@@ -132,13 +132,13 @@ export class Circuit
 	protected solderToWires(wireNetworks: Line[][], networks: Network[]) {
 		let isolatedConnectors: IIsolatedConnectors = {};
 		for (let i = 0; i < wireNetworks.length; i++) {
-			this.__networks.push(new Network());
+			networks.push(new Network());
 		}
 		for (let component of this.components) {
 			for (let connector of component.connectorsTransformed) {
 				let index = this.findConnectedNetwork(connector.position, wireNetworks);
 				if (index >= 0)  {
-					this.__networks[index].connect(connector.connector);
+					networks[index].connect(connector.connector);
 				} else {
 					let key = connector.position.toString();
 					let connectors = isolatedConnectors[key] || [];
@@ -159,7 +159,7 @@ export class Circuit
 				for (let connector of isolatedConnectors[point]) {
 					network.connect(connector);
 				}
-				this.__networks.push(network);
+				networks.push(network);
 			}
 		}
 	}

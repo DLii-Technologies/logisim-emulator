@@ -37,7 +37,7 @@ export default class Component
 	/**
 	 * Indicate the library the circuit component resides
 	 */
-	public static readonly LIB?: string;
+	public static readonly LIB: string = "";
 
 	/**
 	 * The position of the component

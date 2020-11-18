@@ -52,9 +52,9 @@ export default class Project
 	 * Create all of the circuit instances
 	 */
 	protected createCircuits(schematics: ICircuit[]) {
-		let circuits = {};
+		let circuits: ICircuitMap = {};
 		for (let schematic of schematics) {
-			this.circuits[schematic.name] = new Circuit(schematic);
+			circuits[schematic.name] = new Circuit(schematic);
 		}
 		return circuits;
 	}
