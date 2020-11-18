@@ -27,6 +27,14 @@ export class Network
 	protected scheduledUpdates = new Set<Connector>();
 
 	/**
+	 * Connect a connector to the network
+	 */
+	public connect(connector: Connector) {
+		this.connectors.push(connector);
+		connector.connect(this);
+	}
+
+	/**
 	 * Schedule a new network update
 	 */
 	public scheduleUpdate(connector: Connector) {
