@@ -2,7 +2,15 @@ import assert from "assert";
 import { ICircuit } from "../schematic";
 import { Line, Point } from "../util/coordinates";
 import Component, { IComponentMap } from "./component/Component";
+import { Connector } from "./wiring/Connector";
 import { Network } from "./wiring/Network";
+
+/**
+ * Map sets of isolated connectors by position
+ */
+interface IIsolatedConnectors {
+	[point: string]: Connector[]
+}
 
 export class Circuit
 {
@@ -47,12 +55,11 @@ export class Circuit
 			return;
 		}
 		this.components = this.createComponents(this.schematic, componentMap);
-		let wireNetworks = this.createWireNetworks(this.schematic);
-		this.wireUp(wireNetworks);
+		this.__networks = this.wireUp(this.schematic, this.components);
 		this.__isCompiled = true;
 	}
 
-	// ---------------------------------------------------------------------------------------------
+	// Compilation and Wire-up ---------------------------------------------------------------------
 
 	/**
 	 * Create the all of the component instances to be added to the circuit
@@ -89,7 +96,8 @@ export class Circuit
 
 	/**
 	 * Determine if the given point should connect to a wire network.
-	 * Returns the index of the network
+	 *
+	 * @return The index of the network
 	 */
 	protected findConnectedNetwork(point: Point, networks: Line[][]) {
 		for (let i = 0; i < networks.length; i++) {
@@ -105,7 +113,21 @@ export class Circuit
 	/**
 	 * Wire up the circuit and construct the compiled networks
 	 */
-	protected wireUp(wireNetworks: Line[][]) {
+	protected wireUp(schematic: ICircuit, components: Component[]) {
+		let networks: Network[] = [];
+		let wireNetworks = this.createWireNetworks(this.schematic);
+		let isolatedConnectors = this.solderToWires(wireNetworks, networks);
+		this.solderToConnectors(isolatedConnectors, networks);
+		return networks;
+	}
+
+	/**
+	 * Connect component connectors to wire networks if possible
+	 *
+	 * @return Isolated connectors mapped by position
+	 */
+	protected solderToWires(wireNetworks: Line[][], networks: Network[]) {
+		let isolatedConnectors: IIsolatedConnectors = {};
 		for (let i = 0; i < wireNetworks.length; i++) {
 			this.__networks.push(new Network());
 		}
@@ -114,7 +136,27 @@ export class Circuit
 				let index = this.findConnectedNetwork(connector.position, wireNetworks);
 				if (index >= 0)  {
 					this.__networks[index].connect(connector.connector);
+				} else {
+					let key = connector.position.toString();
+					let connectors = isolatedConnectors[key] || [];
+					isolatedConnectors[key] = connectors.concat([connector.connector]);
 				}
+			}
+		}
+		return isolatedConnectors;
+	}
+
+	/**
+	 * Connect component connectors that are directly connected
+	 */
+	protected solderToConnectors(isolatedConnectors: IIsolatedConnectors, networks: Network[]) {
+		for (let point in isolatedConnectors) {
+			if (isolatedConnectors[point].length > 1) {
+				let network = new Network();
+				for (let connector of isolatedConnectors[point]) {
+					network.connect(connector);
+				}
+				this.__networks.push(network);
 			}
 		}
 	}

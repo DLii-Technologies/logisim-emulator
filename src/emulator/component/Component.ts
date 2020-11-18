@@ -27,14 +27,6 @@ export interface IConnector {
 	position : Point;
 }
 
-/**
- * Store a mapping of all connectors
- */
-export interface IConnectorMap {
-	input : Connector[];
-	output: Connector[];
-};
-
 export default class Component
 {
 	/**
@@ -46,13 +38,6 @@ export default class Component
 	 * Indicate the library the circuit component resides
 	 */
 	public static readonly LIB?: string;
-
-	/**
-	 * Generate the key for the component
-	 */
-	public static get key() {
-		return [this.LIB, this.NAME].toString();
-	}
 
 	/**
 	 * The position of the component
@@ -82,9 +67,18 @@ export default class Component
 	/**
 	 * Add a connector to the component
 	 */
-	protected addConnector(x: number, y: number) {
+	protected addConnector(x: number, y: number): Connector;
+	protected addConnector(position: Point): Connector;
+	protected addConnector(x: Point|number, y?: number) {
+		let position;
 		let connector = new Connector();
-		this.connectors.push({ connector, x, y });
+		if (x instanceof Point) {
+			position = x;
+		} else {
+			assert(typeof(x) == "number" && typeof(y) == "number", "Invalid connector position");
+			position = new Point(x, y);
+		}
+		this.connectors.push({ connector, position });
 		return connector;
 	}
 

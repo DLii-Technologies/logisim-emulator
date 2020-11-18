@@ -85,6 +85,13 @@ export class Point
 		};
 	}
 
+	/**
+	 * Convert the point to a string
+	 */
+	public toString() {
+		return `(${this.__x},${this.__y})`;
+	}
+
 	// ---------------------------------------------------------------------------------------------
 
 	/**
