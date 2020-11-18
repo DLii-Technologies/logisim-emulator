@@ -1,16 +1,16 @@
 {
   "name": "logisim-emulator",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "",
   "main": "index.js",
   "directories": {
     "test": "test"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha -r node_modules/ts-node/register ./test/**/*.spec.ts"
   },
   "keywords": [],
-  "author": "",
+  "author": "David Ludwig",
   "license": "ISC",
   "dependencies": {
     "xml2js": "^0.4.23"
