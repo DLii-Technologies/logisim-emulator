@@ -20,8 +20,8 @@ export interface IWireXml {
  * A component XML element
  */
 export interface IComponentXml {
-	a: IAttributeXml[];
-	$: {
+	a?: IAttributeXml[];
+	$ : {
 		lib : string;
 		loc : string;
 		name: string;
@@ -34,7 +34,7 @@ export interface IComponentXml {
  */
 export interface ICircuitXml {
 	$    : { name: string };
-	a    : IAttributeXml[];
+	a   ?: IAttributeXml[];
 	wire?: IWireXml[];
 	comp?: IComponentXml[];
 };

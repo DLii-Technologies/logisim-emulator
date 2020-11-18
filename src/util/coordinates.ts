@@ -163,8 +163,8 @@ export class Line
 	 * lines that follow a manhattan grid
 	 */
 	public intersects(p: Point) {
-		return this.__a.x >= p.x && p.x <= this.__b.x
-		    && this.__a.y >= p.y && p.y <= this.__b.y;
+		return p.x >= this.__a.x && p.x <= this.__b.x
+		    && p.y >= this.__a.y && p.y <= this.__b.y;
 	}
 
 	/**

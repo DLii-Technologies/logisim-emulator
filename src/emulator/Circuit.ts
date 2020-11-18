@@ -108,7 +108,7 @@ export class Circuit
 	protected wireUp(wireNetworks: Line[][]) {
 		for (let component of this.components) {
 			for (let connector of component.connectorsTransformed) {
-				let findConnectedNetwork(connector.position, wireNetworks);
+				// let findConnectedNetwork(connector.position, wireNetworks);
 			}
 		}
 	}

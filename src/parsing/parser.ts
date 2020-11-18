@@ -68,7 +68,7 @@ function constructCircuit(xml: ICircuitXml) {
 		wires: [],
 		components: []
 	};
-	let attributes = parseAttributes(xml.a);
+	let attributes = parseAttributes(xml.a || []);
 	if ("clabel" in attributes) {
 		circuit.label = attributes["clabel"];
 	}
@@ -87,7 +87,7 @@ function constructCircuit(xml: ICircuitXml) {
  */
 function constructComponent(xml: IComponentXml) {
 	let component: IComponent = {
-		attributes: parseAttributes(xml.a),
+		attributes: parseAttributes(xml.a || []),
 		lib: xml.$.lib,
 		name: xml.$.name,
 		key: [xml.$.lib, xml.$.name].toString(),
