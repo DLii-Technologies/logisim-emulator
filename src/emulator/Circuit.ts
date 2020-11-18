@@ -63,7 +63,7 @@ export class Circuit
 			if (component.key in componentMap) {
 				components.push(new componentMap[component.key](component));
 			} else {
-				console.log("Component not found:", component.lib, component.name);
+				console.warn("Component not found:", component.lib, component.name);
 			}
 		}
 		return components;
