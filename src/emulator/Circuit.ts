@@ -106,10 +106,9 @@ export class Circuit
 	 * Wire up the circuit and construct the compiled networks
 	 */
 	protected wireUp(wireNetworks: Line[][]) {
-
 		for (let component of this.components) {
-			for (let connector of component.connectors) {
-				let findConnectedNetwork(component.position.add(connector.position), wireNetworks);
+			for (let connector of component.connectorsTransformed) {
+				let findConnectedNetwork(connector.position, wireNetworks);
 			}
 		}
 	}

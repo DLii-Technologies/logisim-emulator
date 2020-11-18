@@ -1,6 +1,7 @@
 import assert from "assert";
 import { IComponent } from "../../schematic";
 import { Point } from "../../util/coordinates";
+import { transform } from "../../util/transform";
 import { Facing } from "../enums";
 import { Connector } from "../wiring/Connector";
 
@@ -23,8 +24,7 @@ export interface IComponentMap {
  */
 export interface IConnector {
 	connector: Connector;
-	x        : number;
-	y        : number;
+	position : Point;
 }
 
 /**
@@ -113,8 +113,13 @@ export default class Component
 	 * Get the list of connectors for this component transformed with the component orientation
 	 */
 	public get connectorsTransformed() {
-		let result: IConnector = [];
-
+		let result: IConnector[] = [];
+		for (let connector of this.__connectors) {
+			result.push({
+				connector: connector.connector,
+				position: transform(connector.position, this.position, this.facing)
+			});
+		}
 		return result;
 	}
 }
