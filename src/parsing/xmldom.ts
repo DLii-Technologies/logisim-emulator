@@ -2,8 +2,10 @@
  * An attribute XML element
  */
 export interface IAttributeXml {
-	name : string;
-	value: string;
+	$: {
+		name : string;
+		val: string;
+	}
 }
 
 /**

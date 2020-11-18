@@ -39,7 +39,7 @@ export function parseFile(file: string) {
 function parseAttributes(xml: IAttributeXml[]) {
 	let attributes: IAttributeMap = {};
 	for (let attribute of xml) {
-		attributes[attribute.name] = attribute.value;
+		attributes[attribute.$.name] = attribute.$.val;
 	}
 	return attributes;
 }

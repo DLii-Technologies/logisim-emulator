@@ -21,13 +21,13 @@ export class Connector {
 	/**
 	 * The number of bits this connector is compatible with
 	 */
-	private __bitWidth: number = 1;
+	private __bitWidth: number;
 
 	/**
 	 * Create a connector
 	 */
-	public constructor(bitWidth?: number) {
-		this.__bitWidth = bitWidth || this.__bitWidth;
+	public constructor(bitWidth: number = 1) {
+		this.__bitWidth = bitWidth;
 	}
 
 	/**

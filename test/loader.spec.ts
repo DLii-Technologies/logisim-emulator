@@ -8,6 +8,6 @@ describe("Loader", async () => {
 			console.log("Searching for external dependency...", file);
 			return file;
 		});
-		console.log(project);
+		// console.log(project);
 	});
 });

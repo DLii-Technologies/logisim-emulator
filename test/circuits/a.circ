@@ -18,7 +18,14 @@ This file is intended to be loaded by Logisim (http://www.cburch.com/logisim/).
     </tool>
   </lib>
   <lib desc="#I/O" name="5"/>
-  <lib desc="#Base" name="6"/>
+  <lib desc="#Base" name="6">
+    <tool name="Text Tool">
+      <a name="text" val=""/>
+      <a name="font" val="SansSerif plain 12"/>
+      <a name="halign" val="center"/>
+      <a name="valign" val="base"/>
+    </tool>
+  </lib>
   <lib desc="file#b.circ" name="7"/>
   <lib desc="file#c.circ" name="8"/>
   <main name="main"/>
@@ -59,16 +66,18 @@ This file is intended to be loaded by Logisim (http://www.cburch.com/logisim/).
     <a name="clabel" val="aoeu"/>
     <a name="clabelup" val="east"/>
     <a name="clabelfont" val="SansSerif plain 12"/>
-    <wire from="(410,310)" to="(420,310)"/>
     <wire from="(410,240)" to="(410,310)"/>
+    <wire from="(410,310)" to="(420,310)"/>
     <wire from="(340,240)" to="(410,240)"/>
+    <comp lib="0" loc="(340,240)" name="Pin">
+      <a name="width" val="5"/>
+      <a name="tristate" val="false"/>
+    </comp>
     <comp lib="0" loc="(420,310)" name="Pin">
       <a name="facing" val="west"/>
       <a name="output" val="true"/>
+      <a name="width" val="5"/>
       <a name="labelloc" val="east"/>
-    </comp>
-    <comp lib="0" loc="(340,240)" name="Pin">
-      <a name="tristate" val="false"/>
     </comp>
   </circuit>
 </project>

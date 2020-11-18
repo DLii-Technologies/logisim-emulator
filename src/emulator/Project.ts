@@ -8,15 +8,15 @@ import { CircuitComponent } from "./component/CircuitComponent";
  */
 export interface ILibraryMap {
 	[key: string]: {
-		[name: string]: IComponentType
-	}
+		[name: string]: IComponentType;
+	};
 }
 
 /**
  * Store a mapping of the circuits
  */
 interface ICircuitMap {
-	[name: string]: Circuit
+	[name: string]: Circuit;
 };
 
 export default class Project

@@ -1,5 +1,6 @@
 import assert from "assert";
 import { IComponent } from "../../schematic";
+import { getAttribute } from "../../util";
 import { Point } from "../../util/coordinates";
 import { transform } from "../../util/transform";
 import { Facing } from "../enums";
@@ -59,26 +60,15 @@ export default class Component
 	 */
 	public constructor(schematic: IComponent) {
 		this.position = schematic.location;
-		if ("facing" in schematic.attributes) {
-			this.setFacing(schematic.attributes["facing"]);
-		}
+		this.setFacing(getAttribute("facing", schematic, Facing.East));
 	}
 
 	/**
 	 * Add a connector to the component
 	 */
-	protected addConnector(x: number, y: number): Connector;
-	protected addConnector(position: Point): Connector;
-	protected addConnector(x: Point|number, y?: number) {
-		let position;
-		let connector = new Connector();
-		if (x instanceof Point) {
-			position = x;
-		} else {
-			assert(typeof(x) == "number" && typeof(y) == "number", "Invalid connector position");
-			position = new Point(x, y);
-		}
-		this.connectors.push({ connector, position });
+	protected addConnector(x: number, y: number, bitWidth: number = 1) {
+		let connector = new Connector(bitWidth);
+		this.connectors.push({ connector, position: new Point(x, y) });
 		return connector;
 	}
 
@@ -87,8 +77,9 @@ export default class Component
 	 */
 	protected setFacing(facing: Facing | string) {
 		if (typeof(facing) == "string") {
-			assert(Object.values(Facing).includes(facing), "Invalid facing property given");
-			this.facing = <Facing>(<any>Facing)[facing]; // TS can't figure this out... really????
+			Object.values(Facing).includes(<Facing>facing)
+			assert(Object.values(Facing).includes(<Facing>facing), "Invalid facing property given");
+			this.facing = <Facing>facing;
 		} else {
 			this.facing = facing;
 		}

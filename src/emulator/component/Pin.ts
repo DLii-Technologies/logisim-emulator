@@ -1,5 +1,6 @@
 import { IComponent } from "../../schematic";
 import { BuiltinLibrary } from "../enums";
+import { getAttribute } from "../../util";
 import { Connector } from "../wiring/Connector";
 import Component from "./Component";
 
@@ -25,7 +26,8 @@ export class Pin extends Component {
 	 */
 	public constructor(schematic: IComponent) {
 		super(schematic);
-		this.__connector = this.addConnector(0, 0);
+		let bitWidth = parseInt(getAttribute("width", schematic, "1"));
+		this.__connector = this.addConnector(0, 0, bitWidth);
 	}
 
 	/**
