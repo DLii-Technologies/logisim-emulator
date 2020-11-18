@@ -2,7 +2,8 @@ import { readFile } from "fs";
 import xml2js from "xml2js";
 import { Line, Point } from "../util/coordinates";
 import { IAttributeMap, ICircuit, IComponent, IProject } from "../schematic";
-import { IAttributeXml, ICircuitXml, IComponentXml, ILogisimXml } from "./xmldom";
+import { IAttributeXml, ICircuitXml, IComponentXml, ILibraryXml, ILogisimXml } from "./xmldom";
+import { basename } from "path";
 
 /**
  * Parse the given XML string
@@ -11,7 +12,7 @@ export function parse(xmlString: xml2js.convertableToString) {
 	return new Promise<IProject>(async (resolve) => {
 		let parser = new xml2js.Parser();
 		let xml = await parser.parseStringPromise(xmlString);
-		resolve(constructSchematic(xml));
+		resolve(constructProjectSchematic(xml));
 	});
 }
 
@@ -46,16 +47,32 @@ function parseAttributes(xml: IAttributeXml[]) {
 /**
  * Construct the project schematic
  */
-function constructSchematic(xml: ILogisimXml) {
+function constructProjectSchematic(xml: ILogisimXml) {
 	let project: IProject = {
 		source: xml.project.$.source,
 		version: xml.project.$.version,
+		libraries: [],
 		circuits: []
 	};
+	for (let lib of xml.project.lib) {
+		project.libraries.push(constructLibrary(lib));
+	}
 	for (let circuit of xml.project.circuit) {
 		project.circuits.push(constructCircuit(circuit));
 	}
 	return project;
+}
+
+/**
+ * Construct a library schematic
+ */
+function constructLibrary(xml: ILibraryXml) {
+	let [isExternal, desc] = xml.$.desc.split('#');
+	return {
+		id: xml.$.name,
+		path: desc,
+		isExternal: Boolean(isExternal)
+	};
 }
 
 /**

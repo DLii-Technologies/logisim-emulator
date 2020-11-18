@@ -1,3 +1,4 @@
+import { BuiltinLibrary } from "../../enums";
 import Component from "../Component";
 
 
@@ -11,5 +12,5 @@ export class AndGate extends Component
 	/**
 	 * Indicate the library the circuit component resides
 	 */
-	public static readonly LIB = "0";
+	public static readonly LIB = BuiltinLibrary.Gates;
 }

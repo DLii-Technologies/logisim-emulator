@@ -2,6 +2,7 @@ import assert from "assert";
 import { ICircuit } from "../schematic";
 import { Line, Point } from "../util/coordinates";
 import Component, { IComponentMap } from "./component/Component";
+import { ILibraryMap } from "./Project";
 import { Connector } from "./wiring/Connector";
 import { Network } from "./wiring/Network";
 
@@ -50,11 +51,11 @@ export class Circuit
 	/**
 	 * Compile the circuit
 	 */
-	public compile(componentMap: IComponentMap, circuitMap: Circuit[]) {
+	public compile(libraries: ILibraryMap) {
 		if (this.__isCompiled) {
 			return;
 		}
-		this.components = this.createComponents(this.schematic, componentMap);
+		this.components = this.createComponents(this.schematic, libraries);
 		this.__networks = this.wireUp(this.schematic, this.components);
 		this.__isCompiled = true;
 	}
@@ -64,11 +65,13 @@ export class Circuit
 	/**
 	 * Create the all of the component instances to be added to the circuit
 	 */
-	protected createComponents(schematic: ICircuit, componentMap: IComponentMap) {
+	protected createComponents(schematic: ICircuit, libraries: ILibraryMap) {
 		let components: Component[] = [];
 		for (let component of schematic.components) {
-			if (component.key in componentMap) {
-				components.push(new componentMap[component.key](component));
+			assert((component.lib || "") in libraries, "Missing library in circuit!");
+			let library = libraries[component.lib || ""]
+			if (component.name in library) {
+				components.push(new library[component.name](component));
 			} else {
 				console.warn("Component not found:", component.lib, component.name);
 			}

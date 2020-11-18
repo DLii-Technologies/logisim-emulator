@@ -7,6 +7,16 @@ export interface IAttributeXml {
 }
 
 /**
+ * A library XML element
+ */
+export interface ILibraryXml {
+	$: {
+		desc: string;
+		name: string;
+	}
+}
+
+/**
  * A wire XML element
  */
 export interface IWireXml {
@@ -48,7 +58,7 @@ export interface ILogisimXml {
 			source : string;
 			version: string;
 		};
-		lib    : Object[];
+		lib    : ILibraryXml[];
 		circuit: ICircuitXml[];
 	}
 };

@@ -1,4 +1,5 @@
 import { IComponent } from "../../schematic";
+import { BuiltinLibrary } from "../enums";
 import { Connector } from "../wiring/Connector";
 import Component from "./Component";
 
@@ -12,7 +13,7 @@ export class Pin extends Component {
 	/**
 	 * Indicate the library the circuit component resides
 	 */
-	public static readonly LIB?: string = "0";
+	public static readonly LIB: string = BuiltinLibrary.Wiring;
 
 	/**
 	 * Store a direct reference to the pin's connector

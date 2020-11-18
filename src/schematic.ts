@@ -19,6 +19,15 @@ export interface IComponent {
 }
 
 /**
+ * A parsed library
+ */
+export interface ILibrary {
+	id        : string;
+	path      : string;
+	isExternal: boolean;
+}
+
+/**
  * A parsed circuit schematic
  */
 export interface ICircuit {
@@ -32,7 +41,8 @@ export interface ICircuit {
  * Store a parsed project
  */
 export interface IProject {
-	source  : string;
-	version : string;
-	circuits: ICircuit[];
+	source   : string;
+	version  : string;
+	libraries: ILibrary[];
+	circuits : ICircuit[];
 }
