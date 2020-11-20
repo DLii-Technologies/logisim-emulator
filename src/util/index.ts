@@ -1,10 +1,10 @@
-import { IComponent } from "../schematic";
+import { IAttributeMap } from "../schematic";
 
 
 
-export function getAttribute(attribute: string, schematic: IComponent, defaultValue: string) {
-	if (attribute in schematic.attributes) {
-		return schematic.attributes[attribute];
+export function getAttribute(attribute: string, attributes: IAttributeMap, defaultValue: string) {
+	if (attribute in attributes) {
+		return attributes[attribute];
 	}
 	return defaultValue;
 }

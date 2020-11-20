@@ -3,7 +3,7 @@ import "mocha";
 import { threeValuedAnd, threeValuedNot, threeValuedOr, Bit, threeValuedNand, threeValuedNor,
 	threeValuedXor, threeValuedXnor, threeValuedMerge} from "../src/util/logic";
 
-describe.only("Three-valued Logic", () => {
+describe("Three-valued Logic", () => {
 	it("AND", () => {
 		expect(threeValuedAnd(Bit.Unknown, Bit.Unknown)).to.equal(Bit.Error);
 		expect(threeValuedAnd(Bit.Unknown, Bit.Error  )).to.equal(Bit.Error);

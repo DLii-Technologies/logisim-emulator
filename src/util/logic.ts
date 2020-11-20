@@ -112,3 +112,22 @@ export function threeValuedMerge(a: Bit[], b: Bit[]) {
 	}
 	return result;
 }
+
+/**
+ * Transpose a 2D array
+ */
+export function transpose<T>(a: T[][]) {
+	if (a.length == 0) {
+		return [];
+	}
+	let result: T[][] = [];
+	for (let i = 0; i < a.length; i++) {
+		result.push([]);
+	}
+	for (let i = 0; i < a.length; i++) {
+		for (let j = 0; j < a[i].length; j++) {
+			result[j][i] = a[i][j];
+		}
+	}
+	return result;
+}

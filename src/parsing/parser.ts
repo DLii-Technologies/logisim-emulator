@@ -107,7 +107,6 @@ function constructComponent(xml: IComponentXml) {
 		attributes: parseAttributes(xml.a || []),
 		lib: xml.$.lib,
 		name: xml.$.name,
-		key: [xml.$.lib, xml.$.name].toString(),
 		location: Point.fromString(xml.$.loc)
 	};
 	return component;

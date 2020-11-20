@@ -17,4 +17,12 @@ export class CircuitComponent extends Component
 		super(schematic);
 
 	}
+
+	/**
+	 * @TODO
+	 * Re-evaluate the input and output
+	 */
+	public update() {
+		//
+	}
 }

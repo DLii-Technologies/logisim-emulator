@@ -1,16 +1,13 @@
+import assert from "assert";
+import { Bit, threeValuedMerge } from "../../util/logic";
 import { Connector } from "./Connector";
-import { Signal } from "./Signal";
 
 /**
  * The network maintains connections to directly-connected components
  */
 export class Network
 {
-	/**
-	 * The signal currently emitted on the network
-	 */
-	private signal: Signal = new Signal();
-
+	protected signal: Bit[] = [];
 	/**
 	 * Indicate that the network has been updated
 	 */
@@ -30,6 +27,7 @@ export class Network
 	 * Connect a connector to the network
 	 */
 	public connect(connector: Connector) {
+		assert(this.signal.length in [0, connector.bitWidth], "Network contains mismatched widths");
 		this.connectors.push(connector);
 		connector.connect(this);
 	}
@@ -47,12 +45,11 @@ export class Network
 	 */
 	public probe() {
 		if (this.isDirty) {
-			this.signal.clear();
+			this.signal = [];
 			for (let connector of this.connectors) {
-				if (connector.emitting !== null) {
-					this.signal.merge(connector.emitting);
-				}
+				threeValuedMerge(this.signal, connector.signal);
 			}
+			this.isDirty = false;
 		}
 		return this.signal;
 	}

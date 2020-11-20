@@ -3,8 +3,8 @@ import { ICircuit } from "../schematic";
 import { Line, Point } from "../util/coordinates";
 import Component, { IComponentMap } from "./component/Component";
 import { ILibraryMap } from "./Project";
-import { Connector } from "./wiring/Connector";
-import { Network } from "./wiring/Network";
+import { Connector } from "./core/Connector";
+import { Network } from "./core/Network";
 
 /**
  * Map sets of isolated connectors by position

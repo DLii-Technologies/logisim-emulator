@@ -1,7 +1,7 @@
 import { IComponent } from "../../schematic";
 import { BuiltinLibrary } from "../enums";
 import { getAttribute } from "../../util";
-import { Connector } from "../wiring/Connector";
+import { Connector } from "../core/Connector";
 import Component from "./Component";
 
 export class Pin extends Component {
@@ -26,9 +26,20 @@ export class Pin extends Component {
 	 */
 	public constructor(schematic: IComponent) {
 		super(schematic);
-		let bitWidth = parseInt(getAttribute("width", schematic, "1"));
+		let bitWidth = parseInt(getAttribute("width", schematic.attributes, "1"));
 		this.__connector = this.addConnector(0, 0, bitWidth);
 	}
+
+	// ---------------------------------------------------------------------------------------------
+
+	/**
+	 * Invoked when the connected networks has updated
+	 */
+	public update() {
+		// NO-OP
+	}
+
+	// ---------------------------------------------------------------------------------------------
 
 	/**
 	 * Get the pin's connector

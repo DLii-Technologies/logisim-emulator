@@ -4,7 +4,7 @@ import { getAttribute } from "../../util";
 import { Point } from "../../util/coordinates";
 import { transform } from "../../util/transform";
 import { Facing } from "../enums";
-import { Connector } from "../wiring/Connector";
+import { Connector } from "../core/Connector";
 
 /**
  * Allow component class definitions to be passed as arguments
@@ -28,7 +28,7 @@ export interface IConnector {
 	position : Point;
 }
 
-export default class Component
+export default abstract class Component
 {
 	/**
 	 * The name of the component
@@ -60,7 +60,7 @@ export default class Component
 	 */
 	public constructor(schematic: IComponent) {
 		this.position = schematic.location;
-		this.setFacing(getAttribute("facing", schematic, Facing.East));
+		this.setFacing(getAttribute("facing", schematic.attributes, Facing.East));
 	}
 
 	/**
@@ -84,6 +84,13 @@ export default class Component
 			this.facing = facing;
 		}
 	}
+
+	// ---------------------------------------------------------------------------------------------
+
+	/**
+	 * The input has changed, update and re-evaluate
+	 */
+	public abstract update(): void;
 
 	// ---------------------------------------------------------------------------------------------
 

@@ -14,7 +14,6 @@ export interface IComponent {
 	attributes: IAttributeMap;
 	lib      ?: string;
 	name      : string;
-	key       : string;
 	location  : Point;
 }
 
