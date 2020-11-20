@@ -87,3 +87,28 @@ export function threeValuedXnor(...bits: Bit[]) {
 	assert(bits.length >= 2, "Attempted XNOR of 1 or fewer inputs");
 	return threeValuedNot(threeValuedXor(...bits));
 }
+
+/**
+ * Merge two signals together if possible. Conflicting bits result in errors
+ */
+export function threeValuedMerge(a: Bit[], b: Bit[]) {
+	if (b.length < a.length) {
+		let tmp = a;
+		a = b;
+		b = tmp;
+	}
+	let result = a;
+	if (result.length == 0) {
+		result = b;
+	} else {
+		assert(a.length == b.length, "Signals must have the same bit width!");
+		for (let i = 0; i < result.length; i++) {
+			if (result[i] == Bit.Unknown || b[i] == Bit.Unknown) {
+				result[i] |= b[i];
+			} else if (result[i] != b[i]) {
+				result[i] = Bit.Error;
+			}
+		}
+	}
+	return result;
+}

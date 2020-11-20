@@ -1,7 +1,7 @@
 import { expect } from "chai";
 import "mocha";
 import { threeValuedAnd, threeValuedNot, threeValuedOr, Bit, threeValuedNand, threeValuedNor,
-	threeValuedXor, threeValuedXnor } from "../src/util/logic";
+	threeValuedXor, threeValuedXnor, threeValuedMerge} from "../src/util/logic";
 
 describe.only("Three-valued Logic", () => {
 	it("AND", () => {
@@ -117,5 +117,31 @@ describe.only("Three-valued Logic", () => {
 		expect(threeValuedXnor(Bit.One,     Bit.Error  )).to.equal(Bit.Error);
 		expect(threeValuedXnor(Bit.One,     Bit.Zero   )).to.equal(Bit.Zero);
 		expect(threeValuedXnor(Bit.One,     Bit.One    )).to.equal(Bit.One);
+	});
+	it("Merge", () => {
+		expect(threeValuedMerge([],            [Bit.Unknown])).to.eql([Bit.Unknown]);
+		expect(threeValuedMerge([],            [Bit.Error]  )).to.eql([Bit.Error]);
+		expect(threeValuedMerge([],            [Bit.Zero]   )).to.eql([Bit.Zero]);
+		expect(threeValuedMerge([],            [Bit.One]    )).to.eql([Bit.One]);
+		expect(threeValuedMerge([Bit.Unknown], []           )).to.eql([Bit.Unknown]);
+		expect(threeValuedMerge([Bit.Error],   []           )).to.eql([Bit.Error]);
+		expect(threeValuedMerge([Bit.Zero],    []           )).to.eql([Bit.Zero]);
+		expect(threeValuedMerge([Bit.One],     []           )).to.eql([Bit.One]);
+		expect(threeValuedMerge([Bit.Unknown], [Bit.Unknown])).to.eql([Bit.Unknown]);
+		expect(threeValuedMerge([Bit.Unknown], [Bit.Error]  )).to.eql([Bit.Error]);
+		expect(threeValuedMerge([Bit.Unknown], [Bit.Zero]   )).to.eql([Bit.Zero]);
+		expect(threeValuedMerge([Bit.Unknown], [Bit.One]    )).to.eql([Bit.One]);
+		expect(threeValuedMerge([Bit.Error],   [Bit.Unknown])).to.eql([Bit.Error]);
+		expect(threeValuedMerge([Bit.Error],   [Bit.Error]  )).to.eql([Bit.Error]);
+		expect(threeValuedMerge([Bit.Error],   [Bit.Zero]   )).to.eql([Bit.Error]);
+		expect(threeValuedMerge([Bit.Error],   [Bit.One]    )).to.eql([Bit.Error]);
+		expect(threeValuedMerge([Bit.Zero],    [Bit.Unknown])).to.eql([Bit.Zero]);
+		expect(threeValuedMerge([Bit.Zero],    [Bit.Error]  )).to.eql([Bit.Error]);
+		expect(threeValuedMerge([Bit.Zero],    [Bit.Zero]   )).to.eql([Bit.Zero]);
+		expect(threeValuedMerge([Bit.Zero],    [Bit.One]    )).to.eql([Bit.Error]);
+		expect(threeValuedMerge([Bit.One],     [Bit.Unknown])).to.eql([Bit.One]);
+		expect(threeValuedMerge([Bit.One],     [Bit.Error]  )).to.eql([Bit.Error]);
+		expect(threeValuedMerge([Bit.One],     [Bit.Zero]   )).to.eql([Bit.Error]);
+		expect(threeValuedMerge([Bit.One],     [Bit.One]    )).to.eql([Bit.One]);
 	});
 });
