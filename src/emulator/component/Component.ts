@@ -2,7 +2,7 @@ import assert from "assert";
 import { IComponent } from "../../schematic";
 import { getAttribute } from "../../util";
 import { Point } from "../../util/coordinates";
-import { transform } from "../../util/transform";
+import { ROTATION, transform } from "../../util/transform";
 import { Facing } from "../enums";
 import { Connector } from "../core/Connector";
 
@@ -109,7 +109,7 @@ export default abstract class Component
 		for (let connector of this.__connectors) {
 			result.push({
 				connector: connector.connector,
-				position: transform(connector.position, this.position, this.facing)
+				position: transform(connector.position, this.position, ROTATION[this.facing])
 			});
 		}
 		return result;

@@ -2,8 +2,9 @@ import { IAttributeMap, IComponent } from "../../../schematic";
 import { getAttribute } from "../../../util";
 import { Point } from "../../../util/coordinates";
 import { Bit, transpose } from "../../../util/logic";
+import { MIRROR_ROTATION, transform } from "../../../util/transform";
 import { Connector } from "../../core/Connector";
-import Component from "../Component";
+import Component, { IConnector } from "../Component";
 
 
 export abstract class Gate extends Component
@@ -157,8 +158,25 @@ export abstract class Gate extends Component
 
 	// ---------------------------------------------------------------------------------------------
 
-		/**
+	/**
 	 * Evaluate the column of bits
 	 */
 	protected abstract evaluate(bits: Bit[]): Bit;
+
+	// ---------------------------------------------------------------------------------------------
+
+	/**
+	 * Due to Logisim bug in pin placement with gates, custom transform is required...
+	 */
+	public get connectorsTransformed() {
+		let result: IConnector[] = [];
+		for (let connector of this.connectors) {
+			let pos = transform(connector.position, this.position, MIRROR_ROTATION[this.facing]);
+			result.push({
+				connector: connector.connector,
+				position: pos
+			});
+		}
+		return result;
+	}
 }

@@ -2,7 +2,7 @@ import { expect } from "chai";
 import "mocha";
 import { Facing } from "../src/emulator/enums";
 import { Line, Point } from "../src/util/coordinates";
-import { transform } from "../src/util/transform";
+import { MIRROR_ROTATION, ROTATION, transform } from "../src/util/transform";
 
 describe("Coordinates: Point", () => {
 	it("Create point through overloaded constructors", () => {
@@ -33,15 +33,23 @@ describe("Coordinates: Point", () => {
 	});
 	it("Transform a point", () => {
 		let p0 = new Point(5, 2);
-		let a = new Point(2, 3);
-		let t1 = transform(a, p0, Facing.East);
-		let t2 = transform(a, p0, Facing.North);
-		let t3 = transform(a, p0, Facing.West);
-		let t4 = transform(a, p0, Facing.South);
-		expect(t1.x == 7 && t1.y == 5).to.equal(true);
-		expect(t2.x == 8 && t2.y == 0).to.equal(true);
-		expect(t3.x == 3 && t3.y == -1).to.equal(true);
-		expect(t4.x == 2 && t4.y == 4).to.equal(true);
+		let a = new Point(-2, 3);
+		let t1 = transform(a, p0, ROTATION[Facing.East]);
+		let t2 = transform(a, p0, ROTATION[Facing.North]);
+		let t3 = transform(a, p0, ROTATION[Facing.West]);
+		let t4 = transform(a, p0, ROTATION[Facing.South]);
+		let t5 = transform(a, p0, MIRROR_ROTATION[Facing.East]);
+		let t6 = transform(a, p0, MIRROR_ROTATION[Facing.North]);
+		let t7 = transform(a, p0, MIRROR_ROTATION[Facing.West]);
+		let t8 = transform(a, p0, MIRROR_ROTATION[Facing.South]);
+		expect(t1.x == (-2 + p0.x) && t1.y == ( 3 + p0.y)).to.equal(true);
+		expect(t2.x == ( 3 + p0.x) && t2.y == ( 2 + p0.y)).to.equal(true);
+		expect(t3.x == ( 2 + p0.x) && t3.y == (-3 + p0.y)).to.equal(true);
+		expect(t4.x == (-3 + p0.x) && t4.y == (-2 + p0.y)).to.equal(true);
+		expect(t5.x == (-2 + p0.x) && t5.y == ( 3 + p0.y)).to.equal(true);
+		expect(t6.x == ( 3 + p0.x) && t6.y == ( 2 + p0.y)).to.equal(true);
+		expect(t7.x == ( 2 + p0.x) && t7.y == ( 3 + p0.y)).to.equal(true);
+		expect(t8.x == ( 3 + p0.x) && t8.y == (-2 + p0.y)).to.equal(true);
 	});
 })
 
