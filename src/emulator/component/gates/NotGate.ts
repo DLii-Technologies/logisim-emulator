@@ -18,21 +18,6 @@ export class NotGate extends Component
 	public static readonly LIB = BuiltinLibrary.Gates;
 
 	/**
-	 * Add additional width for certain gates
-	 */
-	protected bonusWidth = 0;
-
-	/**
-	 * Indicate the negated inputs
-	 */
-	protected negated: Boolean[] = [];
-
-	/**
-	 * Indicate if the gate negates the output
-	 */
-	protected negateOutput = false;
-
-	/**
 	 * Input connectors
 	 */
 	protected input: Connector;
