@@ -148,7 +148,7 @@ export abstract class Gate extends Component
 	/**
 	 * Perform the gate operation and output
 	 */
-	public update() {
+	public onUpdate() {
 		let result: Bit[] = [];
 		for (let col of this.inputSignals()) {
 			result.push(this.evaluate(col));

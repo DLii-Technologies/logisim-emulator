@@ -17,6 +17,11 @@ export class Pin extends Component {
 	public static readonly LIB: string = BuiltinLibrary.Wiring;
 
 	/**
+	 * Indicate if this pin is an output pin
+	 */
+	public readonly isOutput: boolean;
+
+	/**
 	 * Store a direct reference to the pin's connector
 	 */
 	private __connector: Connector
@@ -26,6 +31,7 @@ export class Pin extends Component {
 	 */
 	public constructor(schematic: IComponent) {
 		super(schematic);
+		this.isOutput = getAttribute("output", schematic.attributes, "true") == "true";
 		let bitWidth = parseInt(getAttribute("width", schematic.attributes, "1"));
 		this.__connector = this.addConnector(0, 0, bitWidth);
 	}
@@ -35,8 +41,18 @@ export class Pin extends Component {
 	/**
 	 * Invoked when the connected networks has updated
 	 */
-	public update() {
+	public onUpdate() {
 		// NO-OP
+	}
+
+	/**
+	 * Probe the network for the output
+	 */
+	public probe() {
+		if (this.isOutput) {
+			return this.connector.probe();
+		}
+		return this.connector.signal;
 	}
 
 	// ---------------------------------------------------------------------------------------------

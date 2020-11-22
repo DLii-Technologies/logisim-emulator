@@ -5,6 +5,10 @@ import Component, { IComponentMap } from "./component/Component";
 import { ILibraryMap } from "./Project";
 import { Connector } from "./core/Connector";
 import { Network } from "./core/Network";
+import { Updatable } from "./mixins/Updatable";
+import { Bit } from "../util/logic";
+import { Pin } from "./component";
+import { Facing } from "./enums";
 
 /**
  * Map sets of isolated connectors by position
@@ -23,12 +27,12 @@ export class Circuit
 	/**
 	 * Store the component instances
 	 */
-	protected components: Component[] = [];
+	private __components: Component[] = [];
 
 	/**
 	 * The schematic for the circuit
 	 */
-	protected schematic: ICircuit;
+	private __schematic: ICircuit;
 
 	/**
 	 * Indicate if the circuit has been compiled
@@ -41,11 +45,17 @@ export class Circuit
 	private __networks: Network[] = [];
 
 	/**
+	 * Maintain a queue of networks that need updating
+	 */
+	private __toUpdate: Updatable[] = [];
+
+	/**
 	 * Create a new circuit
 	 */
 	public constructor(circuit: ICircuit) {
 		this.name = circuit.name;
-		this.schematic = circuit;
+		this.__schematic = circuit;
+		this.scheduleUpdate = this.scheduleUpdate.bind(this);
 	}
 
 	/**
@@ -55,8 +65,9 @@ export class Circuit
 		if (this.__isCompiled) {
 			return;
 		}
-		this.components = this.createComponents(this.schematic, libraries);
-		this.__networks = this.wireUp(this.schematic, this.components);
+		this.__components = this.createComponents(this.__schematic, libraries);
+		this.__networks = this.wireUp(this.__schematic, this.__components);
+		this.installEventListeners();
 		this.__isCompiled = true;
 	}
 
@@ -118,7 +129,7 @@ export class Circuit
 	 */
 	protected wireUp(schematic: ICircuit, components: Component[]) {
 		let networks: Network[] = [];
-		let wireNetworks = this.createWireNetworks(this.schematic);
+		let wireNetworks = this.createWireNetworks(this.__schematic);
 		let isolatedConnectors = this.solderToWires(wireNetworks, networks);
 		this.solderToConnectors(isolatedConnectors, networks);
 		return networks;
@@ -134,7 +145,7 @@ export class Circuit
 		for (let i = 0; i < wireNetworks.length; i++) {
 			networks.push(new Network());
 		}
-		for (let component of this.components) {
+		for (let component of this.__components) {
 			for (let connector of component.connectorsTransformed) {
 				let index = this.findConnectedNetwork(connector.position, wireNetworks);
 				if (index >= 0)  {
@@ -164,9 +175,74 @@ export class Circuit
 		}
 	}
 
+	/**
+	 * Setup the event listeners to evaluate the circuit
+	 */
+	protected installEventListeners() {
+		for (let component of this.__components) {
+			component.addListener(this.scheduleUpdate);
+		}
+		for (let network of this.__networks) {
+			network.addListener(this.scheduleUpdate);
+		}
+	}
+
+	// Circuit Evaluation --------------------------------------------------------------------------
+
+	/**
+	 * Get the current state of the circuit
+	 */
+	protected networkState() {
+		let bits: Bit[] = [];
+		for (let network of this.__networks) {
+			bits = bits.concat(network.signal);
+		}
+		return bits.toString();
+	}
+
+	/**
+	 * Invoked when an
+	 */
+	protected scheduleUpdate(updatable: Updatable) {
+		if (!this.__toUpdate.includes(updatable)) {
+			this.__toUpdate.push(updatable);
+		}
+	}
+
+	/**
+	 * Evaluate the circuit with the given input/output set
+	 */
+	public async evaluate() {
+		let states = new Set<string>();
+		while (this.__toUpdate.length) {
+			let state = this.networkState();
+			if (states.has(state)) {
+				throw new Error("Oscillation detected!");
+			}
+			let updatable = this.__toUpdate.splice(1, 0)[0];
+			states.add(state);
+			updatable.update();
+		}
+		// return this.output();
+	}
+
+	/**
+	 * Clear the update queue
+	 */
+	public clearUpdates() {
+		this.__toUpdate = [];
+	}
+
 	// ---------------------------------------------------------------------------------------------
 
-
+	/**
+	 * @TODO
+	 * Add a new network to the circuit
+	 */
+	// public addNetwork(network: Network) {
+	// 	network.on("update", (network) => this.onUpdate(network));
+	// 	this.__networks.push(network);
+	// }
 
 	// ---------------------------------------------------------------------------------------------
 
@@ -176,4 +252,36 @@ export class Circuit
 	public isCompiled() {
 		return this.__isCompiled;
 	}
+
+	/**
+	 * Get a list of all pins for this circuit
+	 */
+	public pins(inputs: boolean = true, outputs: boolean = true) {
+		return <Pin[]>this.__components.filter(comp => comp instanceof Pin && (
+			(comp.isOutput && outputs) || (!comp.isOutput && inputs)));
+	}
+
+	/**
+	 * Get the input pins for the
+	 */
+	// public inputPins(facing: Facing) {
+
+	// }
+
+	/**
+	 * Get the current output of the circuit
+	 */
+	// public output() {
+	// 	let labeled = {};
+	// 	let unlabeled = [];
+	// 	for (let connector of this.__components) {
+	// 		if (connector instanceof Pin) {
+	// 			if (connector.label !== "") {
+
+	// 			} else {
+	// 				unlabeled.push(connector);
+	// 			}
+	// 		}
+	// 	}
+	// }
 }

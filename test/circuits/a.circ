@@ -64,22 +64,25 @@ This file is intended to be loaded by Logisim (http://www.cburch.com/logisim/).
     <a name="clabel" val="aoeu"/>
     <a name="clabelup" val="east"/>
     <a name="clabelfont" val="SansSerif plain 12"/>
-    <wire from="(410,240)" to="(410,310)"/>
-    <wire from="(410,310)" to="(420,310)"/>
-    <wire from="(340,240)" to="(410,240)"/>
-    <comp lib="0" loc="(420,310)" name="Pin">
+    <wire from="(320,160)" to="(410,160)"/>
+    <wire from="(170,140)" to="(270,140)"/>
+    <wire from="(170,180)" to="(270,180)"/>
+    <comp lib="1" loc="(320,160)" name="AND Gate">
+      <a name="inputs" val="2"/>
+    </comp>
+    <comp lib="0" loc="(170,140)" name="Pin">
+      <a name="tristate" val="false"/>
+      <a name="label" val="A"/>
+    </comp>
+    <comp lib="0" loc="(410,160)" name="Pin">
       <a name="facing" val="west"/>
       <a name="output" val="true"/>
-      <a name="width" val="5"/>
+      <a name="label" val="AB"/>
       <a name="labelloc" val="east"/>
     </comp>
-    <comp lib="0" loc="(340,240)" name="Pin">
-      <a name="width" val="5"/>
+    <comp lib="0" loc="(170,180)" name="Pin">
       <a name="tristate" val="false"/>
-    </comp>
-    <comp lib="1" loc="(460,500)" name="AND Gate">
-      <a name="size" val="70"/>
-      <a name="inputs" val="4"/>
+      <a name="label" val="B"/>
     </comp>
   </circuit>
 </project>

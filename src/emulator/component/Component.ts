@@ -5,6 +5,7 @@ import { Point } from "../../util/coordinates";
 import { ROTATION, transform } from "../../util/transform";
 import { Facing } from "../enums";
 import { Connector } from "../core/Connector";
+import { Updatable } from "../mixins/Updatable";
 
 /**
  * Allow component class definitions to be passed as arguments
@@ -28,27 +29,32 @@ export interface IConnector {
 	position : Point;
 }
 
-export default abstract class Component
+export default abstract class Component extends Updatable
 {
 	/**
 	 * The name of the component
 	 */
-	public static readonly NAME: string = "";
+	public static readonly NAME: string;
 
 	/**
 	 * Indicate the library the circuit component resides
 	 */
-	public static readonly LIB: string = "";
-
-	/**
-	 * The position of the component
-	 */
-	public position: Point;
+	public static readonly LIB: string;
 
 	/**
 	 * The orientation of the component
 	 */
 	public facing: Facing = Facing.East;
+
+	/**
+	 * The label of the component
+	 */
+	public label: string;
+
+	/**
+	 * The position of the component
+	 */
+	public position: Point;
 
 	/**
 	 * The list of connectors for this component
@@ -59,7 +65,9 @@ export default abstract class Component
 	 * The component constructor
 	 */
 	public constructor(schematic: IComponent) {
+		super();
 		this.position = schematic.location;
+		this.label = getAttribute("label", schematic.attributes, "");
 		this.setFacing(getAttribute("facing", schematic.attributes, Facing.East));
 	}
 
@@ -67,7 +75,7 @@ export default abstract class Component
 	 * Add a connector to the component
 	 */
 	protected addConnector(x: number, y: number, bitWidth: number = 1) {
-		let connector = new Connector(bitWidth);
+		let connector = new Connector(bitWidth, this);
 		this.connectors.push({ connector, position: new Point(x, y) });
 		return connector;
 	}
@@ -90,7 +98,7 @@ export default abstract class Component
 	/**
 	 * The input has changed, update and re-evaluate
 	 */
-	public abstract update(): void;
+	// public abstract update(): void;
 
 	// ---------------------------------------------------------------------------------------------
 

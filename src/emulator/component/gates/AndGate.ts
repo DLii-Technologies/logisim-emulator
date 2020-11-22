@@ -9,7 +9,7 @@ export class AndGate extends Gate
 	/**
 	 * The name of the component
 	 */
-	public static readonly NAME = "And Gate";
+	public static readonly NAME = "AND Gate";
 
 	/**
 	 * Indicate the library the circuit component resides

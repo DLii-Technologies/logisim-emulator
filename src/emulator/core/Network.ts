@@ -1,56 +1,63 @@
 import assert from "assert";
+import { EventEmitter } from "events";
+import { arraysAreEqual } from "../../util";
 import { Bit, threeValuedMerge } from "../../util/logic";
+import { Updatable } from "../mixins/Updatable";
 import { Connector } from "./Connector";
 
 /**
  * The network maintains connections to directly-connected components
  */
-export class Network
+export class Network extends Updatable
 {
-	protected signal: Bit[] = [];
 	/**
-	 * Indicate that the network has been updated
+	 * The signal currently on the network
 	 */
-	protected isDirty: boolean = false;
+	private __signal: Bit[] = [];
 
 	/**
-	 * Maintain the list of connectors in the network
+	 * Maintain a set of the connectors in the network
 	 */
-	protected connectors: Connector[] = [];
+	protected connectors: Set<Connector> = new Set();
 
 	/**
-	 * Maintain a list of scheduled updates
+	 * Update the network
 	 */
-	protected scheduledUpdates = new Set<Connector>();
+	public onUpdate() {
+		let signal = this.probe();
+		if (!arraysAreEqual(signal, this.__signal)) {
+			return;
+		}
+		this.__signal = signal;
+		for (let connector of this.connectors) {
+			connector.scheduleUpdate();
+		}
+	}
 
 	/**
 	 * Connect a connector to the network
 	 */
 	public connect(connector: Connector) {
 		assert(this.signal.length in [0, connector.bitWidth], "Network contains mismatched widths");
-		this.connectors.push(connector);
+		this.connectors.add(connector);
 		connector.connect(this);
 	}
 
 	/**
-	 * Schedule a new network update
+	 * Probe all connected connectors to determine the merged signal
 	 */
-	public scheduleUpdate(connector: Connector) {
-		// this.scheduledUpdates.add(connector);
-		this.isDirty = true;
+	public probe() {
+		let signal: Bit[] = [];
+		for (let connector of this.connectors) {
+			threeValuedMerge(signal, connector.signal);
+		}
+		return signal;
 	}
 
 	/**
-	 * Determine the signal on this network
+	 * Get the current signal on the network
 	 */
-	public probe() {
-		if (this.isDirty) {
-			this.signal = [];
-			for (let connector of this.connectors) {
-				threeValuedMerge(this.signal, connector.signal);
-			}
-			this.isDirty = false;
-		}
-		return this.signal;
+	public get signal() {
+		return this.__signal;
 	}
 }

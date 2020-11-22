@@ -22,7 +22,7 @@ export class CircuitComponent extends Component
 	 * @TODO
 	 * Re-evaluate the input and output
 	 */
-	public update() {
+	public onUpdate() {
 		//
 	}
 }
