@@ -44,7 +44,7 @@ export class NotGate extends Component
 		super(schematic);
 		this.bitWidth = parseInt(getAttribute("width", schematic.attributes, "1"));
 		this.size = parseInt(getAttribute("size", schematic.attributes, "30"));
-		this.input = this.addConnector(-this.size, this.bitWidth);
+		this.input = this.addConnector(-this.size, 0, this.bitWidth);
 		this.output = this.addConnector(0, 0, this.bitWidth, true);
 	}
 
@@ -52,6 +52,7 @@ export class NotGate extends Component
 	 * Perform the gate operation and output
 	 */
 	public onUpdate() {
-		this.output.emitSignal(threeValuedNot(this.input.probe()));
+		let signal = threeValuedNot(this.input.probe());
+		this.output.emitSignal(signal);
 	}
 }

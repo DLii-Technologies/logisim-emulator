@@ -2,7 +2,7 @@ import { expect } from "chai";
 import "mocha";
 import Project from "../src/emulator/Project";
 import { loadProject } from "../src/loader";
-import { bitCombinations, threeValuedAnd, threeValuedOr } from "../src/util/logic";
+import { bitCombinations, threeValuedAnd, threeValuedNot, threeValuedOr } from "../src/util/logic";
 
 /**
  * The project to work with and evaluate
@@ -40,7 +40,7 @@ describe.only("Emulation", () => {
 			inputC.connector.emitSignal([comb[2]]);
 			await circuit.evaluate();
 			expect(output.connector.probe()).to.eql([
-				threeValuedOr([comb[2], threeValuedAnd([comb[0], comb[1]])])
+				threeValuedOr([threeValuedNot(comb[2]), threeValuedAnd([comb[0], comb[1]])])
 			], "Inputs Provided: " + comb.toString());
 		});
 	});
