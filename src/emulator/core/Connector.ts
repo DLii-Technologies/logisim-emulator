@@ -34,7 +34,7 @@ export class Connector {
 	/**
 	 * Determine if this connector should update the component from signal changes
 	 */
-	private readonly __mute;
+	private readonly __mute: boolean;
 
 	/**
 	 * Create a connector
