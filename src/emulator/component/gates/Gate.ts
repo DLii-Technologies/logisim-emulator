@@ -6,7 +6,6 @@ import { MIRROR_ROTATION, transform } from "../../../util/transform";
 import { Connector } from "../../core/Connector";
 import Component, { IConnector } from "../Component";
 
-
 export abstract class Gate extends Component
 {
 	/**
@@ -60,14 +59,14 @@ export abstract class Gate extends Component
 		for (let i = 0; i < this.numInputs; i++) {
 			this.negated.push(getAttribute(`negated${i}`, schematic.attributes, "false") == "true");
 		}
-		this.output = this.addConnector(0, 0, this.bitWidth);
-		this.createConnectors(schematic.attributes);
+		this.output = this.addConnector(0, 0, this.bitWidth, true);
+		this.createInputConnectors(schematic.attributes);
 	}
 
 	/**
-	 * Create the connectors for the gate
+	 * Create the input connectors for the gate
 	 */
-	protected createConnectors(attributes: IAttributeMap) {
+	protected createInputConnectors(attributes: IAttributeMap) {
 		let offsetX = -this.size;
 		for (let i = 0; i < this.numInputs; i++) {
 			let offs = this.getInputOffset(attributes, i);
