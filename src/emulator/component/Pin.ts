@@ -31,7 +31,7 @@ export class Pin extends Component {
 	 */
 	public constructor(schematic: IComponent) {
 		super(schematic);
-		this.isOutput = getAttribute("output", schematic.attributes, "true") == "true";
+		this.isOutput = getAttribute("output", schematic.attributes, "false") == "true";
 		let bitWidth = parseInt(getAttribute("width", schematic.attributes, "1"));
 		this.__connector = this.addConnector(0, 0, bitWidth);
 	}

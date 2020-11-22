@@ -89,6 +89,23 @@ export function threeValuedXnor(...bits: Bit[]) {
 }
 
 /**
+ * Increment a three-valued bit array
+ */
+export function threeValuedIncrement(a: Bit[]) {
+	let i: number;
+	let carry = Bit.One;
+	let result = a.concat();
+	for (i = a.length - 1; carry == Bit.One && i >= 0; i--) {
+		result[i] = threeValuedXor(a[i], carry);
+		carry = (a[i] >= Bit.Zero) ? a[i] : Bit.Error;
+	}
+	if (carry == Bit.Error) {
+		result.fill(Bit.Error, 0, i + 1);
+	}
+	return result;
+}
+
+/**
  * Merge two signals together if possible. Conflicting bits result in errors
  */
 export function threeValuedMerge(a: Bit[], b: Bit[]) {
@@ -97,7 +114,7 @@ export function threeValuedMerge(a: Bit[], b: Bit[]) {
 		a = b;
 		b = tmp;
 	}
-	let result = a;
+	let result = a.concat();
 	if (result.length == 0) {
 		result = b;
 	} else {
@@ -121,7 +138,7 @@ export function transpose<T>(a: T[][]) {
 		return [];
 	}
 	let result: T[][] = [];
-	for (let i = 0; i < a.length; i++) {
+	for (let i = 0; i < a[0].length; i++) {
 		result.push([]);
 	}
 	for (let i = 0; i < a.length; i++) {
@@ -130,4 +147,54 @@ export function transpose<T>(a: T[][]) {
 		}
 	}
 	return result;
+}
+
+/**
+ * Generate all combinations of 0's and 1's
+ */
+export class BitCombinations
+{
+	protected bits?: Bit[];
+
+	public constructor(numBits: number) {
+		this.bits = [];
+		for (let i = 0; i < numBits; i++) {
+			this.bits.push(Bit.Zero);
+		}
+	}
+
+	/**
+	 * Get the next bit combination
+	 */
+	public next() {
+		let result = this.bits;
+		if (this.bits) {
+			if (this.bits.includes(Bit.Zero)) {
+				this.bits = threeValuedIncrement(this.bits);
+			} else {
+				this.bits = undefined;
+			}
+		}
+		return result;
+	}
+}
+
+/**
+ * Evaluate a function with all possible binary-bit combinations
+ */
+export async function bitCombinations(numBits: number, evaluate: (comb: Bit[]) => Promise<void>) {
+	let generator = new BitCombinations(numBits);
+	for (let comb = generator.next(); comb; comb = generator.next()) {
+		await evaluate(comb);
+	}
+}
+
+/**
+ * Evaluate a function with all possible binary-bit combinations synchronously
+ */
+export function bitCombinationsSync(numBits: number, evaluate: (comb: Bit[]) => void) {
+	let generator = new BitCombinations(numBits);
+	for (let comb = generator.next(); comb; comb = generator.next()) {
+		evaluate(comb);
+	}
 }

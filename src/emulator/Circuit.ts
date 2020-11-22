@@ -213,13 +213,14 @@ export class Circuit
 	 * Evaluate the circuit with the given input/output set
 	 */
 	public async evaluate() {
+		let updatable: Updatable;
 		let states = new Set<string>();
 		while (this.__toUpdate.length) {
 			let state = this.networkState();
-			if (states.has(state)) {
-				throw new Error("Oscillation detected!");
-			}
-			let updatable = this.__toUpdate.splice(1, 0)[0];
+			// if (states.has(state)) {
+			// 	throw new Error("Oscillation detected!");
+			// }
+			updatable = this.__toUpdate.splice(0, 1)[0];
 			states.add(state);
 			updatable.update();
 		}
@@ -259,6 +260,44 @@ export class Circuit
 	public pins(inputs: boolean = true, outputs: boolean = true) {
 		return <Pin[]>this.__components.filter(comp => comp instanceof Pin && (
 			(comp.isOutput && outputs) || (!comp.isOutput && inputs)));
+	}
+
+	/**
+	 * Get a list of all input pins for this circuit
+	 */
+	public get inputPins() {
+		return this.pins(true, false);
+	}
+
+	/**
+	 * Find and group all labeled inputs
+	 */
+	public get inputsPinsLabeled() {
+		let result: {[label: string]: Pin[]} = {};
+		for (let pin of this.inputPins) {
+			if (pin.label == "") {
+				continue;
+			}
+			if (!(pin.label in result)) {
+				result[pin.label] = [];
+			}
+			result[pin.label].push(pin);
+		}
+		return result;
+	}
+
+	/**
+	 * Get a list of all output pins for this circuit
+	 */
+	public get outputPins() {
+		return this.pins(false, true);
+	}
+
+	/**
+	 * Get the list of components in this circuit
+	 */
+	public get components() {
+		return this.__components;
 	}
 
 	/**

@@ -22,12 +22,15 @@ export abstract class Updatable {
 	// Overridable ---------------------------------------------------------------------------------
 
 	/**
-	 * Update the object
+	 * Handle object updates
 	 */
-	public abstract onUpdate(): void;
+	protected abstract onUpdate(): void;
 
 	// Internal Handling----------------------------------------------------------------------------
 
+	/**
+	 * Update the object
+	 */
 	public update() {
 		this.onUpdate();
 		this.__isScheduled = false;

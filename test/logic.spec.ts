@@ -1,7 +1,7 @@
 import { expect } from "chai";
 import "mocha";
 import { threeValuedAnd, threeValuedNot, threeValuedOr, Bit, threeValuedNand, threeValuedNor,
-	threeValuedXor, threeValuedXnor, threeValuedMerge} from "../src/util/logic";
+	threeValuedXor, threeValuedXnor, threeValuedMerge, threeValuedIncrement, bitCombinations, bitCombinationsSync} from "../src/util/logic";
 
 describe("Three-valued Logic", () => {
 	it("AND", () => {
@@ -143,5 +143,47 @@ describe("Three-valued Logic", () => {
 		expect(threeValuedMerge([Bit.One],     [Bit.Error]  )).to.eql([Bit.Error]);
 		expect(threeValuedMerge([Bit.One],     [Bit.Zero]   )).to.eql([Bit.Error]);
 		expect(threeValuedMerge([Bit.One],     [Bit.One]    )).to.eql([Bit.One]);
+	});
+	it("Increment", () => {
+		expect(threeValuedIncrement([Bit.Zero, Bit.Zero   ])).to.eql([Bit.Zero, Bit.One]);
+		expect(threeValuedIncrement([Bit.Zero, Bit.One    ])).to.eql([Bit.One, Bit.Zero]);
+		expect(threeValuedIncrement([Bit.One,  Bit.One    ])).to.eql([Bit.Zero, Bit.Zero]);
+		expect(threeValuedIncrement([Bit.One,  Bit.Unknown])).to.eql([Bit.Error, Bit.Error]);
+		expect(threeValuedIncrement([Bit.One,  Bit.Error  ])).to.eql([Bit.Error, Bit.Error]);
+	});
+	it("Original inputs are unmodified", () => {
+		let testA = [Bit.Zero, Bit.One];
+		let testB = [Bit.One, Bit.Zero];
+
+		threeValuedMerge(testA, testB);
+		expect(testA).to.eql([Bit.Zero, Bit.One]);
+		expect(testB).to.eql([Bit.One, Bit.Zero]);
+
+		threeValuedIncrement(testA);
+		expect(testA).to.eql([Bit.Zero, Bit.One]);
+	})
+	it("Combination Generator (Synchronous)", () => {
+		let combinations = new Set<string>([
+			[Bit.Zero, Bit.Zero].toString(),
+			[Bit.Zero, Bit.One ].toString(),
+			[Bit.One,  Bit.Zero].toString(),
+			[Bit.One,  Bit.One].toString()
+		]);
+		bitCombinationsSync(2, (comb) => {
+			expect(combinations.delete(comb.toString())).to.equal(true);
+		});
+		expect(combinations.size).to.equal(0);
+	});
+	it("Combination Generator (Asynchronous)", async () => {
+		let combinations = new Set<string>([
+			[Bit.Zero, Bit.Zero].toString(),
+			[Bit.Zero, Bit.One ].toString(),
+			[Bit.One,  Bit.Zero].toString(),
+			[Bit.One,  Bit.One].toString()
+		]);
+		await bitCombinations(2, async (comb) => {
+			expect(combinations.delete(comb.toString())).to.equal(true);
+		});
+		expect(combinations.size).to.equal(0);
 	});
 });

@@ -74,8 +74,8 @@ export default abstract class Component extends Updatable
 	/**
 	 * Add a connector to the component
 	 */
-	protected addConnector(x: number, y: number, bitWidth: number = 1) {
-		let connector = new Connector(bitWidth, this);
+	protected addConnector(x: number, y: number, bitWidth: number = 1, mute: boolean = false) {
+		let connector = new Connector(this, bitWidth, mute);
 		this.connectors.push({ connector, position: new Point(x, y) });
 		return connector;
 	}

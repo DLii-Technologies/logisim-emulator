@@ -2,6 +2,7 @@ import assert from "assert";
 import { EventEmitter } from "events";
 import { arraysAreEqual } from "../../util";
 import { Bit, threeValuedMerge } from "../../util/logic";
+import Component from "../component/Component";
 import { Updatable } from "../mixins/Updatable";
 import { Connector } from "./Connector";
 
@@ -25,7 +26,7 @@ export class Network extends Updatable
 	 */
 	public onUpdate() {
 		let signal = this.probe();
-		if (!arraysAreEqual(signal, this.__signal)) {
+		if (arraysAreEqual(signal, this.__signal)) {
 			return;
 		}
 		this.__signal = signal;
@@ -49,7 +50,7 @@ export class Network extends Updatable
 	public probe() {
 		let signal: Bit[] = [];
 		for (let connector of this.connectors) {
-			threeValuedMerge(signal, connector.signal);
+			signal = threeValuedMerge(signal, connector.signal);
 		}
 		return signal;
 	}
@@ -59,5 +60,16 @@ export class Network extends Updatable
 	 */
 	public get signal() {
 		return this.__signal;
+	}
+
+	/**
+	 * Get the list of components connected to the network
+	 */
+	public get components() {
+		let result = new Set<Component>();
+		for (let connector of this.connectors) {
+			result.add(connector.component);
+		}
+		return result;
 	}
 }

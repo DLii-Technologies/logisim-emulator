@@ -1,4 +1,5 @@
 import assert from "assert";
+import { arraysAreEqual } from "../../util";
 import { Bit, threeValuedMerge } from "../../util/logic";
 import Component from "../component/Component";
 import { Updatable } from "../mixins/Updatable";
@@ -33,14 +34,15 @@ export class Connector {
 	/**
 	 * Determine if this connector should update the component from signal changes
 	 */
-	private __mute = false;
+	private readonly __mute;
 
 	/**
 	 * Create a connector
 	 */
-	public constructor(bitWidth: number = 1, component: Component) {
-		this.__bitWidth = bitWidth;
+	public constructor(component: Component, bitWidth: number = 1, mute: boolean = false) {
 		this.__component = component;
+		this.__bitWidth = bitWidth;
+		this.__mute = mute;
 		for (let i = 0; i < bitWidth; i++) {
 			this.__signal.push(Bit.Unknown);
 		}
@@ -70,6 +72,9 @@ export class Connector {
 	 * Emit a value into the connected network
 	 */
 	public emitSignal(signal: Bit[]) {
+		if (arraysAreEqual(signal, this.__signal)) {
+			return;
+		}
 		assert(signal.length == this.__bitWidth, "Emitted signal width invalid");
 		this.__signal = signal;
 		if (this.__network) {
