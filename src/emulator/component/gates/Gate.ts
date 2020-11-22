@@ -1,7 +1,7 @@
 import { IAttributeMap, IComponent } from "../../../schematic";
 import { getAttribute } from "../../../util";
 import { Point } from "../../../util/coordinates";
-import { Bit, transpose } from "../../../util/logic";
+import { Bit, threeValuedNot, transpose } from "../../../util/logic";
 import { MIRROR_ROTATION, transform } from "../../../util/transform";
 import { Connector } from "../../core/Connector";
 import Component, { IConnector } from "../Component";
@@ -136,9 +136,13 @@ export abstract class Gate extends Component
 	 */
 	protected inputSignals() {
 		let result: Bit[][] = [];
-		for (let input of this.inputs) {
-			if (input.network !== null) {
-				result.push(input.probe());
+		for (let i = 0; i < this.inputs.length; i++) {
+			if (this.inputs[i].network !== null) {
+				let signal = this.inputs[i].probe();
+				if (this.negated[i]) {
+					signal = threeValuedNot(signal);
+				}
+				result.push(signal);
 			}
 		}
 		return transpose(result);

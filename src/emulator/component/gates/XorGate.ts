@@ -23,6 +23,6 @@ export class XorGate extends Gate
 	 * Perform an AND operation on the input and output the result
 	 */
 	protected evaluate(bits: Bit[]) {
-		return threeValuedXor(...bits);
+		return threeValuedXor(bits);
 	}
 }

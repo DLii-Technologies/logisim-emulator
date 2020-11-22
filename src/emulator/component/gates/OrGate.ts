@@ -23,6 +23,6 @@ export class OrGate extends Gate
 	 * Perform an AND operation on the input and output the result
 	 */
 	protected evaluate(bits: Bit[]) {
-		return threeValuedOr(...bits);
+		return threeValuedOr(bits);
 	}
 }

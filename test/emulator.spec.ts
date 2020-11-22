@@ -25,7 +25,7 @@ describe.only("Emulation", () => {
 			inputA.connector.emitSignal([comb[0]]);
 			inputB.connector.emitSignal([comb[1]]);
 			await circuit.evaluate();
-			expect(output.connector.probe()).to.eql([threeValuedAnd(...comb)]);
+			expect(output.connector.probe()).to.eql([threeValuedAnd(comb)]);
 		});
 	});
 	it("Evaluate comb circuit", async () => {
@@ -40,7 +40,7 @@ describe.only("Emulation", () => {
 			inputC.connector.emitSignal([comb[2]]);
 			await circuit.evaluate();
 			expect(output.connector.probe()).to.eql([
-				threeValuedOr(...[comb[2], threeValuedAnd(comb[0], comb[1])])
+				threeValuedOr([comb[2], threeValuedAnd([comb[0], comb[1]])])
 			], "Inputs Provided: " + comb.toString());
 		});
 	});

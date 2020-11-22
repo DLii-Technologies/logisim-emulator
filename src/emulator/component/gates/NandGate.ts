@@ -23,6 +23,6 @@ export class NandGate extends Gate
 	 * Perform an AND operation on the input and output the result
 	 */
 	protected evaluate(bits: Bit[]) {
-		return threeValuedNand(...bits);
+		return threeValuedNand(bits);
 	}
 }

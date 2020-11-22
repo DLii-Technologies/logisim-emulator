@@ -16,7 +16,7 @@ export enum Bit {
 /**
  * Three-valued AND operation
  */
-export function threeValuedAnd(...bits: Bit[]) {
+export function threeValuedAnd(bits: Bit[]) {
 	assert(bits.length >= 2, "Attempted AND of 1 or fewer inputs");
 	let result = bits[0];
 	for (let i = 1; result >= Bit.Zero && i < bits.length; i++) {
@@ -28,7 +28,7 @@ export function threeValuedAnd(...bits: Bit[]) {
 /**
  * Three-valued OR operation
  */
-export function threeValuedOr(...bits: Bit[]): Bit {
+export function threeValuedOr(bits: Bit[]): Bit {
 	assert(bits.length >= 2, "Attempted OR of 1 or fewer inputs");
 	let result = Bit.Zero;
 	for (let i = 0; i < bits.length; i++) {
@@ -43,7 +43,7 @@ export function threeValuedOr(...bits: Bit[]): Bit {
 /**
  * Three-valued XOR operation
  */
-export function threeValuedXor(...bits: Bit[]) {
+export function threeValuedXor(bits: Bit[]) {
 	assert(bits.length >= 2, "Attempted XOR of 1 or fewer inputs");
 	let ones = 0;
 	for (let i = 0; ones < 2 && i < bits.length; i++) {
@@ -60,32 +60,42 @@ export function threeValuedXor(...bits: Bit[]) {
 /**
  * Three-valued NOT operation
  */
-export function threeValuedNot(a: Bit): Bit {
-	return (a & 2) ? (2 | (~a & 1)) : Bit.Error;
+export function threeValuedNot(bit: Bit): Bit;
+export function threeValuedNot(bits: Bit[]): Bit[];
+export function threeValuedNot(bit: Bit|Bit[]) {
+	if (Array.isArray(bit)) {
+		let result: Bit[] = [];
+		for (let b of bit) {
+			result.push(threeValuedNot(b));
+		}
+		return result;
+	} else {
+		return (bit >= Bit.Zero) ? (Bit.Zero | (~bit & 1)) : Bit.Error;
+	}
 }
 
 /**
  * Three-valued NAND operation
  */
-export function threeValuedNand(...bits: Bit[]) {
+export function threeValuedNand(bits: Bit[]) {
 	assert(bits.length >= 2, "Attempted NAND of 1 or fewer inputs");
-	return threeValuedNot(threeValuedAnd(...bits));
+	return threeValuedNot(threeValuedAnd(bits));
 }
 
 /**
  * Three-valued NOR operation
  */
-export function threeValuedNor(...bits: Bit[]) {
+export function threeValuedNor(bits: Bit[]) {
 	assert(bits.length >= 2, "Attempted NOR of 1 or fewer inputs");
-	return threeValuedNot(threeValuedOr(...bits));
+	return threeValuedNot(threeValuedOr(bits));
 }
 
 /**
  * Three-valued XNOR operation
  */
-export function threeValuedXnor(...bits: Bit[]) {
+export function threeValuedXnor(bits: Bit[]) {
 	assert(bits.length >= 2, "Attempted XNOR of 1 or fewer inputs");
-	return threeValuedNot(threeValuedXor(...bits));
+	return threeValuedNot(threeValuedXor(bits));
 }
 
 /**
@@ -96,7 +106,7 @@ export function threeValuedIncrement(a: Bit[]) {
 	let carry = Bit.One;
 	let result = a.concat();
 	for (i = a.length - 1; carry == Bit.One && i >= 0; i--) {
-		result[i] = threeValuedXor(a[i], carry);
+		result[i] = threeValuedXor([a[i], carry]);
 		carry = (a[i] >= Bit.Zero) ? a[i] : Bit.Error;
 	}
 	if (carry == Bit.Error) {

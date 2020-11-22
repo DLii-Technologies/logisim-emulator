@@ -23,6 +23,6 @@ export class NorGate extends Gate
 	 * Perform an AND operation on the input and output the result
 	 */
 	protected evaluate(bits: Bit[]) {
-		return threeValuedNor(...bits);
+		return threeValuedNor(bits);
 	}
 }
