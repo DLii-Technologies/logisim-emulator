@@ -270,9 +270,9 @@ export class Circuit
 	}
 
 	/**
-	 * Find and group all labeled inputs
+	 * Find and group all labeled input pins
 	 */
-	public get inputsPinsLabeled() {
+	public get inputPinsLabeled() {
 		let result: {[label: string]: Pin[]} = {};
 		for (let pin of this.inputPins) {
 			if (pin.label == "") {
@@ -291,6 +291,23 @@ export class Circuit
 	 */
 	public get outputPins() {
 		return this.pins(false, true);
+	}
+
+	/**
+	 * Find and group all labeled output pins
+	 */
+	public get outputPinsLabeled() {
+		let result: {[label: string]: Pin[]} = {};
+		for (let pin of this.outputPins) {
+			if (pin.label == "") {
+				continue;
+			}
+			if (!(pin.label in result)) {
+				result[pin.label] = [];
+			}
+			result[pin.label].push(pin);
+		}
+		return result;
 	}
 
 	/**

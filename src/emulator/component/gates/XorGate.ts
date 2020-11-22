@@ -16,7 +16,7 @@ export class XorGate extends Gate
 	public static readonly LIB = BuiltinLibrary.Gates;
 
 	public constructor(schematic: IComponent) {
-		super(schematic);
+		super(schematic, false, 10);
 	}
 
 	/**

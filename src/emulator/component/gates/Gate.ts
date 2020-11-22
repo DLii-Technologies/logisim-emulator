@@ -51,13 +51,15 @@ export abstract class Gate extends Component
 	/**
 	 * Create a logic gate
 	 */
-	public constructor(schematic: IComponent) {
+	public constructor(schematic: IComponent, negateOutput: boolean, bonusWidth: number = 0) {
 		super(schematic);
+		this.negateOutput = negateOutput;
+		this.bonusWidth = bonusWidth;
 		this.bitWidth = parseInt(getAttribute("width", schematic.attributes, "1"));
 		this.size = parseInt(getAttribute("size", schematic.attributes, "50"));
 		this.numInputs = parseInt(getAttribute("inputs", schematic.attributes, "5"));
 		for (let i = 0; i < this.numInputs; i++) {
-			this.negated.push(getAttribute(`negated${i}`, schematic.attributes, "false") == "true");
+			this.negated.push(getAttribute(`negate${i}`, schematic.attributes, "false") == "true");
 		}
 		this.output = this.addConnector(0, 0, this.bitWidth, true);
 		this.createInputConnectors(schematic.attributes);
@@ -82,7 +84,6 @@ export abstract class Gate extends Component
 	 */
 	protected getInputOffset(attrs: IAttributeMap, index: number) {
 		let axisLength = this.size + this.bonusWidth + (this.negateOutput ? 10 : 0);
-		let negated = getAttribute(`negated${index}`, attrs, "false") == "true";
 
 		let skipStart: number;
 		let skipDist: number;
@@ -122,7 +123,7 @@ export abstract class Gate extends Component
         }
 
         let dx = axisLength;
-        if (negated) {
+        if (this.negated[index]) {
             dx += 10;
 		}
 
