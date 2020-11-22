@@ -4,7 +4,7 @@ import { getAttribute } from "../../util";
 import { Point } from "../../util/coordinates";
 import { ROTATION, transform } from "../../util/transform";
 import { Facing } from "../enums";
-import { Connector } from "../core/Connector";
+import { Port } from "../core/Port";
 import { Updatable } from "../mixins/Updatable";
 
 /**
@@ -25,7 +25,7 @@ export interface IComponentMap {
  * Store a single connector in the component
  */
 export interface IConnector {
-	connector: Connector;
+	port: Port;
 	position : Point;
 }
 
@@ -74,9 +74,9 @@ export default abstract class Component extends Updatable
 	/**
 	 * Add a connector to the component
 	 */
-	protected addConnector(x: number, y: number, bitWidth: number = 1, mute: boolean = false) {
-		let connector = new Connector(this, bitWidth, mute);
-		this.connectors.push({ connector, position: new Point(x, y) });
+	protected addPort(x: number, y: number, bitWidth: number = 1, mute: boolean = false) {
+		let connector = new Port(this, bitWidth, mute);
+		this.ports.push({ port: connector, position: new Point(x, y) });
 		return connector;
 	}
 
@@ -105,18 +105,18 @@ export default abstract class Component extends Updatable
 	/**
 	 * Get the list of connectors for this component
 	 */
-	public get connectors() {
+	public get ports() {
 		return this.__connectors;
 	}
 
 	/**
 	 * Get the list of connectors for this component transformed with the component orientation
 	 */
-	public get connectorsTransformed() {
+	public get portsTransformed() {
 		let result: IConnector[] = [];
 		for (let connector of this.__connectors) {
 			result.push({
-				connector: connector.connector,
+				port: connector.port,
 				position: transform(connector.position, this.position, ROTATION[this.facing])
 			});
 		}

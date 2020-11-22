@@ -1,135 +1,78 @@
-import assert from "assert";
-import { arraysAreEqual } from "../../util";
 import { Bit, threeValuedMerge } from "../../util/logic";
-import Component from "../component/Component";
-import { Updatable } from "../mixins/Updatable";
-import { Network } from "./Network";
+import { Port } from "./Port";
+import { Wire } from "./Wire";
 
 /**
- * A connector can probe the connected network or emit signals onto the network.
- * Events triggered via emit trigger network updates.
+ * The connector manages a single bit channel of a port
  */
-export class Connector {
+export class Connector
+{
+	/**
+	 * The port that this connector belongs to
+	 */
+	public readonly port: Port;
 
 	/**
-	 * Store a reference to the component that this connector belongs to
+	 * The index of the signal this connector is responsible for
 	 */
-	private __component: Component;
+	public readonly index: number;
 
 	/**
-	 * Store the network that this connector is connected to
+	 * The wire this connector is connected to
 	 */
-	private __network: Network | null = null;
+	protected wire: Wire | null = null;
 
 	/**
-	 * The value currently being emitted onto the network by this connector
+	 * Create a new connector
 	 */
-	private __signal: Bit[] = [];
-
-	/**
-	 * The number of bits this connector is compatible with
-	 */
-	private __bitWidth: number;
-
-	/**
-	 * Determine if this connector should update the component from signal changes
-	 */
-	private readonly __mute: boolean;
-
-	/**
-	 * Create a connector
-	 */
-	public constructor(component: Component, bitWidth: number = 1, mute: boolean = false) {
-		this.__component = component;
-		this.__bitWidth = bitWidth;
-		this.__mute = mute;
-		for (let i = 0; i < bitWidth; i++) {
-			this.__signal.push(Bit.Unknown);
-		}
+	public constructor(port: Port, index: number) {
+		this.port = port;
+		this.index = index;
 	}
 
 	// ---------------------------------------------------------------------------------------------
 
 	/**
-	 * Schedule an update for this connector's component
+	 * Connect a wire to this connector
+	 */
+	public connect(wire: Wire) {
+		this.wire = wire;
+	}
+
+	/**
+	 * Update the connector and schedule an update for the wire if connected
+	 */
+	public update() {
+		if (this.wire) {
+			this.wire.scheduleUpdate();
+		}
+	}
+
+	/**
+	 * Schedule an update for this connector
 	 */
 	public scheduleUpdate() {
-		if (!this.__mute) {
-			this.component.scheduleUpdate();
-		}
+		this.port.scheduleUpdate();
 	}
 
 	// ---------------------------------------------------------------------------------------------
-
-	/**
-	 * Connect this connector to a wire network
-	 */
-	public connect(network: Network) {
-		this.__network = network;
-	}
-
-	/**
-	 * Emit a value into the connected network
-	 */
-	public emitSignal(signal: Bit[]) {
-		if (arraysAreEqual(signal, this.__signal)) {
-			return;
-		}
-		assert(signal.length == this.__bitWidth, "Emitted signal width invalid");
-		this.__signal = signal;
-		if (this.__network) {
-			this.__network.scheduleUpdate();
-		}
-	}
-
-	/**
-	 * Clear the outputting signal
-	 */
-	public clearSignal() {
-		let signal = [];
-		for (let i = 0; i < this.bitWidth; i++) {
-			signal.push(Bit.Unknown);
-		}
-		this.emitSignal(signal);
-	}
 
 	/**
 	 * Probe the network for the current value
 	 */
 	public probe() {
-		if (this.network === null) {
+		if (this.wire === null) {
 			return this.signal;
 		}
-		return threeValuedMerge(this.signal, this.network.signal);
+		return threeValuedMerge([this.signal], [this.wire.signal])[0];
 	}
 
 	// ---------------------------------------------------------------------------------------------
 
 	/**
-	 * Get the bit width of the connector
-	 */
-	public get bitWidth() {
-		return this.__bitWidth;
-	}
-
-	/**
-	 * Get a reference to the component this connector belongs to
-	 */
-	public get component() {
-		return this.__component;
-	}
-
-	/**
-	 * Get the value currently being emitted by this connector
+	 * Get the signal from the port
 	 */
 	public get signal() {
-		return this.__signal;
-	}
-
-	/**
-	 * Get the network this connector is attached to
-	 */
-	public get network() {
-		return this.__network;
+		return this.port.signal[this.index];
 	}
 }

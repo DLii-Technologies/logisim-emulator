@@ -3,11 +3,17 @@ import { getAttribute } from "../../../util";
 import { Point } from "../../../util/coordinates";
 import { Bit, threeValuedNot, transpose } from "../../../util/logic";
 import { MIRROR_ROTATION, transform } from "../../../util/transform";
-import { Connector } from "../../core/Connector";
+import { Port } from "../../core/Port";
+import { BuiltinLibrary } from "../../enums";
 import Component, { IConnector } from "../Component";
 
 export abstract class Gate extends Component
 {
+	/**
+	 * Indicate the library the circuit component resides
+	 */
+	public static readonly LIB = BuiltinLibrary.Gates;
+
 	/**
 	 * Add additional width for certain gates
 	 */
@@ -26,12 +32,12 @@ export abstract class Gate extends Component
 	/**
 	 * Input connectors
 	 */
-	protected inputs: Connector[] = [];
+	protected inputs: Port[] = [];
 
 	/**
 	 * Output connectors
 	 */
-	protected output: Connector;
+	protected output: Port;
 
 	/**
 	 * The size of the gate
@@ -61,7 +67,7 @@ export abstract class Gate extends Component
 		for (let i = 0; i < this.numInputs; i++) {
 			this.negated.push(getAttribute(`negate${i}`, schematic.attributes, "false") == "true");
 		}
-		this.output = this.addConnector(0, 0, this.bitWidth, true);
+		this.output = this.addPort(0, 0, this.bitWidth, true);
 		this.createInputConnectors(schematic.attributes);
 	}
 
@@ -72,7 +78,7 @@ export abstract class Gate extends Component
 		let offsetX = -this.size;
 		for (let i = 0; i < this.numInputs; i++) {
 			let offs = this.getInputOffset(attributes, i);
-			this.inputs.push(this.addConnector(offs.x, offs.y, this.bitWidth));
+			this.inputs.push(this.addPort(offs.x, offs.y, this.bitWidth));
 		}
 	}
 
@@ -138,7 +144,7 @@ export abstract class Gate extends Component
 	protected inputSignals() {
 		let result: Bit[][] = [];
 		for (let i = 0; i < this.inputs.length; i++) {
-			if (this.inputs[i].network !== null) {
+			if (this.inputs[i].isConnected) {
 				let signal = this.inputs[i].probe();
 				if (this.negated[i]) {
 					signal = threeValuedNot(signal);
@@ -172,12 +178,12 @@ export abstract class Gate extends Component
 	/**
 	 * Due to Logisim bug in pin placement with gates, custom transform is required...
 	 */
-	public get connectorsTransformed() {
+	public get portsTransformed() {
 		let result: IConnector[] = [];
-		for (let connector of this.connectors) {
+		for (let connector of this.ports) {
 			let pos = transform(connector.position, this.position, MIRROR_ROTATION[this.facing]);
 			result.push({
-				connector: connector.connector,
+				port: connector.port,
 				position: pos
 			});
 		}

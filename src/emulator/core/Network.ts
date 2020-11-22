@@ -1,65 +1,42 @@
 import assert from "assert";
-import { EventEmitter } from "events";
-import { arraysAreEqual } from "../../util";
-import { Bit, threeValuedMerge } from "../../util/logic";
 import Component from "../component/Component";
-import { Updatable } from "../mixins/Updatable";
-import { Connector } from "./Connector";
+import { Port } from "./Port";
+import { Wire } from "./Wire";
 
 /**
  * The network maintains connections to directly-connected components
  */
-export class Network extends Updatable
+export class Network
 {
 	/**
-	 * The signal currently on the network
+	 * Maintain a set of the ports in the network
 	 */
-	private __signal: Bit[] = [];
+	protected ports: Set<Port> = new Set();
 
 	/**
-	 * Maintain a set of the connectors in the network
+	 * The list of wires associated with this network
 	 */
-	protected connectors: Set<Connector> = new Set();
+	private __wires: Wire[] = [];
 
 	/**
-	 * Update the network
+	 * Connect a port to the network
 	 */
-	public onUpdate() {
-		let signal = this.probe();
-		if (arraysAreEqual(signal, this.__signal)) {
-			return;
+	public connect(port: Port) {
+		assert(this.bitWidth in [0, port.bitWidth], "Network contains mismatched widths");
+		if (this.bitWidth == 0) {
+			for (let i = 0; i < port.bitWidth; i++) {
+				this.__wires.push(new Wire());
+			}
 		}
-		this.__signal = signal;
-		for (let connector of this.connectors) {
-			connector.scheduleUpdate();
-		}
+		this.ports.add(port);
+		port.connect(this);
 	}
 
 	/**
-	 * Connect a connector to the network
+	 * Get the bit-width of the network
 	 */
-	public connect(connector: Connector) {
-		assert(this.signal.length in [0, connector.bitWidth], "Network contains mismatched widths");
-		this.connectors.add(connector);
-		connector.connect(this);
-	}
-
-	/**
-	 * Probe all connected connectors to determine the merged signal
-	 */
-	public probe() {
-		let signal: Bit[] = [];
-		for (let connector of this.connectors) {
-			signal = threeValuedMerge(signal, connector.signal);
-		}
-		return signal;
-	}
-
-	/**
-	 * Get the current signal on the network
-	 */
-	public get signal() {
-		return this.__signal;
+	public get bitWidth() {
+		return this.__wires.length;
 	}
 
 	/**
@@ -67,9 +44,16 @@ export class Network extends Updatable
 	 */
 	public get components() {
 		let result = new Set<Component>();
-		for (let connector of this.connectors) {
-			result.add(connector.component);
+		for (let port of this.ports) {
+			result.add(port.component);
 		}
 		return result;
+	}
+
+	/**
+	 * Get the list of wires within this network
+	 */
+	public get wires() {
+		return this.__wires;
 	}
 }

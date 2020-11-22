@@ -3,7 +3,7 @@ import { ICircuit } from "../schematic";
 import { Line, Point } from "../util/coordinates";
 import Component, { IComponentMap } from "./component/Component";
 import { ILibraryMap } from "./Project";
-import { Connector } from "./core/Connector";
+import { Port } from "./core/Port";
 import { Network } from "./core/Network";
 import { Updatable } from "./mixins/Updatable";
 import { Bit } from "../util/logic";
@@ -11,10 +11,10 @@ import { Pin } from "./component";
 import { Facing } from "./enums";
 
 /**
- * Map sets of isolated connectors by position
+ * Map sets of isolated ports by position
  */
-interface IIsolatedConnectors {
-	[point: string]: Connector[]
+interface IIsolatedPorts {
+	[point: string]: Port[]
 }
 
 export class Circuit
@@ -97,8 +97,8 @@ export class Circuit
 		let networks: Line[][] = [];
 		for (let wire of schematic.wires) {
 			let network: Line[] = [wire];
-			for (let connector of [wire.a, wire.b]) {
-				let index = this.findConnectedNetwork(connector, networks);
+			for (let port of [wire.a, wire.b]) {
+				let index = this.findConnectedNetwork(port, networks);
 				if (index >= 0) {
 					network = network.concat(networks.splice(index, 1)[0]);
 				}
@@ -130,49 +130,57 @@ export class Circuit
 	protected wireUp(schematic: ICircuit, components: Component[]) {
 		let networks: Network[] = [];
 		let wireNetworks = this.createWireNetworks(this.__schematic);
-		let isolatedConnectors = this.solderToWires(wireNetworks, networks);
-		this.solderToConnectors(isolatedConnectors, networks);
+		let isolatedPorts = this.solderToWires(wireNetworks, networks);
+		this.solderToPorts(isolatedPorts, networks);
+		this.dissolveSplitters();
 		return networks;
 	}
 
 	/**
-	 * Connect component connectors to wire networks if possible
+	 * Connect component ports to wire networks if possible
 	 *
-	 * @return Isolated connectors mapped by position
+	 * @return Isolated ports mapped by position
 	 */
 	protected solderToWires(wireNetworks: Line[][], networks: Network[]) {
-		let isolatedConnectors: IIsolatedConnectors = {};
+		let isolatedPorts: IIsolatedPorts = {};
 		for (let i = 0; i < wireNetworks.length; i++) {
 			networks.push(new Network());
 		}
 		for (let component of this.__components) {
-			for (let connector of component.connectorsTransformed) {
-				let index = this.findConnectedNetwork(connector.position, wireNetworks);
+			for (let port of component.portsTransformed) {
+				let index = this.findConnectedNetwork(port.position, wireNetworks);
 				if (index >= 0)  {
-					networks[index].connect(connector.connector);
+					networks[index].connect(port.port);
 				} else {
-					let key = connector.position.toString();
-					let connectors = isolatedConnectors[key] || [];
-					isolatedConnectors[key] = connectors.concat([connector.connector]);
+					let key = port.position.toString();
+					let ports = isolatedPorts[key] || [];
+					isolatedPorts[key] = ports.concat([port.port]);
 				}
 			}
 		}
-		return isolatedConnectors;
+		return isolatedPorts;
 	}
 
 	/**
-	 * Connect component connectors that are directly connected
+	 * Connect component ports that are directly connected
 	 */
-	protected solderToConnectors(isolatedConnectors: IIsolatedConnectors, networks: Network[]) {
-		for (let point in isolatedConnectors) {
-			if (isolatedConnectors[point].length > 1) {
+	protected solderToPorts(isolatedPorts: IIsolatedPorts, networks: Network[]) {
+		for (let point in isolatedPorts) {
+			if (isolatedPorts[point].length > 1) {
 				let network = new Network();
-				for (let connector of isolatedConnectors[point]) {
-					network.connect(connector);
+				for (let port of isolatedPorts[point]) {
+					network.connect(port);
 				}
 				networks.push(network);
 			}
 		}
+	}
+
+	/**
+	 * Once everything is wired up, splitters should be dissolved to merge the networks
+	 */
+	protected dissolveSplitters() {
+
 	}
 
 	/**
@@ -183,7 +191,9 @@ export class Circuit
 			component.addListener(this.scheduleUpdate);
 		}
 		for (let network of this.__networks) {
-			network.addListener(this.scheduleUpdate);
+			for (let wire of network.wires) {
+				wire.addListener(this.scheduleUpdate);
+			}
 		}
 	}
 
@@ -195,7 +205,9 @@ export class Circuit
 	protected networkState() {
 		let bits: Bit[] = [];
 		for (let network of this.__networks) {
-			bits = bits.concat(network.signal);
+			for (let wire of network.wires) {
+				bits = bits.concat(wire.signal);
+			}
 		}
 		return bits.toString();
 	}
@@ -330,12 +342,12 @@ export class Circuit
 	// public output() {
 	// 	let labeled = {};
 	// 	let unlabeled = [];
-	// 	for (let connector of this.__components) {
-	// 		if (connector instanceof Pin) {
-	// 			if (connector.label !== "") {
+	// 	for (let port of this.__components) {
+	// 		if (port instanceof Pin) {
+	// 			if (port.label !== "") {
 
 	// 			} else {
-	// 				unlabeled.push(connector);
+	// 				unlabeled.push(port);
 	// 			}
 	// 		}
 	// 	}

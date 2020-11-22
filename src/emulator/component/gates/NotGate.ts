@@ -1,7 +1,7 @@
 import { IComponent } from "../../../schematic";
 import { getAttribute } from "../../../util";
 import { threeValuedNot } from "../../../util/logic";
-import { Connector } from "../../core/Connector";
+import { Port } from "../../core/Port";
 import { BuiltinLibrary } from "../../enums";
 import Component from "../Component";
 
@@ -20,12 +20,12 @@ export class NotGate extends Component
 	/**
 	 * Input connectors
 	 */
-	protected input: Connector;
+	protected input: Port;
 
 	/**
 	 * Output connectors
 	 */
-	protected output: Connector;
+	protected output: Port;
 
 	/**
 	 * The size of the gate
@@ -44,8 +44,8 @@ export class NotGate extends Component
 		super(schematic);
 		this.bitWidth = parseInt(getAttribute("width", schematic.attributes, "1"));
 		this.size = parseInt(getAttribute("size", schematic.attributes, "30"));
-		this.input = this.addConnector(-this.size, 0, this.bitWidth);
-		this.output = this.addConnector(0, 0, this.bitWidth, true);
+		this.input = this.addPort(-this.size, 0, this.bitWidth);
+		this.output = this.addPort(0, 0, this.bitWidth, true);
 	}
 
 	/**

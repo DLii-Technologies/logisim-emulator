@@ -1,7 +1,7 @@
 import { IComponent } from "../../schematic";
 import { BuiltinLibrary } from "../enums";
 import { getAttribute } from "../../util";
-import { Connector } from "../core/Connector";
+import { Port } from "../core/Port";
 import Component from "./Component";
 
 export class Pin extends Component {
@@ -24,7 +24,7 @@ export class Pin extends Component {
 	/**
 	 * Store a direct reference to the pin's connector
 	 */
-	private __connector: Connector
+	private __connector: Port
 
 	/**
 	 * Create the component
@@ -33,7 +33,7 @@ export class Pin extends Component {
 		super(schematic);
 		this.isOutput = getAttribute("output", schematic.attributes, "false") == "true";
 		let bitWidth = parseInt(getAttribute("width", schematic.attributes, "1"));
-		this.__connector = this.addConnector(0, 0, bitWidth);
+		this.__connector = this.addPort(0, 0, bitWidth);
 	}
 
 	// ---------------------------------------------------------------------------------------------

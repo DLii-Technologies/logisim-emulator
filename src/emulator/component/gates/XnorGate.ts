@@ -1,6 +1,5 @@
 import { IComponent } from "../../../schematic";
 import { Bit, threeValuedXnor } from "../../../util/logic";
-import { BuiltinLibrary } from "../../enums";
 import { Gate } from "./Gate";
 
 export class XnorGate extends Gate
@@ -9,11 +8,6 @@ export class XnorGate extends Gate
 	 * The name of the component
 	 */
 	public static readonly NAME = "XNOR Gate";
-
-	/**
-	 * Indicate the library the circuit component resides
-	 */
-	public static readonly LIB = BuiltinLibrary.Gates;
 
 	public constructor(schematic: IComponent) {
 		super(schematic, true, 10);
