@@ -59,13 +59,14 @@ export class Circuit
 	/**
 	 * Compile the circuit
 	 */
-	public compile(libraries: ILibraryMap) {
+	public async compile(libraries: ILibraryMap) {
 		if (this.__isCompiled) {
 			return;
 		}
 		this.__components = this.createComponents(this.__schematic, libraries);
 		this.__networks = this.wireUp(this.__schematic, this.__components);
 		this.installEventListeners();
+		await this.initialize();
 		this.__isCompiled = true;
 	}
 
@@ -196,6 +197,18 @@ export class Circuit
 				wire.addListener(this.scheduleUpdate);
 			}
 		}
+	}
+
+	/**
+	 * initialize the circuit by updating all wire networks
+	 */
+	protected async initialize() {
+		for (let network of this.__networks) {
+			for (let wire of network.wires) {
+				wire.scheduleUpdate();
+			}
+		}
+		await this.evaluate();
 	}
 
 	// Circuit Evaluation --------------------------------------------------------------------------

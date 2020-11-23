@@ -9,12 +9,13 @@ import { Bit, bitCombinations, threeValuedAnd, threeValuedNand, threeValuedNor, 
  */
 let project: Project;
 
-describe.only("Emulation", () => {
+describe("Emulation", () => {
 	it("Load a project and compile circuits", async () => {
 		project = await loadProject(`${__dirname}/circuits/a.circ`, async (file: string) => {
 			return file;
 		});
 		expect(project.circuits).to.have.property("main");
+		expect(project.circuits["main"].outputPinsLabeled["test"][0].probe()).to.eql([Bit.One, Bit.One]);
 	});
 	it("Evaluate gates circuit", async () => {
 		let circuit = project.circuits["gates"];

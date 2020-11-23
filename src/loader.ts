@@ -30,5 +30,8 @@ export async function loadProject(file: string, findDepend?: (file: string) => P
 			libraries[`${Object.keys(libraries).length}`] = allLibraries[lib.path];
 		}
 	}
-	return new Project(schematic, libraries, subProjects);
+	let project = new Project(schematic, libraries, subProjects);
+	await project.compileCircuits();
+	return project;
+
 }

@@ -14,6 +14,17 @@ export enum Bit {
 }
 
 /**
+ * Encode the given number into binary bits
+ */
+export function numberToBits(value: number) {
+	let result: Bit[] = [];
+	for (let bit of value.toString(2)) {
+		result.push(parseInt(bit) + 2);
+	}
+	return result;
+}
+
+/**
  * Three-valued AND operation
  */
 export function threeValuedAnd(bits: Bit[]) {

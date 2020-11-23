@@ -45,7 +45,6 @@ export default class Project
 		this.subProjects = subProjects;
 		this.circuits = this.createCircuits(project.circuits);
 		this.libraries = this.compileLibraries(this.circuits, libraries);
-		this.compileCircuits(this.circuits, this.libraries);
 	}
 
 	/**
@@ -77,9 +76,9 @@ export default class Project
 	/**
 	 * Compile all of the circuit objects
 	 */
-	protected compileCircuits(circuits: ICircuitMap, libraries: ILibraryMap) {
-		for (let name in circuits) {
-			circuits[name].compile(libraries);
+	public async compileCircuits() {
+		for (let name in this.circuits) {
+			await this.circuits[name].compile(this.libraries);
 		}
 	}
 }
