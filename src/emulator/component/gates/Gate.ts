@@ -2,7 +2,7 @@ import { IAttributeMap, IComponent } from "../../../schematic";
 import { getAttribute } from "../../../util";
 import { Point } from "../../../util/coordinates";
 import { Bit, threeValuedNot, transpose } from "../../../util/logic";
-import { MIRROR_ROTATION, transform } from "../../../util/transform";
+import { Axis, Facing } from "../../../util/transform";
 import { Port } from "../../core/Port";
 import { BuiltinLibrary } from "../../enums";
 import Component, { IConnector } from "../Component";
@@ -181,10 +181,15 @@ export abstract class Gate extends Component
 	public get portsTransformed() {
 		let result: IConnector[] = [];
 		for (let connector of this.ports) {
-			let pos = transform(connector.position, this.position, MIRROR_ROTATION[this.facing]);
+			let pos = connector.position.rotate(this.facing);
+			if (this.facing == Facing.South) {
+				pos = pos.flip(Axis.X);
+			} else if (this.facing == Facing.West) {
+				pos = pos.flip(Axis.Y);
+			}
 			result.push({
 				port: connector.port,
-				position: pos
+				position: pos.add(this.position)
 			});
 		}
 		return result;

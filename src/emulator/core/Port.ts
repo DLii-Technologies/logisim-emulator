@@ -19,7 +19,7 @@ export class Port {
 	/**
 	 * The network this port is associated with
 	 */
-	protected network: Network | null = null;
+	protected __network: Network | null = null;
 
 	/**
 	 * The list of connectors within this port
@@ -52,9 +52,9 @@ export class Port {
 	 * Connect this port to a network
 	 */
 	public connect(network: Network) {
-		this.network = network;
+		this.__network = network;
 		for (let i = 0; i < this.bitWidth; i++) {
-			this.network.wires[i].connect(this.__connectors[i]);
+			this.__network.wires[i].connect(this.__connectors[i]);
 		}
 	}
 
@@ -112,10 +112,17 @@ export class Port {
 	// ---------------------------------------------------------------------------------------------
 
 	/**
+	 * Get the connectors that belong to this port
+	 */
+	public get connectors() {
+		return this.__connectors;
+	}
+
+	/**
 	 * Determine if the port is connected to a network
 	 */
 	public get isConnected() {
-		return this.network !== null;
+		return this.__network !== null;
 	}
 
 	/**
@@ -123,6 +130,13 @@ export class Port {
 	 */
 	public get bitWidth() {
 		return this.__connectors.length;
+	}
+
+	/**
+	 * Get the network this port belongs to
+	 */
+	public get network() {
+		return this.__network;
 	}
 
 	/**

@@ -1,10 +1,3 @@
-export enum Facing {
-	East  = "east",
-	West  = "west",
-	North = "north",
-	South = "south",
-}
-
 /**
  * Builtin libraries
  */

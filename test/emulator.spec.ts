@@ -2,14 +2,14 @@ import { expect } from "chai";
 import "mocha";
 import Project from "../src/emulator/Project";
 import { loadProject } from "../src/loader";
-import { bitCombinations, threeValuedAnd, threeValuedNand, threeValuedNor, threeValuedNot, threeValuedOr, threeValuedXnor, threeValuedXor } from "../src/util/logic";
+import { Bit, bitCombinations, threeValuedAnd, threeValuedNand, threeValuedNor, threeValuedNot, threeValuedOr, threeValuedXnor, threeValuedXor } from "../src/util/logic";
 
 /**
  * The project to work with and evaluate
  */
 let project: Project;
 
-describe("Emulation", () => {
+describe.only("Emulation", () => {
 	it("Load a project and compile circuits", async () => {
 		project = await loadProject(`${__dirname}/circuits/a.circ`, async (file: string) => {
 			return file;
@@ -59,6 +59,18 @@ describe("Emulation", () => {
 			expect(output.connector.probe()).to.eql([
 				threeValuedOr([threeValuedNot(comb[2]), threeValuedAnd([comb[0], comb[1]])])
 			], "Inputs Provided: " + comb.toString());
+		});
+	});
+	it("Evaluate splitter circuit", async () => {
+		let circuit = project.circuits["splitters"];
+		let input = circuit.inputPinsLabeled["Input"][0];
+		let outA = circuit.outputPinsLabeled["A"][0];
+		let outB = circuit.outputPinsLabeled["B"][0];
+		await bitCombinations(2, async (comb) => {
+			input.connector.emitSignal(comb);
+			await circuit.evaluate();
+			expect(outA.connector.probe()).to.eql([comb[0]], "A; Inputs Provided: " + comb.toString());
+			expect(outB.connector.probe()).to.eql([comb[1]], "B; Inputs Provided: " + comb.toString());
 		});
 	});
 });

@@ -1,13 +1,16 @@
 import { IAttributeMap, IComponent } from "../../../schematic";
 import { getAttribute } from "../../../util";
-import { MIRROR_ROTATION, transform } from "../../../util/transform";
+import { Point } from "../../../util/coordinates";
+import { Axis, Facing } from "../../../util/transform";
+import { Network } from "../../core/Network";
 import { Port } from "../../core/Port";
+import { Wire } from "../../core/Wire";
 import { BuiltinLibrary } from "../../enums";
 import Component, { IConnector } from "../Component";
 
 enum SplitterAppearance {
-	LeftHanded  = "left",
-	RightHanded = "right",
+	Left  = "left",
+	Right = "right",
 	Center      = "center",
 	Legacy      = "legacy"
 }
@@ -72,7 +75,7 @@ export class Splitter extends Component
 		this.bitWidth = parseInt(getAttribute("incoming", schematic.attributes, "2"));
 		this.fanOut = parseInt(getAttribute("fanout", schematic.attributes, "2"));
 		this.appearance = <SplitterAppearance>getAttribute("appear", schematic.attributes,
-			SplitterAppearance.LeftHanded);
+			SplitterAppearance.Left);
 		this.rootConnector = this.addPort(0, 0, this.bitWidth);
 		this.createFanMapping(schematic.attributes);
 		this.createFanConnectors(schematic.attributes);
@@ -104,36 +107,123 @@ export class Splitter extends Component
 		let dy: number;
 		switch(this.appearance) {
 			// left-handed/right-handed are just mirrors and can be done through transforms...
-			case SplitterAppearance.LeftHanded:
+			case SplitterAppearance.Left:
+			case SplitterAppearance.Right:
 				dy = -10*this.fanOut;
-				break;
-			case SplitterAppearance.RightHanded:
-				dy = 10*this.fanOut;
 				break;
 			default:
 				dy = -10 * Math.floor(this.fanOut / 2);
 		}
 		for (let i = 0; i < this.fanOut; i++) {
-			this.addPort(20, 10*i + dy, this.fanBitWidths[i]);
+			this.fannedConnectors.push(this.addPort(20, 10*i + dy, this.fanBitWidths[i]));
 		}
 	}
 
 	/**
 	 * Splitters transform connectors based on the splitter type
+	 *
+	 * @note This function is absolutely disgusting. Splitters in Logisim are absolutely disgusting
+	 *       and I blame them for this result here. Left and Right splitters appear to rotate, but
+	 *       the bits do not??? For real???
 	 */
 	public get portsTransformed() {
-		if (this.appearance in [SplitterAppearance.LeftHanded, SplitterAppearance.RightHanded]) {
-			return super.portsTransformed;
-		}
 		let result: IConnector[] = [];
+		let transform: (p: Point) => Point;
+		if (this.appearance == SplitterAppearance.Left) {
+			transform = this.transformLeft.bind(this);
+		} else if (this.appearance == SplitterAppearance.Right) {
+			transform = this.transformRight.bind(this);
+		} else {
+			transform = this.transformCenter.bind(this);
+		}
 		for (let connector of this.ports) {
-			let pos = transform(connector.position, this.position, MIRROR_ROTATION[this.facing]);
+			let pos = connector.position;
+			if (connector.position.x != 0 || connector.position.y != 0) {
+				pos = transform(connector.position);
+			}
 			result.push({
 				port: connector.port,
-				position: pos
+				position: pos.add(this.position)
 			});
 		}
 		return result;
+	}
+
+	/**
+	 * Transform a coordinate for left-handed splitters
+	 */
+	protected transformLeft(point: Point) {
+		let offset = point;
+		if ([Facing.West, Facing.North].includes(this.facing)) {
+			offset = offset.flip(Axis.Y).add(0, -10*this.fanOut - 10);
+		}
+		return offset.rotate(this.facing);
+	}
+
+	/**
+	 * Transform a coordinate for right-handed splitters
+	 */
+	protected transformRight(point: Point) {
+		let offset = point.add(0, 10*this.fanOut + 10);
+		if ([Facing.West, Facing.North].includes(this.facing)) {
+			offset = offset.flip(Axis.Y).add(0, 10*this.fanOut + 10);
+		}
+		return offset.rotate(this.facing);
+	}
+
+	/**
+	 * Transform a coordinate for center/legacy splitters
+	 */
+	protected transformCenter(point: Point) {
+		let offset = point;
+		if (this.facing == Facing.South || this.facing == Facing.North) {
+			offset = offset.rotate(Facing.South);
+			if (this.fanOut % 2 == 0) {
+				offset = offset.add(-10, 0);
+			}
+			if (this.facing == Facing.North) {
+				offset = offset.flip(Axis.Y);
+			}
+		}
+		if (this.facing == Facing.West) {
+			offset = offset.flip(Axis.X);
+		}
+		return offset;
+	}
+
+	// ---------------------------------------------------------------------------------------------
+
+	/**
+	 * Merge wires in the networks
+	 */
+	public dissolve() {
+		if (!this.rootConnector.network) {
+			return;
+		}
+		let rootWires = this.rootConnector.network.wires;
+		for (let i = 0; i < rootWires.length; i++) {
+			let mapping = this.fanMapping[i];
+			if (mapping) {
+				let network = this.fannedConnectors[mapping.portIndex].network;
+				if (network) {
+					this.mergeWires(rootWires[i], network, mapping.bitIndex);
+				}
+			}
+		}
+	}
+
+	/**
+	 * Merge two wires together (B into A)
+	 */
+	protected mergeWires(wire: Wire, network: Network, wireIndex: number) {
+		for (let connector of network.wires[wireIndex].connectors) {
+			if (this != connector.port.component) {
+				wire.connect(connector);
+			} else {
+				network.wires[wireIndex].disconnect(connector);
+			}
+		}
+		network.wires[wireIndex] = wire;
 	}
 
 	/**

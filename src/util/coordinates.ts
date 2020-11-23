@@ -1,4 +1,5 @@
 import assert from "assert";
+import { Axis, Facing, MIRROR, ROTATION, Transform } from "./transform";
 
 export interface IPoint {
 	x: number;
@@ -97,8 +98,38 @@ export class Point
 	/**
 	 * Add two points together. returns a new point instance
 	 */
-	public add(other: Point) {
-		return new Point(this.__x + other.__x, this.__y + other.__y);
+	public add(x: number, y: number): Point;
+	public add(other: Point): Point;
+	public add(x: Point | number, y?: number) {
+		if (typeof x == "number" && typeof y == "number") {
+			return new Point(this.__x + x, this.__y + y);
+		}
+		let other = x;
+		assert(other instanceof Point, "Add invoked improperly");
+		return this.add(other.x, other.y);
+	}
+
+	/**
+	 * Mirror the point across an axis
+	 */
+	public flip(axis: Axis) {
+		return this.transform(MIRROR[axis]);
+	}
+
+	/**
+	 * Apply a 90-degree increment rotation
+	 */
+	public rotate(facing: Facing) {
+		return this.transform(ROTATION[facing]);
+	}
+
+	/**
+	 * Apply a transform to the point
+	 */
+	public transform(transformation: Transform) {
+		let x = transformation[0][0]*this.x + transformation[0][1]*this.y;
+		let y = transformation[1][0]*this.x + transformation[1][1]*this.y;
+		return new Point(x, y);
 	}
 
 	// ---------------------------------------------------------------------------------------------

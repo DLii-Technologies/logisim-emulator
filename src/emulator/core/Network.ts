@@ -22,7 +22,7 @@ export class Network
 	 * Connect a port to the network
 	 */
 	public connect(port: Port) {
-		assert(this.bitWidth in [0, port.bitWidth], "Network contains mismatched widths");
+		assert([0, port.bitWidth].includes(this.bitWidth), "Network contains mismatched widths");
 		if (this.bitWidth == 0) {
 			for (let i = 0; i < port.bitWidth; i++) {
 				this.__wires.push(new Wire());

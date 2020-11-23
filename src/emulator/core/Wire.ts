@@ -15,7 +15,7 @@ export class Wire extends Updatable
 	/**
 	 * Maintain a set of the connectors in the network
 	 */
-	protected connectors: Set<Connector> = new Set();
+	private __connectors: Set<Connector> = new Set();
 
 	/**
 	 * Create a new wire for the given bit index
@@ -28,8 +28,15 @@ export class Wire extends Updatable
 	 * Connect a connector to the network
 	 */
 	public connect(connector: Connector) {
-		this.connectors.add(connector);
+		this.__connectors.add(connector);
 		connector.connect(this);
+	}
+
+	/**
+	 * Disconnect a wire from a connector
+	 */
+	public disconnect(connector: Connector) {
+		this.__connectors.delete(connector);
 	}
 
 	/**
@@ -37,7 +44,7 @@ export class Wire extends Updatable
 	 */
 	public probe() {
 		let signal = Bit.Unknown;
-		for (let connector of this.connectors) {
+		for (let connector of this.__connectors) {
 			signal = threeValuedMerge([signal], [connector.signal])[0];
 		}
 		return signal;
@@ -54,12 +61,19 @@ export class Wire extends Updatable
 			return;
 		}
 		this.__signal = signal;
-		for (let connector of this.connectors) {
+		for (let connector of this.__connectors) {
 			connector.scheduleUpdate();
 		}
 	}
 
 	// ---------------------------------------------------------------------------------------------
+
+	/**
+	 * Get the list of connectors this wire is attached to
+	 */
+	public get connectors() {
+		return this.__connectors;
+	}
 
 	/**
 	 * Get the signal currently stored on the wire

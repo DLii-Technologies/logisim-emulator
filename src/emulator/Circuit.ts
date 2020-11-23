@@ -1,14 +1,12 @@
 import assert from "assert";
 import { ICircuit } from "../schematic";
 import { Line, Point } from "../util/coordinates";
-import Component, { IComponentMap } from "./component/Component";
+import Component from "./component/Component";
 import { ILibraryMap } from "./Project";
 import { Port } from "./core/Port";
 import { Network } from "./core/Network";
 import { Updatable } from "./mixins/Updatable";
-import { Bit } from "../util/logic";
-import { Pin } from "./component";
-import { Facing } from "./enums";
+import { Pin, Splitter } from "./component";
 
 /**
  * Map sets of isolated ports by position
@@ -180,7 +178,10 @@ export class Circuit
 	 * Once everything is wired up, splitters should be dissolved to merge the networks
 	 */
 	protected dissolveSplitters() {
-
+		let splitters = <Splitter[]>this.__components.filter(comp => comp instanceof Splitter);
+		for (let splitter of splitters) {
+			splitter.dissolve();
+		}
 	}
 
 	/**
@@ -202,14 +203,12 @@ export class Circuit
 	/**
 	 * Get the current state of the circuit
 	 */
-	protected networkState() {
-		let bits: Bit[] = [];
-		for (let network of this.__networks) {
-			for (let wire of network.wires) {
-				bits = bits.concat(wire.signal);
-			}
+	protected circuitState() {
+		let state = "";
+		for (let component of this.components) {
+			state += component.state;
 		}
-		return bits.toString();
+		return state;
 	}
 
 	/**
@@ -228,7 +227,7 @@ export class Circuit
 		let updatable: Updatable;
 		let states = new Set<string>();
 		while (this.__toUpdate.length) {
-			let state = this.networkState();
+			let state = this.circuitState();
 			// if (states.has(state)) {
 			// 	throw new Error("Oscillation detected!");
 			// }

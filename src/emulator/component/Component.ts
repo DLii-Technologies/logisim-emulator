@@ -2,8 +2,7 @@ import assert from "assert";
 import { IComponent } from "../../schematic";
 import { getAttribute } from "../../util";
 import { Point } from "../../util/coordinates";
-import { ROTATION, transform } from "../../util/transform";
-import { Facing } from "../enums";
+import { Facing, ROTATION } from "../../util/transform";
 import { Port } from "../core/Port";
 import { Updatable } from "../mixins/Updatable";
 
@@ -117,9 +116,20 @@ export default abstract class Component extends Updatable
 		for (let connector of this.__connectors) {
 			result.push({
 				port: connector.port,
-				position: transform(connector.position, this.position, ROTATION[this.facing])
+				position: connector.position.rotate(this.facing).add(this.position)
 			});
 		}
 		return result;
+	}
+
+	/**
+	 * Get the current state of the component by returning the values emitted by the ports
+	 */
+	public get state() {
+		let state = "";
+		for (let connector of this.__connectors) {
+			state += connector.port.signal.toString();
+		}
+		return state;
 	}
 }
