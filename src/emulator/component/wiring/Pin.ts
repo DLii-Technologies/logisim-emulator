@@ -1,8 +1,9 @@
-import { IComponent } from "../../schematic";
-import { BuiltinLibrary } from "../enums";
-import { getAttribute } from "../../util";
-import { Port } from "../core/Port";
-import Component from "./Component";
+import { IComponent } from "../../../schematic";
+import { getAttribute } from "../../../util";
+import { Port } from "../../core/Port";
+import { BuiltinLibrary } from "../../enums";
+import Component from "../Component";
+
 
 export class Pin extends Component {
 
