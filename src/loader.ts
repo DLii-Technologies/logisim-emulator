@@ -1,5 +1,5 @@
 import { existsSync } from "fs";
-import { dirname, join, normalize } from "path";
+import { basename, dirname, join, normalize } from "path";
 import { loadBuiltinLibraries } from "./emulator/libraries";
 import Project, { ILibraryMap } from "./emulator/Project";
 import { parseFile } from "./parsing";
@@ -8,7 +8,7 @@ import { parseFile } from "./parsing";
 /**
  * Load a Logisim project
  */
-export async function loadProject(file: string, findDependency: (file: string) => Promise<string>) {
+export async function loadProject(file: string, findDepend?: (file: string) => Promise<string>) {
 	let allLibraries = loadBuiltinLibraries();
 	let libraries: ILibraryMap = {};
 	let subProjects: Project[] = [];
@@ -17,9 +17,13 @@ export async function loadProject(file: string, findDependency: (file: string) =
 		if (lib.isExternal) {
 			let path = normalize(join(dirname(file), lib.path));
 			if (!existsSync(path)) {
-				path = await findDependency(lib.path);
+				if (findDepend) {
+					path = await findDepend(lib.path);
+				} else {
+					path = basename(path);
+				}
 			}
-			let project = await loadProject(path, findDependency);
+			let project = await loadProject(path, findDepend);
 			libraries[`${Object.keys(libraries).length}`] = project.libraries[""];
 			subProjects.push(project);
 		} else {

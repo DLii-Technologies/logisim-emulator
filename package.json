@@ -14,7 +14,10 @@
   },
   "keywords": [],
   "author": "David Ludwig",
-  "license": "ISC",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
     "xml2js": "^0.4.23"
   },
