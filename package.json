@@ -1,16 +1,16 @@
 {
   "name": "logisim-emulator",
   "version": "0.1.5",
-  "description": "",
+  "description": "A simple emulator for Logisim circuits.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "prepublish": "tsc",
   "directories": {
     "test": "test"
   },
   "scripts": {
     "build": "tsc",
-    "test": "mocha -r node_modules/ts-node/register ./test/**/*.spec.ts"
+    "test": "mocha -r node_modules/ts-node/register ./test/**/*.spec.ts",
+    "prepublish": "rm -rf ./dist; npm run build"
   },
   "keywords": [],
   "author": "David Ludwig",
