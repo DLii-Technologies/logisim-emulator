@@ -3,18 +3,18 @@ import "mocha";
 import { threeValuedAnd, threeValuedNot, threeValuedOr, Bit, threeValuedNand, threeValuedNor,
 	threeValuedXor, threeValuedXnor, threeValuedMerge, threeValuedIncrement, bitCombinations, bitCombinationsSync} from "../src/util/logic";
 
-describe("Three-valued Logic", () => {
+describe.only("Three-valued Logic", () => {
 	it("AND", () => {
 		expect(threeValuedAnd([Bit.Unknown, Bit.Unknown])).to.equal(Bit.Error);
 		expect(threeValuedAnd([Bit.Unknown, Bit.Error  ])).to.equal(Bit.Error);
-		expect(threeValuedAnd([Bit.Unknown, Bit.Zero   ])).to.equal(Bit.Error);
+		expect(threeValuedAnd([Bit.Unknown, Bit.Zero   ])).to.equal(Bit.Zero);
 		expect(threeValuedAnd([Bit.Unknown, Bit.One    ])).to.equal(Bit.Error);
 		expect(threeValuedAnd([Bit.Error,   Bit.Unknown])).to.equal(Bit.Error);
 		expect(threeValuedAnd([Bit.Error,   Bit.Error  ])).to.equal(Bit.Error);
-		expect(threeValuedAnd([Bit.Error,   Bit.Zero   ])).to.equal(Bit.Error);
+		expect(threeValuedAnd([Bit.Error,   Bit.Zero   ])).to.equal(Bit.Zero);
 		expect(threeValuedAnd([Bit.Error,   Bit.One    ])).to.equal(Bit.Error);
-		expect(threeValuedAnd([Bit.Zero,    Bit.Unknown])).to.equal(Bit.Error);
-		expect(threeValuedAnd([Bit.Zero,    Bit.Error  ])).to.equal(Bit.Error);
+		expect(threeValuedAnd([Bit.Zero,    Bit.Unknown])).to.equal(Bit.Zero);
+		expect(threeValuedAnd([Bit.Zero,    Bit.Error  ])).to.equal(Bit.Zero);
 		expect(threeValuedAnd([Bit.Zero,    Bit.Zero   ])).to.equal(Bit.Zero);
 		expect(threeValuedAnd([Bit.Zero,    Bit.One    ])).to.equal(Bit.Zero);
 		expect(threeValuedAnd([Bit.One,     Bit.Unknown])).to.equal(Bit.Error);
@@ -49,14 +49,14 @@ describe("Three-valued Logic", () => {
 	it("NAND", () => {
 		expect(threeValuedNand([Bit.Unknown, Bit.Unknown])).to.equal(Bit.Error);
 		expect(threeValuedNand([Bit.Unknown, Bit.Error  ])).to.equal(Bit.Error);
-		expect(threeValuedNand([Bit.Unknown, Bit.Zero   ])).to.equal(Bit.Error);
+		expect(threeValuedNand([Bit.Unknown, Bit.Zero   ])).to.equal(Bit.One);
 		expect(threeValuedNand([Bit.Unknown, Bit.One    ])).to.equal(Bit.Error);
 		expect(threeValuedNand([Bit.Error,   Bit.Unknown])).to.equal(Bit.Error);
 		expect(threeValuedNand([Bit.Error,   Bit.Error  ])).to.equal(Bit.Error);
-		expect(threeValuedNand([Bit.Error,   Bit.Zero   ])).to.equal(Bit.Error);
+		expect(threeValuedNand([Bit.Error,   Bit.Zero   ])).to.equal(Bit.One);
 		expect(threeValuedNand([Bit.Error,   Bit.One    ])).to.equal(Bit.Error);
-		expect(threeValuedNand([Bit.Zero,    Bit.Unknown])).to.equal(Bit.Error);
-		expect(threeValuedNand([Bit.Zero,    Bit.Error  ])).to.equal(Bit.Error);
+		expect(threeValuedNand([Bit.Zero,    Bit.Unknown])).to.equal(Bit.One);
+		expect(threeValuedNand([Bit.Zero,    Bit.Error  ])).to.equal(Bit.One);
 		expect(threeValuedNand([Bit.Zero,    Bit.Zero   ])).to.equal(Bit.One);
 		expect(threeValuedNand([Bit.Zero,    Bit.One    ])).to.equal(Bit.One);
 		expect(threeValuedNand([Bit.One,     Bit.Unknown])).to.equal(Bit.Error);

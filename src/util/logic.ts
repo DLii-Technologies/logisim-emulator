@@ -29,8 +29,11 @@ export function numberToBits(value: number) {
  */
 export function threeValuedAnd(bits: Bit[]) {
 	assert(bits.length >= 2, "Attempted AND of 1 or fewer inputs");
-	let result = bits[0];
-	for (let i = 1; result >= Bit.Zero && i < bits.length; i++) {
+	let result = Bit.One;
+	for (let i = 0; i < bits.length; i++) {
+		if (bits[i] == Bit.Zero) {
+			return Bit.Zero;
+		}
 		result &= bits[i];
 	}
 	return result || Bit.Error;
