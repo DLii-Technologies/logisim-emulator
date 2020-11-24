@@ -1,5 +1,6 @@
 import { IComponent } from "../../../schematic";
 import { getAttribute } from "../../../util";
+import { Bit } from "../../../util/logic";
 import { Port } from "../../core/Port";
 import { BuiltinLibrary } from "../../enums";
 import Component from "../Component";
@@ -35,6 +36,18 @@ export class Pin extends Component {
 		this.isOutput = getAttribute("output", schematic.attributes, "false") == "true";
 		let bitWidth = parseInt(getAttribute("width", schematic.attributes, "1"));
 		this.__connector = this.addPort(0, 0, bitWidth);
+		this.initializeSignal();
+	}
+
+	/**
+	 * Initialize the input pin's signal if necessary
+	 */
+	protected initializeSignal() {
+		if (this.isOutput) {
+			return;
+		}
+		let signal = new Array<Bit>(this.__connector.bitWidth).fill(Bit.Zero);
+		this.__connector.emitSignal(signal);
 	}
 
 	// ---------------------------------------------------------------------------------------------
