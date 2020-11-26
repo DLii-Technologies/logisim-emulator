@@ -1,5 +1,6 @@
 import { IAttributeMap, IComponent } from "../../../schematic";
 import { getAttribute } from "../../../util";
+import { mergeWires } from "../../../util/circuit";
 import { Point } from "../../../util/coordinates";
 import { Axis, Facing } from "../../../util/transform";
 import { Network } from "../../core/Network";
@@ -78,7 +79,7 @@ export class Splitter extends Component
 			SplitterAppearance.Left);
 		this.rootConnector = this.addPort(0, 0, this.bitWidth);
 		this.createFanMapping(schematic);
-		this.createFanConnectors();
+		this.createFanConnectors(schematic);
 	}
 
 	/**
@@ -103,7 +104,7 @@ export class Splitter extends Component
 	/**
 	 * Create the fann-out connectors
 	 */
-	protected createFanConnectors() {
+	protected createFanConnectors(schematic: IComponent) {
 		let dy: number;
 		switch(this.appearance) {
 			// left-handed/right-handed are just mirrors and can be done through transforms...
@@ -206,24 +207,10 @@ export class Splitter extends Component
 			if (mapping) {
 				let network = this.fannedConnectors[mapping.portIndex].network;
 				if (network) {
-					this.mergeWires(rootWires[i], network, mapping.bitIndex);
+					mergeWires(this.rootConnector.network, i, network, mapping.bitIndex);
 				}
 			}
 		}
-	}
-
-	/**
-	 * Merge two wires together (B into A)
-	 */
-	protected mergeWires(wire: Wire, network: Network, wireIndex: number) {
-		for (let connector of network.wires[wireIndex].connectors) {
-			if (this != connector.port.component) {
-				wire.connect(connector);
-			} else {
-				network.wires[wireIndex].disconnect(connector);
-			}
-		}
-		network.wires[wireIndex] = wire;
 	}
 
 	/**

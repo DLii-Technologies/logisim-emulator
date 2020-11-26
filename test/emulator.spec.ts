@@ -86,8 +86,10 @@ describe("Emulation", () => {
 			], "Inputs Provided: " + comb.toString());
 		});
 	});
-	it("Evaluate splitter circuit", async () => {
-		let circuit = project.circuits["splitters"];
+	it("Evaluate wiring circuit", async () => {
+		let circuit = project.circuits["wiring"];
+
+		// Splitter
 		let input = circuit.inputPinsLabeled["Input"][0];
 		let outA = circuit.outputPinsLabeled["A"][0];
 		let outB = circuit.outputPinsLabeled["B"][0];
@@ -97,5 +99,16 @@ describe("Emulation", () => {
 			expect(outA.connector.probe()).to.eql([comb[0]], "A; Inputs Provided: " + comb.toString());
 			expect(outB.connector.probe()).to.eql([comb[1]], "B; Inputs Provided: " + comb.toString());
 		});
+
+		// Tunnel
+		input = circuit.inputPinsLabeled["Tunnel_In"][0];
+		outA = circuit.outputPinsLabeled["Tunnel_Out_A"][0];
+		outB = circuit.outputPinsLabeled["Tunnel_Out_B"][0];
+		for (let bit of [Bit.Unknown, Bit.Error, Bit.Zero, Bit.One]) {
+			input.connector.emitSignal([bit]);
+			await circuit.evaluate();
+			expect(outA.connector.probe()).to.eql([bit], "Tunnel_A; Inputs Provided: " + bit.toString());
+			expect(outB.connector.probe()).to.eql([bit], "Tunnel_B; Inputs Provided: " + bit.toString());
+		}
 	});
 });

@@ -357,16 +357,19 @@ This file is intended to be loaded by Logisim (http://www.cburch.com/logisim/).
       <a name="label" val="6"/>
     </comp>
   </circuit>
-  <circuit name="splitters">
-    <a name="circuit" val="splitters"/>
+  <circuit name="wiring">
+    <a name="circuit" val="wiring"/>
     <a name="clabel" val=""/>
     <a name="clabelup" val="east"/>
     <a name="clabelfont" val="SansSerif plain 12"/>
     <wire from="(90,100)" to="(120,100)"/>
+    <wire from="(90,310)" to="(120,310)"/>
     <wire from="(190,70)" to="(200,70)"/>
     <wire from="(190,100)" to="(200,100)"/>
     <wire from="(190,70)" to="(190,80)"/>
     <wire from="(190,90)" to="(190,100)"/>
+    <wire from="(270,310)" to="(320,310)"/>
+    <wire from="(270,370)" to="(320,370)"/>
     <wire from="(140,80)" to="(190,80)"/>
     <wire from="(140,90)" to="(190,90)"/>
     <comp lib="0" loc="(90,100)" name="Pin">
@@ -375,10 +378,37 @@ This file is intended to be loaded by Logisim (http://www.cburch.com/logisim/).
       <a name="label" val="Input"/>
     </comp>
     <comp lib="0" loc="(120,100)" name="Splitter"/>
+    <comp lib="0" loc="(120,310)" name="Tunnel">
+      <a name="label" val="A"/>
+    </comp>
+    <comp lib="0" loc="(270,310)" name="Tunnel">
+      <a name="facing" val="east"/>
+      <a name="label" val="A"/>
+    </comp>
     <comp lib="0" loc="(200,70)" name="Pin">
       <a name="facing" val="west"/>
       <a name="output" val="true"/>
       <a name="label" val="A"/>
+      <a name="labelloc" val="east"/>
+    </comp>
+    <comp lib="0" loc="(320,310)" name="Pin">
+      <a name="facing" val="west"/>
+      <a name="output" val="true"/>
+      <a name="label" val="Tunnel_Out_A"/>
+      <a name="labelloc" val="east"/>
+    </comp>
+    <comp lib="0" loc="(270,370)" name="Tunnel">
+      <a name="facing" val="east"/>
+      <a name="label" val="A"/>
+    </comp>
+    <comp lib="0" loc="(90,310)" name="Pin">
+      <a name="tristate" val="false"/>
+      <a name="label" val="Tunnel_In"/>
+    </comp>
+    <comp lib="0" loc="(320,370)" name="Pin">
+      <a name="facing" val="west"/>
+      <a name="output" val="true"/>
+      <a name="label" val="Tunnel_Out_B"/>
       <a name="labelloc" val="east"/>
     </comp>
     <comp lib="0" loc="(200,100)" name="Pin">

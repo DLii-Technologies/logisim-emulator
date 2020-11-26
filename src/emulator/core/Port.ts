@@ -58,6 +58,19 @@ export class Port {
 		}
 	}
 
+	/**
+	 * Disconnect this port from the network
+	 */
+	public disconnect() {
+		if (this.__network == null) {
+			return;
+		}
+		for (let i = 0; i < this.bitWidth; i++) {
+			this.__network.wires[i].disconnect(this.__connectors[i]);
+		}
+		this.__network = null;
+	}
+
 	// ---------------------------------------------------------------------------------------------
 
 	/**

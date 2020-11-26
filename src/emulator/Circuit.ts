@@ -6,7 +6,8 @@ import { ILibraryMap } from "./Project";
 import { Port } from "./core/Port";
 import { Network } from "./core/Network";
 import { Updatable } from "./mixins/Updatable";
-import { Pin, Splitter } from "./component";
+import { Pin, Splitter, Tunnel } from "./component";
+import { mergeNetworks, mergeNetworksByPorts } from "../util/circuit";
 
 /**
  * Map sets of isolated ports by position
@@ -132,6 +133,7 @@ export class Circuit
 		let isolatedPorts = this.solderToWires(wireNetworks, networks);
 		this.solderToPorts(isolatedPorts, networks);
 		this.dissolveSplitters();
+		this.dissolveTunnels();
 		return networks;
 	}
 
@@ -182,6 +184,32 @@ export class Circuit
 		let splitters = <Splitter[]>this.__components.filter(comp => comp instanceof Splitter);
 		for (let splitter of splitters) {
 			splitter.dissolve();
+		}
+	}
+
+	/**
+	 * Tunnels should also be dissolved to merge the networks
+	 */
+	protected dissolveTunnels() {
+		let tunnelGroups: {[label: string]: Tunnel[]} = {};
+		for (let component of this.__components) {
+			if (component instanceof Tunnel && component.port.network !== null) {
+				if (!(component.label in tunnelGroups)) {
+					tunnelGroups[component.label] = [];
+				}
+				tunnelGroups[component.label].push(component);
+			}
+		}
+		for (let group of Object.values(tunnelGroups)) {
+			for (let i = 1; i < group.length; i++) {
+				let networkA = group[0].port.network;
+				let networkB = group[i].port.network;
+				assert(group[0].bitWidth == group[i].bitWidth, "network bit-widths must match");
+				assert(networkA && networkB, "The tunnel should have a network to merge");
+				mergeNetworks(networkA, networkB);
+				group[i].port.disconnect();
+			}
+			group[0].port.disconnect();
 		}
 	}
 
