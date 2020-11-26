@@ -1,6 +1,6 @@
 {
   "name": "logisim-emulator",
-  "version": "0.1.6",
+  "version": "0.2.0-0",
   "description": "A simple emulator for Logisim circuits.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
