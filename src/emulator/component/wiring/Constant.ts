@@ -33,8 +33,8 @@ export class Constant extends Component {
 	 */
 	public constructor(schematic: IComponent) {
 		super(schematic);
-		let bitWidth = parseInt(getAttribute("width", schematic.attributes, "1"));
-		let value = parseInt(getAttribute("value", schematic.attributes, "0x1"), 16);
+		let bitWidth = parseInt(getAttribute("width", schematic, "1"));
+		let value = parseInt(getAttribute("value", schematic, "0x1"), 16);
 		this.__port = this.addPort(0, 0, bitWidth);
 		this.__signal = numberToBits(value);
 		this.__port.emitSignal(this.__signal);

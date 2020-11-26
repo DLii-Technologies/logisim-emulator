@@ -57,15 +57,15 @@ export abstract class Gate extends Component
 	public constructor(schematic: IComponent, negateOutput: boolean, hasControlLine: boolean) {
 		super(schematic);
 		this.negateOutput = negateOutput;
-		this.bitWidth = parseInt(getAttribute("width", schematic.attributes, "1"));
-		this.size = parseInt(getAttribute("size", schematic.attributes, "30"));
+		this.bitWidth = parseInt(getAttribute("width", schematic, "1"));
+		this.size = parseInt(getAttribute("size", schematic, "30"));
 		this.output = this.addPort(0, 0, this.bitWidth, true);
 
 		let dx = this.negateOutput ? -10 : 0;
 		this.input = this.addPort(-this.size + dx, 0, this.bitWidth);
 
 		if (hasControlLine) {
-			this.controlSide = (getAttribute("control", schematic.attributes, "right"));
+			this.controlSide = (getAttribute("control", schematic, "right"));
 			let dy = this.controlSide == "right" ? 10 : -10;
 			this.control = this.addPort((this.size == 30 ? -10 : 0) + dx, dy, 1);
 		}

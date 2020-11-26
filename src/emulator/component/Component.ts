@@ -66,8 +66,8 @@ export default abstract class Component extends Updatable
 	public constructor(schematic: IComponent) {
 		super();
 		this.position = schematic.location;
-		this.label = getAttribute("label", schematic.attributes, "");
-		this.setFacing(getAttribute("facing", schematic.attributes, Facing.East));
+		this.label = getAttribute("label", schematic, "");
+		this.setFacing(getAttribute("facing", schematic, Facing.East));
 	}
 
 	/**

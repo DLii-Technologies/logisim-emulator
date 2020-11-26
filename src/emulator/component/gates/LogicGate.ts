@@ -61,11 +61,11 @@ export abstract class LogicGate extends Component
 		super(schematic);
 		this.negateOutput = negateOutput;
 		this.bonusWidth = bonusWidth;
-		this.bitWidth = parseInt(getAttribute("width", schematic.attributes, "1"));
-		this.size = parseInt(getAttribute("size", schematic.attributes, "50"));
-		this.numInputs = parseInt(getAttribute("inputs", schematic.attributes, "5"));
+		this.bitWidth = parseInt(getAttribute("width", schematic, "1"));
+		this.size = parseInt(getAttribute("size", schematic, "50"));
+		this.numInputs = parseInt(getAttribute("inputs", schematic, "5"));
 		for (let i = 0; i < this.numInputs; i++) {
-			this.negated.push(getAttribute(`negate${i}`, schematic.attributes, "false") == "true");
+			this.negated.push(getAttribute(`negate${i}`, schematic, "false") == "true");
 		}
 		this.output = this.addPort(0, 0, this.bitWidth, true);
 		this.createInputConnectors(schematic.attributes);

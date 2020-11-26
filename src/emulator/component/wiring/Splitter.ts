@@ -72,22 +72,22 @@ export class Splitter extends Component
 	 */
 	public constructor(schematic: IComponent) {
 		super(schematic);
-		this.bitWidth = parseInt(getAttribute("incoming", schematic.attributes, "2"));
-		this.fanOut = parseInt(getAttribute("fanout", schematic.attributes, "2"));
-		this.appearance = <SplitterAppearance>getAttribute("appear", schematic.attributes,
+		this.bitWidth = parseInt(getAttribute("incoming", schematic, "2"));
+		this.fanOut = parseInt(getAttribute("fanout", schematic, "2"));
+		this.appearance = <SplitterAppearance>getAttribute("appear", schematic,
 			SplitterAppearance.Left);
 		this.rootConnector = this.addPort(0, 0, this.bitWidth);
-		this.createFanMapping(schematic.attributes);
-		this.createFanConnectors(schematic.attributes);
+		this.createFanMapping(schematic);
+		this.createFanConnectors();
 	}
 
 	/**
 	 * Map each bit in the splitter
 	 */
-	protected createFanMapping(attrs: IAttributeMap) {
+	protected createFanMapping(schematic: IComponent) {
 		this.fanBitWidths = new Array<number>(this.fanOut).fill(0);
 		for (let i = 0; i < this.bitWidth; i++) {
-			let fanIndex = getAttribute(`bit${i}`, attrs, `${i}`);
+			let fanIndex = getAttribute(`bit${i}`, schematic, `${i}`);
 			if (fanIndex != "none") {
 				let index = parseInt(fanIndex);
 				this.fanMapping.push({
@@ -103,7 +103,7 @@ export class Splitter extends Component
 	/**
 	 * Create the fann-out connectors
 	 */
-	protected createFanConnectors(attrs: IAttributeMap) {
+	protected createFanConnectors() {
 		let dy: number;
 		switch(this.appearance) {
 			// left-handed/right-handed are just mirrors and can be done through transforms...
