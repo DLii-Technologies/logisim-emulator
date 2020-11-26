@@ -1,8 +1,8 @@
 import { IComponent } from "../../../schematic";
 import { Bit, threeValuedNor } from "../../../util/logic";
-import { Gate } from "./Gate";
+import { LogicGate } from "./LogicGate";
 
-export class NorGate extends Gate
+export class NorGate extends LogicGate
 {
 	/**
 	 * The name of the component

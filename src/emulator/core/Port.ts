@@ -88,13 +88,18 @@ export class Port {
 	}
 
 	/**
+	 * Emit an error signal across all connectors
+	 */
+	public emitErrorSignal() {
+		let signal = new Array(this.bitWidth).fill(Bit.Error);
+		this.emitSignal(signal);
+	}
+
+	/**
 	 * Clear the outputting signal
 	 */
 	public clearSignal() {
-		let signal = [];
-		for (let i = 0; i < this.bitWidth; i++) {
-			signal.push(Bit.Unknown);
-		}
+		let signal = new Array(this.bitWidth).fill(Bit.Unknown);
 		this.emitSignal(signal);
 	}
 

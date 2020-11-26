@@ -1,18 +1,17 @@
 import { IComponent } from "../../../schematic";
-import { BuiltinLibrary } from "../../enums";
 import { Gate } from "./Gate";
 
-export class NotGate extends Gate
+export class ControlledInverter extends Gate
 {
 	/**
 	 * The name of the component
 	 */
-	public static readonly NAME = "NOT Gate";
+	public static readonly NAME = "Controlled Inverter";
 
 	/**
 	 * Create a logic gate
 	 */
 	public constructor(schematic: IComponent) {
-		super(schematic, true, false);
+		super(schematic, true, true);
 	}
 }

@@ -1,18 +1,19 @@
 import { IComponent } from "../../../schematic";
-import { BuiltinLibrary } from "../../enums";
+import { getAttribute } from "../../../util";
+import { Port } from "../../core/Port";
 import { Gate } from "./Gate";
 
-export class NotGate extends Gate
+export class Buffer extends Gate
 {
 	/**
 	 * The name of the component
 	 */
-	public static readonly NAME = "NOT Gate";
+	public static readonly NAME = "Buffer";
 
 	/**
 	 * Create a logic gate
 	 */
 	public constructor(schematic: IComponent) {
-		super(schematic, true, false);
+		super(schematic, false, false);
 	}
 }

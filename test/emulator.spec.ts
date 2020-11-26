@@ -25,8 +25,10 @@ describe("Emulation", () => {
 			threeValuedOr,
 			threeValuedNor,
 			threeValuedXor,
-			threeValuedXnor
+			threeValuedXnor,
 		];
+
+		// Logic gates (AND, NAND, OR, NOR, XOR, XNOR)
 		await bitCombinations(3, async (comb) => {
 			for (let i = 0; i < gates.length; i++) {
 				circuit.inputPinsLabeled[`${i}_A`][0].connector.emitSignal([comb[0]]);
@@ -40,11 +42,33 @@ describe("Emulation", () => {
 				expect(actualSignal).to.eql(expectedSignal, comb.toString());
 			}
 		});
+
+		// Buffer/NOT Gate
 		await bitCombinations(1, async (comb) => {
 			circuit.inputPinsLabeled["6"][0].connector.emitSignal([comb[0]]);
 			await circuit.evaluate();
-			expect(circuit.outputPinsLabeled["6"][0].probe()).to.eql([threeValuedNot(comb[0])]);
-		})
+			expect(circuit.outputPinsLabeled["6_A"][0].probe()).to.eql([comb[0]]);
+			expect(circuit.outputPinsLabeled["6_B"][0].probe()).to.eql([threeValuedNot(comb[0])]);
+		});
+
+		// Controlled Buffer/NOT Gate
+		for (let bit = 0; bit <= Bit.One; bit++) {
+			circuit.inputPinsLabeled["7_B"][0].connector.emitSignal([bit]);
+			await bitCombinations(1, async (comb) => {
+				circuit.inputPinsLabeled["7_A"][0].connector.emitSignal([comb[0]]);
+				await circuit.evaluate();
+				if (bit == Bit.One) {
+					expect(circuit.outputPinsLabeled["7_A"][0].probe()).to.eql([comb[0]]);
+					expect(circuit.outputPinsLabeled["7_B"][0].probe()).to.eql([threeValuedNot(comb[0])]);
+				} else if (bit == Bit.Zero) {
+					expect(circuit.outputPinsLabeled["7_A"][0].probe()).to.eql([Bit.Unknown], "7_A should be unknown");
+					expect(circuit.outputPinsLabeled["7_B"][0].probe()).to.eql([Bit.Unknown], "7_B should be unknown");
+				} else {
+					expect(circuit.outputPinsLabeled["7_A"][0].probe()).to.eql([Bit.Error], "7_A should be error");
+					expect(circuit.outputPinsLabeled["7_B"][0].probe()).to.eql([Bit.Error], "7_B should be error");
+				}
+			});
+		}
 	});
 	it("Evaluate comb circuit", async () => {
 		let circuit = project.circuits["comb"];

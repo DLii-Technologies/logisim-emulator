@@ -1,8 +1,8 @@
 import { IComponent } from "../../../schematic";
 import { Bit, threeValuedXnor } from "../../../util/logic";
-import { Gate } from "./Gate";
+import { LogicGate } from "./LogicGate";
 
-export class XnorGate extends Gate
+export class XnorGate extends LogicGate
 {
 	/**
 	 * The name of the component
