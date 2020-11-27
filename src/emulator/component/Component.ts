@@ -2,7 +2,7 @@ import assert from "assert";
 import { IComponent } from "../../schematic";
 import { getAttribute } from "../../util";
 import { Point } from "../../util/coordinates";
-import { Facing, ROTATION } from "../../util/transform";
+import { Facing } from "../../util/transform";
 import { Port } from "../core/Port";
 import { Updatable } from "../mixins/Updatable";
 

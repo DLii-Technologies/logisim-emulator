@@ -53,6 +53,7 @@ This file is intended to be loaded by Logisim (http://www.cburch.com/logisim/).
     <tool lib="0" name="Pin">
       <a name="facing" val="west"/>
       <a name="output" val="true"/>
+      <a name="width" val="2"/>
       <a name="labelloc" val="east"/>
     </tool>
     <tool lib="1" name="NOT Gate"/>
@@ -364,23 +365,15 @@ This file is intended to be loaded by Logisim (http://www.cburch.com/logisim/).
     <a name="clabelfont" val="SansSerif plain 12"/>
     <wire from="(90,100)" to="(120,100)"/>
     <wire from="(90,310)" to="(120,310)"/>
-    <wire from="(190,70)" to="(200,70)"/>
-    <wire from="(190,100)" to="(200,100)"/>
     <wire from="(190,70)" to="(190,80)"/>
     <wire from="(190,90)" to="(190,100)"/>
     <wire from="(270,310)" to="(320,310)"/>
     <wire from="(270,370)" to="(320,370)"/>
     <wire from="(140,80)" to="(190,80)"/>
     <wire from="(140,90)" to="(190,90)"/>
-    <comp lib="0" loc="(90,100)" name="Pin">
-      <a name="width" val="2"/>
-      <a name="tristate" val="false"/>
-      <a name="label" val="Input"/>
-    </comp>
+    <wire from="(190,70)" to="(200,70)"/>
+    <wire from="(190,100)" to="(200,100)"/>
     <comp lib="0" loc="(120,100)" name="Splitter"/>
-    <comp lib="0" loc="(120,310)" name="Tunnel">
-      <a name="label" val="A"/>
-    </comp>
     <comp lib="0" loc="(270,310)" name="Tunnel">
       <a name="facing" val="east"/>
       <a name="label" val="A"/>
@@ -389,12 +382,6 @@ This file is intended to be loaded by Logisim (http://www.cburch.com/logisim/).
       <a name="facing" val="west"/>
       <a name="output" val="true"/>
       <a name="label" val="A"/>
-      <a name="labelloc" val="east"/>
-    </comp>
-    <comp lib="0" loc="(320,310)" name="Pin">
-      <a name="facing" val="west"/>
-      <a name="output" val="true"/>
-      <a name="label" val="Tunnel_Out_A"/>
       <a name="labelloc" val="east"/>
     </comp>
     <comp lib="0" loc="(270,370)" name="Tunnel">
@@ -416,6 +403,67 @@ This file is intended to be loaded by Logisim (http://www.cburch.com/logisim/).
       <a name="output" val="true"/>
       <a name="label" val="B"/>
       <a name="labelloc" val="east"/>
+    </comp>
+    <comp lib="0" loc="(90,100)" name="Pin">
+      <a name="width" val="2"/>
+      <a name="tristate" val="false"/>
+      <a name="label" val="Input"/>
+    </comp>
+    <comp lib="0" loc="(120,310)" name="Tunnel">
+      <a name="label" val="A"/>
+    </comp>
+    <comp lib="0" loc="(320,310)" name="Pin">
+      <a name="facing" val="west"/>
+      <a name="output" val="true"/>
+      <a name="label" val="Tunnel_Out_A"/>
+      <a name="labelloc" val="east"/>
+    </comp>
+  </circuit>
+  <circuit name="memory">
+    <a name="circuit" val="memory"/>
+    <a name="clabel" val=""/>
+    <a name="clabelup" val="east"/>
+    <a name="clabelfont" val="SansSerif plain 12"/>
+    <wire from="(190,80)" to="(220,80)"/>
+    <wire from="(160,120)" to="(160,130)"/>
+    <wire from="(190,120)" to="(190,130)"/>
+    <wire from="(140,70)" to="(140,80)"/>
+    <wire from="(140,90)" to="(140,100)"/>
+    <wire from="(140,80)" to="(160,80)"/>
+    <wire from="(140,90)" to="(160,90)"/>
+    <wire from="(160,120)" to="(170,120)"/>
+    <wire from="(180,120)" to="(190,120)"/>
+    <wire from="(130,70)" to="(140,70)"/>
+    <wire from="(130,100)" to="(140,100)"/>
+    <wire from="(170,100)" to="(170,120)"/>
+    <wire from="(180,100)" to="(180,120)"/>
+    <comp lib="4" loc="(30,20)" name="Register"/>
+    <comp lib="0" loc="(160,130)" name="Pin">
+      <a name="facing" val="north"/>
+      <a name="tristate" val="false"/>
+      <a name="label" val="Register_Clock"/>
+    </comp>
+    <comp lib="4" loc="(190,80)" name="Register">
+      <a name="width" val="1"/>
+    </comp>
+    <comp lib="0" loc="(190,130)" name="Pin">
+      <a name="facing" val="north"/>
+      <a name="tristate" val="false"/>
+      <a name="label" val="Register_Clear"/>
+      <a name="labelloc" val="east"/>
+    </comp>
+    <comp lib="0" loc="(220,80)" name="Pin">
+      <a name="facing" val="west"/>
+      <a name="output" val="true"/>
+      <a name="label" val="Register_Out"/>
+      <a name="labelloc" val="east"/>
+    </comp>
+    <comp lib="0" loc="(130,100)" name="Pin">
+      <a name="tristate" val="false"/>
+      <a name="label" val="Register_Load"/>
+    </comp>
+    <comp lib="0" loc="(130,70)" name="Pin">
+      <a name="label" val="Register_In"/>
     </comp>
   </circuit>
 </project>

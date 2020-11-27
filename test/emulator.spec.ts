@@ -9,7 +9,7 @@ import { Bit, bitCombinations, threeValuedAnd, threeValuedNand, threeValuedNor, 
  */
 let project: Project;
 
-describe("Emulation", () => {
+describe.only("Emulation", () => {
 	it("Load a project and compile circuits", async () => {
 		project = await loadProject(`${__dirname}/circuits/a.circ`, async (file: string) => {
 			return file;
@@ -110,5 +110,33 @@ describe("Emulation", () => {
 			expect(outA.connector.probe()).to.eql([bit], "Tunnel_A; Inputs Provided: " + bit.toString());
 			expect(outB.connector.probe()).to.eql([bit], "Tunnel_B; Inputs Provided: " + bit.toString());
 		}
+	});
+	it("Evaluate memory circuit", async () => {
+		let circuit = project.circuits["memory"];
+		let clock = circuit.inputPinsLabeled["Register_Clock"][0];
+		let input = circuit.inputPinsLabeled["Register_In"][0];
+		let load = circuit.inputPinsLabeled["Register_Load"][0];
+		let clear = circuit.inputPinsLabeled["Register_Clear"][0];
+		let output = circuit.outputPinsLabeled["Register_Out"][0];
+
+		// Initial evaluation
+		await circuit.evaluate();
+		expect(output.probe()[0]).to.equal(Bit.Zero, "Inial evaluation of register failed");
+
+		// Try all possible combinations of input/load/clock
+		let results = [
+			Bit.Zero, Bit.Zero, Bit.One,  Bit.One,  // data: 1
+			Bit.One,  Bit.One, Bit.Zero,  Bit.Zero
+		];
+		let index = 0;
+		await bitCombinations(3, async (comb) => {
+			// Since the register starts at 0, negate some of the combinations to do 1 then 0 again
+			input.connector.emitSignal([threeValuedNot(comb[0])]);
+			load.connector.emitSignal([comb[1]]);
+			clock.connector.emitSignal([threeValuedNot(comb[2])]);
+			await circuit.evaluate();
+			expect(output.probe()[0]).to.equal(results[index], "Unexpected output from register: " + index.toString());
+			index++;
+		});
 	});
 });
