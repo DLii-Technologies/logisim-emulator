@@ -9,7 +9,7 @@ import { Bit, bitCombinations, threeValuedAnd, threeValuedNand, threeValuedNor, 
  */
 let project: Project;
 
-describe.only("Emulation", () => {
+describe("Emulation", () => {
 	it("Load a project and compile circuits", async () => {
 		project = await loadProject(`${__dirname}/circuits/a.circ`, async (file: string) => {
 			return file;
