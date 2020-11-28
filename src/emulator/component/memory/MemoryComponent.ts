@@ -1,3 +1,4 @@
+import assert from "assert";
 import { IComponent } from "../../../schematic";
 import { getAttribute } from "../../../util";
 import { Point } from "../../../util/coordinates";
@@ -39,12 +40,18 @@ export abstract class MemoryComponent extends Component
 	protected prevClockBit: Bit = Bit.Zero;
 
 	/**
+	 * The contents of memory
+	 */
+	protected contents: Bit[] = [];
+
+	/**
 	 * Create a new memory component
 	 */
-	public constructor(schematic: IComponent, clockPos: Point) {
+	public constructor(schematic: IComponent, bitWidth: number, clockPos: Point) {
 		super(schematic);
 		this.setTrigger(getAttribute("trigger", schematic, "rising"));
 		this.clockPort = this.addPort(clockPos.x, clockPos.y, 1);
+		this.contents = new Array(bitWidth).fill(Bit.Zero);
 	}
 
 	/**
@@ -70,10 +77,19 @@ export abstract class MemoryComponent extends Component
 		}
 	}
 
+	// ---------------------------------------------------------------------------------------------
+
 	/**
 	 * Update the memory contents
 	 */
-	protected abstract updateMemory(): void;
+	protected abstract updateMemoryContents(): boolean;
+
+	/**
+	 * Output the contents of memory to the appropriate ports
+	 */
+	protected abstract output(): void;
+
+	// ---------------------------------------------------------------------------------------------
 
 	/**
 	 * Update memory if the clock is on the correct level
@@ -81,9 +97,13 @@ export abstract class MemoryComponent extends Component
 	protected tryUpdateMemory(clock: Bit) {
 		// Check if the memory component should update for the given clock signal
 		if (clock == Bit.One && (this.trigger & MemoryTrigger.HighLevel)) {
-			this.updateMemory();
+			if (this.updateMemoryContents()) {
+				this.output();
+			}
 		} else if (clock == Bit.Zero && (~this.trigger & MemoryTrigger.LowLevel)) {
-			this.updateMemory();
+			if (this.updateMemoryContents()) {
+				this.output();
+			}
 		}
 	}
 

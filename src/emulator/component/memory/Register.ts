@@ -34,18 +34,11 @@ export class Register extends MemoryComponent
 	protected readonly clearPort: Port;
 
 	/**
-	 * The contents of the register
-	 */
-	protected contents: Bit[];
-
-	/**
 	 * Create a new register
 	 */
 	public constructor(schematic: IComponent) {
-		super(schematic, new Point(-20, 20));
-
 		let bitWidth = parseInt(getAttribute("width", schematic, "8"));
-		this.contents = new Array(bitWidth).fill(Bit.Zero);
+		super(schematic,  bitWidth, new Point(-20, 20));
 
 		let muteInput = this.trigger >= MemoryTrigger.FallingEdge;
 		this.inputPort = this.addPort(-30, 0, this.bitWidth, muteInput);
@@ -53,27 +46,34 @@ export class Register extends MemoryComponent
 		this.loadPort = this.addPort(-30, 10, 1, true);
 		this.clearPort = this.addPort(-10, 20, 1);
 
+		this.output();
+	}
+
+	/**
+	 * Output the contents of memory
+	 */
+	protected output() {
 		this.outputPort.emitSignal(this.contents);
 	}
 
 	/**
 	 * Update the contents of the register
 	 */
-	protected updateMemory() {
+	protected updateMemoryContents() {
 		if (this.clearPort.probe()[0] == Bit.One) {
 			this.contents.fill(Bit.Zero);
-			return;
+			return false;
 		}
 		if (this.loadPort.probe()[0] != Bit.One) {
-			return;
+			return false;
 		}
 		let data = this.inputPort.probe();
 		assert(data.length == this.bitWidth, "Invalid bit-width provided to memory update");
 		if (data.includes(Bit.Unknown) || data.includes(Bit.Error)) {
-			return;
+			return false;
 		}
 		this.contents = data;
-		this.outputPort.emitSignal(this.contents);
+		return true;
 	}
 
 	/**
