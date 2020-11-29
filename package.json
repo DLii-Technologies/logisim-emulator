@@ -9,6 +9,7 @@
   },
   "scripts": {
     "build": "tsc",
+    "coverage": "nyc npm run test",
     "test": "mocha -r node_modules/ts-node/register ./test/**/*.spec.ts",
     "prepublish": "rm -rf ./dist; npm run build"
   },
@@ -30,6 +31,8 @@
     "@types/xml2js": "^0.4.6",
     "chai": "^4.2.0",
     "mocha": "^8.2.1",
+    "mocha-steps": "^1.3.0",
+    "nyc": "^15.1.0",
     "ts-node": "^9.0.0",
     "typescript": "^4.0.5"
   }

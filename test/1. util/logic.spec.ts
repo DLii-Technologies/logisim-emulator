@@ -1,7 +1,7 @@
 import { expect } from "chai";
 import "mocha";
 import { threeValuedAnd, threeValuedNot, threeValuedOr, Bit, threeValuedNand, threeValuedNor,
-	threeValuedXor, threeValuedXnor, threeValuedMerge, threeValuedIncrement, bitCombinations, bitCombinationsSync} from "../src/util/logic";
+	threeValuedXor, threeValuedXnor, threeValuedMerge, threeValuedIncrement, bitCombinations, bitCombinationsSync} from "../../src/util/logic";
 
 describe("Three-valued Logic", () => {
 	it("AND", () => {

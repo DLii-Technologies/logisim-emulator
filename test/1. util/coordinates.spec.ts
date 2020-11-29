@@ -1,7 +1,7 @@
 import { expect } from "chai";
 import "mocha";
-import { Line, Point } from "../src/util/coordinates";
-import { Axis, Facing } from "../src/util/transform";
+import { Line, Point } from "../../src/util/coordinates";
+import { Axis, Facing } from "../../src/util/transform";
 
 describe("Coordinates: Point", () => {
 	it("Create point through overloaded constructors", () => {
@@ -84,8 +84,8 @@ describe("Coordinates: Line", () => {
 		let pointA = new Point(3, 2);
 		let pointB = new Point(9, 3);
 		expect(lineA.intersects(pointA)).to.equal(true);
-		// expect(lineA.intersects(pointB)).to.equal(false);
-		// expect(lineB.intersects(pointA)).to.equal(false);
-		// expect(lineB.intersects(pointB)).to.equal(true);
+		expect(lineA.intersects(pointB)).to.equal(false);
+		expect(lineB.intersects(pointA)).to.equal(false);
+		expect(lineB.intersects(pointB)).to.equal(true);
 	});
 });
