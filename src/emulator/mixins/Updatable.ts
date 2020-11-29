@@ -40,7 +40,7 @@ export abstract class Updatable {
 	 * Schedule an update for the listeners
 	 */
 	public scheduleUpdate() {
-		if (!this.__isScheduled) {
+		if (!this.isUpdateScheduled) {
 			this.__isScheduled = true;
 			for (let listener of this.__updateListeners) {
 				listener(this);
@@ -58,21 +58,21 @@ export abstract class Updatable {
 	/**
 	 * Remove a listener from this object
 	 */
-	public removeListener(listener: UpdateListener) {
-		this.__updateListeners.delete(listener);
-	}
+	// public removeListener(listener: UpdateListener) {
+	// 	this.__updateListeners.delete(listener);
+	// }
 
 	/**
 	 * Remove all listeners from this object
 	 */
-	public removeAllListeners() {
-		this.__updateListeners.clear();
-	}
+	// public removeAllListeners() {
+	// 	this.__updateListeners.clear();
+	// }
 
 	/**
 	 * Determine if an update is scheduled
 	 */
-	public isUpdateScheduled() {
+	public get isUpdateScheduled() {
 		return this.__isScheduled;
 	}
 }

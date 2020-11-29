@@ -1,3 +1,5 @@
+import assert from "assert";
+
 /**
  * The transform type
  */
@@ -72,3 +74,12 @@ export const MIRROR: MirrorMap = {
 		[[ 1, 0],
 		 [ 0,-1]],
 };
+
+/**
+ * Convert facing string to enum
+ */
+export function facingFromString(facing: string) {
+	Object.values(Facing).includes(<Facing>facing)
+	assert(Object.values(Facing).includes(<Facing>facing), "Invalid facing property given");
+	return <Facing>facing;
+}

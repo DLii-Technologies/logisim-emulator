@@ -26,11 +26,11 @@ export function mergeNetworks(networkA: Network, networkB: Network) {
 /**
  * Merge two networks together (B into A) via two ports. The ports will be disconnected after
  */
-export function mergeNetworksByPorts(portA: Port, portB: Port) {
-	assert(portA.network !== null && portB.network !== null, "Ports must have networks to merge");
-	let networkA = portA.network;
-	let networkB = portB.network;
-	portA.disconnect();
-	portB.disconnect();
-	mergeNetworks(networkA, networkB);
-}
+// export function mergeNetworksByPorts(portA: Port, portB: Port) {
+// 	assert(portA.network !== null && portB.network !== null, "Ports must have networks to merge");
+// 	let networkA = portA.network;
+// 	let networkB = portB.network;
+// 	portA.disconnect();
+// 	portB.disconnect();
+// 	mergeNetworks(networkA, networkB);
+// }

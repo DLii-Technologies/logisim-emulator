@@ -3,7 +3,6 @@ import xml2js from "xml2js";
 import { Line, Point } from "../util/coordinates";
 import { IAttributeMap, ICircuit, IComponent, IProject } from "../schematic";
 import { IAttributeXml, ICircuitXml, IComponentXml, ILibraryXml, ILogisimXml } from "./xmldom";
-import { basename } from "path";
 
 /**
  * Parse the given XML string
@@ -85,10 +84,10 @@ function constructCircuit(xml: ICircuitXml) {
 		wires: [],
 		components: []
 	};
-	let attributes = parseAttributes(xml.a || []);
-	if ("clabel" in attributes) {
-		circuit.label = attributes["clabel"];
-	}
+
+	let attributes = parseAttributes(xml.a);
+	circuit.label = attributes["clabel"];
+
 	for (let wire of (xml.wire || [])) {
 		let line = new Line(Point.fromString(wire.$.to), Point.fromString(wire.$.from));
 		circuit.wires.push(line);

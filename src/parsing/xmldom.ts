@@ -46,7 +46,7 @@ export interface IComponentXml {
  */
 export interface ICircuitXml {
 	$    : { name: string };
-	a   ?: IAttributeXml[];
+	a    : IAttributeXml[];
 	wire?: IWireXml[];
 	comp?: IComponentXml[];
 };

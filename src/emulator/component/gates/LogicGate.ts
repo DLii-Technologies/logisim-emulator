@@ -75,7 +75,6 @@ export abstract class LogicGate extends Component
 	 * Create the input connectors for the gate
 	 */
 	protected createInputConnectors(attributes: IAttributeMap) {
-		let offsetX = -this.size;
 		for (let i = 0; i < this.numInputs; i++) {
 			let offs = this.getInputOffset(attributes, i);
 			this.inputs.push(this.addPort(offs.x, offs.y, this.bitWidth));

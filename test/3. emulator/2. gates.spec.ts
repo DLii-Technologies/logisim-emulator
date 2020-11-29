@@ -1,8 +1,10 @@
 import { expect } from "chai";
 import "mocha";
 import { step } from "mocha-steps";
+import { AndGate } from "../../src/emulator";
 import Project from "../../src/emulator/Project";
 import { loadProject } from "../../src/loader";
+import { Point } from "../../src/util/coordinates";
 import { Bit, bitCombinations, threeValuedAnd, threeValuedNand, threeValuedNor, threeValuedNot,
 	     threeValuedOr, threeValuedXnor, threeValuedXor } from "../../src/util/logic";
 
@@ -22,6 +24,68 @@ describe("Emulation: Gates", () => {
 			return file;
 		});
 		expect(project.circuits).to.have.property("gates");
+	});
+	step("Logic gate port coordinates and transforms", async () => {
+		let gate: AndGate;
+		let options = {location: new Point(0, 0), name: "AND Gate"};
+
+		// Narrow logic gate with 2 inputs
+		gate = new AndGate(Object.assign(options, {attributes: { "size": "30", "inputs": "2" }}));
+		expect(gate.ports[1].position.equals(new Point(-30, -10))).to.be.true;
+		expect(gate.ports[2].position.equals(new Point(-30,  10))).to.be.true;
+
+		// Medium logic gate with 3 inputs
+		gate = new AndGate(Object.assign(options, {attributes: { "size": "50", "inputs": "3" }}));
+		expect(gate.ports[1].position.equals(new Point(-50, -20))).to.be.true;
+		expect(gate.ports[2].position.equals(new Point(-50,   0))).to.be.true;
+		expect(gate.ports[3].position.equals(new Point(-50,  20))).to.be.true;
+
+		// Wide logic gate with 2 inputs
+		gate = new AndGate(Object.assign(options, {attributes: { "size": "70", "inputs": "2" }}));
+		expect(gate.ports[1].position.equals(new Point(-70, -20))).to.be.true;
+		expect(gate.ports[2].position.equals(new Point(-70,  20))).to.be.true;
+
+		// Wide logic gate with 3 inputs
+		gate = new AndGate(Object.assign(options, {attributes: { "size": "70", "inputs": "3" }}));
+		expect(gate.ports[1].position.equals(new Point(-70, -30))).to.be.true;
+		expect(gate.ports[2].position.equals(new Point(-70,   0))).to.be.true;
+		expect(gate.ports[3].position.equals(new Point(-70,  30))).to.be.true;
+
+		// Wide logic gate with 4 inputs
+		gate = new AndGate(Object.assign(options, {attributes: { "size": "70", "inputs": "4" }}));
+		expect(gate.ports[1].position.equals(new Point(-70, -20))).to.be.true;
+		expect(gate.ports[2].position.equals(new Point(-70,   0))).to.be.true;
+		expect(gate.ports[3].position.equals(new Point(-70,  20))).to.be.true;
+		expect(gate.ports[4].position.equals(new Point(-70,  40))).to.be.true;
+
+		// Logic gate with >= 5 inputs
+		gate = new AndGate(Object.assign(options, {attributes: { "size": "50", "inputs": "5" }}));
+		expect(gate.ports[1].position.equals(new Point(-50, -20))).to.be.true;
+		expect(gate.ports[2].position.equals(new Point(-50, -10))).to.be.true;
+		expect(gate.ports[3].position.equals(new Point(-50,   0))).to.be.true;
+		expect(gate.ports[4].position.equals(new Point(-50,  10))).to.be.true;
+		expect(gate.ports[5].position.equals(new Point(-50,  20))).to.be.true;
+
+		// Wide logic gate with 4 inputs facing West
+		gate = new AndGate(Object.assign(options, {attributes: { "size": "70", "inputs": "4", "facing": "west"}}));
+		expect(gate.portsTransformed[1].position.equals(new Point( 70, -20))).to.be.true;
+		expect(gate.portsTransformed[2].position.equals(new Point( 70,   0))).to.be.true;
+		expect(gate.portsTransformed[3].position.equals(new Point( 70,  20))).to.be.true;
+		expect(gate.portsTransformed[4].position.equals(new Point( 70,  40))).to.be.true;
+
+		// Wide logic gate with 4 inputs facing North
+		gate = new AndGate(Object.assign(options, {attributes: { "size": "70", "inputs": "4", "facing": "north"}}));
+		expect(gate.portsTransformed[1].position.equals(new Point(-20,  70))).to.be.true;
+		expect(gate.portsTransformed[2].position.equals(new Point(  0,  70))).to.be.true;
+		expect(gate.portsTransformed[3].position.equals(new Point( 20,  70))).to.be.true;
+		expect(gate.portsTransformed[4].position.equals(new Point( 40,  70))).to.be.true;
+
+		// Wide logic gate with 4 inputs facing South
+		gate = new AndGate(Object.assign(options, {attributes: { "size": "70", "inputs": "4", "facing": "south"}}));
+		expect(gate.portsTransformed[1].position.equals(new Point(-20, -70))).to.be.true;
+		expect(gate.portsTransformed[2].position.equals(new Point(  0, -70))).to.be.true;
+		expect(gate.portsTransformed[3].position.equals(new Point( 20, -70))).to.be.true;
+		expect(gate.portsTransformed[4].position.equals(new Point( 40, -70))).to.be.true;
 	});
 	step("Evaluate gates circuit", async () => {
 		let circuit = project.circuits["gates"];

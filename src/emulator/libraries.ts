@@ -1,3 +1,4 @@
+import assert from "assert";
 import * as components from "./component";
 import Component, { IComponentType } from "./component/Component";
 import { BuiltinLibrary } from "./enums";
@@ -23,11 +24,8 @@ export function loadBuiltinLibraries() {
 		libraries[key] = {}
 	}
 	for (let component of Object.values(components)) {
-		if (component.LIB in libraries) {
-			libraries[component.LIB][component.NAME] = component;
-		} else {
-			console.warn("Builtin library not found:", component.LIB);
-		}
+		assert(component.LIB in libraries, "Builtin library not found: " + component.LIB);
+		libraries[component.LIB][component.NAME] = component;
 	}
 	return libraries;
 }

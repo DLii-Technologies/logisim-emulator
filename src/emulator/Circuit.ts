@@ -7,7 +7,7 @@ import { Port } from "./core/Port";
 import { Network } from "./core/Network";
 import { Updatable } from "./mixins/Updatable";
 import { Pin, Splitter, Tunnel } from "./component";
-import { mergeNetworks, mergeNetworksByPorts } from "../util/circuit";
+import { mergeNetworks } from "../util/circuit";
 
 /**
  * Map sets of isolated ports by position
@@ -61,9 +61,7 @@ export class Circuit
 	 * Compile the circuit
 	 */
 	public async compile(libraries: ILibraryMap) {
-		if (this.__isCompiled) {
-			return;
-		}
+		assert(this.__isCompiled == false, "Attempted to compile an already-compiled circuit");
 		this.__components = this.createComponents(this.__schematic, libraries);
 		this.__networks = this.wireUp(this.__schematic, this.__components);
 		this.installEventListeners();
@@ -79,8 +77,9 @@ export class Circuit
 	protected createComponents(schematic: ICircuit, libraries: ILibraryMap) {
 		let components: Component[] = [];
 		for (let component of schematic.components) {
-			assert((component.lib || "") in libraries, "Missing library in circuit!");
-			let library = libraries[component.lib || ""]
+			let lib = component.lib || "";
+			assert(lib in libraries, "Missing library in circuit!");
+			let library = libraries[lib];
 			if (component.name in library) {
 				components.push(new library[component.name](component));
 			} else {
@@ -253,12 +252,12 @@ export class Circuit
 	}
 
 	/**
-	 * Invoked when an
+	 * Schedule a component for updating
 	 */
 	protected scheduleUpdate(updatable: Updatable) {
-		if (!this.__toUpdate.includes(updatable)) {
-			this.__toUpdate.push(updatable);
-		}
+		assert(this.__toUpdate.includes(updatable) == false,
+		       "Attempted to schedule an update for an already-scheduled component");
+		this.__toUpdate.push(updatable);
 	}
 
 	/**
@@ -276,7 +275,6 @@ export class Circuit
 			states.add(state);
 			updatable.update();
 		}
-		// return this.output();
 	}
 
 	/**
@@ -287,24 +285,6 @@ export class Circuit
 	}
 
 	// ---------------------------------------------------------------------------------------------
-
-	/**
-	 * @TODO
-	 * Add a new network to the circuit
-	 */
-	// public addNetwork(network: Network) {
-	// 	network.on("update", (network) => this.onUpdate(network));
-	// 	this.__networks.push(network);
-	// }
-
-	// ---------------------------------------------------------------------------------------------
-
-	/**
-	 * Check if the circuit has been compiled
-	 */
-	public isCompiled() {
-		return this.__isCompiled;
-	}
 
 	/**
 	 * Get a list of all pins for this circuit
@@ -367,6 +347,13 @@ export class Circuit
 	 */
 	public get components() {
 		return this.__components;
+	}
+
+	/**
+	 * Check if the circuit has been compiled
+	 */
+	public get isCompiled() {
+		return this.__isCompiled;
 	}
 
 	/**

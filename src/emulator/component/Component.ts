@@ -1,8 +1,7 @@
-import assert from "assert";
 import { IComponent } from "../../schematic";
 import { getAttribute } from "../../util";
 import { Point } from "../../util/coordinates";
-import { Facing } from "../../util/transform";
+import { Facing, facingFromString } from "../../util/transform";
 import { Port } from "../core/Port";
 import { Updatable } from "../mixins/Updatable";
 
@@ -67,7 +66,7 @@ export default abstract class Component extends Updatable
 		super();
 		this.position = schematic.location;
 		this.label = getAttribute("label", schematic, "");
-		this.setFacing(getAttribute("facing", schematic, Facing.East));
+		this.setFacing(facingFromString(getAttribute("facing", schematic, Facing.East)));
 	}
 
 	/**
@@ -82,22 +81,9 @@ export default abstract class Component extends Updatable
 	/**
 	 * Set the direction the component is facing
 	 */
-	protected setFacing(facing: Facing | string) {
-		if (typeof(facing) == "string") {
-			Object.values(Facing).includes(<Facing>facing)
-			assert(Object.values(Facing).includes(<Facing>facing), "Invalid facing property given");
-			this.facing = <Facing>facing;
-		} else {
-			this.facing = facing;
-		}
+	protected setFacing(facing: Facing) {
+		this.facing = facing;
 	}
-
-	// ---------------------------------------------------------------------------------------------
-
-	/**
-	 * The input has changed, update and re-evaluate
-	 */
-	// public abstract update(): void;
 
 	// ---------------------------------------------------------------------------------------------
 

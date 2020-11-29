@@ -1,11 +1,9 @@
-import { IAttributeMap, IComponent } from "../../../schematic";
+import { IComponent } from "../../../schematic";
 import { getAttribute } from "../../../util";
 import { mergeWires } from "../../../util/circuit";
 import { Point } from "../../../util/coordinates";
 import { Axis, Facing } from "../../../util/transform";
-import { Network } from "../../core/Network";
 import { Port } from "../../core/Port";
-import { Wire } from "../../core/Wire";
 import { BuiltinLibrary } from "../../enums";
 import Component, { IConnector } from "../Component";
 
@@ -116,7 +114,9 @@ export class Splitter extends Component
 				dy = -10 * Math.floor(this.fanOut / 2);
 		}
 		for (let i = 0; i < this.fanOut; i++) {
-			this.fannedConnectors.push(this.addPort(20, 10*i + dy, this.fanBitWidths[i]));
+			if (this.fanMapping[i] != null) {
+				this.fannedConnectors.push(this.addPort(20, 10*i + dy, this.fanBitWidths[i]));
+			}
 		}
 	}
 

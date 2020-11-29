@@ -74,7 +74,7 @@ describe("Emulation: Wiring and Networking", () => {
 			}
 		}
 	});
-	step("Splitters", async () => {
+	step("Splitter types and orientations", async () => {
 		let circuit = project.circuits["splitters"];
 		let types = ["LH", "RH", "C", "L"]; // left-handed, right-handed, center, legacy
 		await bitCombinations(2, async (comb) => {
@@ -90,6 +90,16 @@ describe("Emulation: Wiring and Networking", () => {
 					expect(circuit.outputPinsLabeled[`${type}_${i}_B`][0].probe()).to.eql([comb[1]]);
 				}
 			}
+		});
+	});
+	step("Splitter bit-mapping", async () => {
+		let circuit = project.circuits["splitters"];
+		await bitCombinations(3, async (comb) => {
+			circuit.inputPinsLabeled["FAN_2"][0].connector.emitSignal(comb);
+			circuit.inputPinsLabeled["FAN_3"][0].connector.emitSignal(comb);
+			circuit.evaluate();
+			expect(circuit.outputPinsLabeled["FAN_2"][0].probe()).to.eql([comb[0], comb[1]]);
+			expect(circuit.outputPinsLabeled["FAN_3"][0].probe()).to.eql([comb[1], comb[0]]);
 		});
 	});
 });

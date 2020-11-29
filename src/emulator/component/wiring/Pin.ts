@@ -1,3 +1,4 @@
+import assert from "assert";
 import { IComponent } from "../../../schematic";
 import { getAttribute } from "../../../util";
 import { Bit } from "../../../util/logic";
@@ -63,10 +64,8 @@ export class Pin extends Component {
 	 * Probe the network for the output
 	 */
 	public probe() {
-		if (this.isOutput) {
-			return this.connector.probe();
-		}
-		return this.connector.signal;
+		assert(this.isOutput, "Probing is only compatible with output pins");
+		return this.connector.probe();
 	}
 
 	// ---------------------------------------------------------------------------------------------
