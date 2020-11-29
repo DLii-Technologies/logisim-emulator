@@ -67,70 +67,84 @@ This file is intended to be loaded by Logisim (http://www.cburch.com/logisim/).
       <rect fill="none" height="30" stroke="#000000" stroke-width="2" width="30" x="50" y="55"/>
       <circ-port height="10" pin="100,60" width="10" x="45" y="65"/>
       <circ-port height="10" pin="100,60" width="10" x="75" y="65"/>
-      <circ-port height="10" pin="250,120" width="10" x="75" y="75"/>
-      <circ-port height="8" pin="100,120" width="8" x="46" y="76"/>
-      <circ-port height="8" pin="100,190" width="8" x="46" y="86"/>
-      <circ-port height="10" pin="250,250" width="10" x="75" y="85"/>
-      <circ-port height="8" pin="100,340" width="8" x="46" y="106"/>
-      <circ-port height="10" pin="250,320" width="10" x="75" y="105"/>
-      <circ-port height="8" pin="100,300" width="8" x="46" y="116"/>
+      <circ-port height="10" pin="250,140" width="10" x="75" y="75"/>
+      <circ-port height="8" pin="100,140" width="8" x="46" y="76"/>
+      <circ-port height="8" pin="100,210" width="8" x="46" y="86"/>
+      <circ-port height="10" pin="250,270" width="10" x="75" y="85"/>
+      <circ-port height="8" pin="100,360" width="8" x="46" y="106"/>
+      <circ-port height="10" pin="250,340" width="10" x="75" y="105"/>
+      <circ-port height="8" pin="100,320" width="8" x="46" y="116"/>
       <circ-port height="10" pin="100,60" width="10" x="45" y="95"/>
-      <circ-port height="8" pin="100,60" width="8" x="46" y="126"/>
+      <circ-port height="10" pin="100,80" width="10" x="45" y="125"/>
+      <circ-port height="8" pin="100,80" width="8" x="46" y="96"/>
+      <circ-port height="10" pin="250,440" width="10" x="55" y="45"/>
       <circ-anchor facing="east" height="6" width="6" x="77" y="67"/>
     </appear>
-    <wire from="(140,320)" to="(250,320)"/>
-    <wire from="(150,190)" to="(210,190)"/>
+    <wire from="(140,340)" to="(250,340)"/>
+    <wire from="(150,210)" to="(210,210)"/>
+    <wire from="(140,340)" to="(140,360)"/>
     <wire from="(140,320)" to="(140,340)"/>
-    <wire from="(140,300)" to="(140,320)"/>
-    <wire from="(100,340)" to="(140,340)"/>
-    <wire from="(100,300)" to="(140,300)"/>
-    <wire from="(100,120)" to="(250,120)"/>
-    <wire from="(150,190)" to="(150,250)"/>
-    <wire from="(150,250)" to="(250,250)"/>
-    <wire from="(100,190)" to="(150,190)"/>
-    <comp lib="0" loc="(250,120)" name="Pin">
-      <a name="facing" val="west"/>
-      <a name="output" val="true"/>
-      <a name="label" val="1"/>
-      <a name="labelloc" val="east"/>
-    </comp>
-    <comp lib="0" loc="(250,320)" name="Pin">
+    <wire from="(100,360)" to="(140,360)"/>
+    <wire from="(100,320)" to="(140,320)"/>
+    <wire from="(100,140)" to="(250,140)"/>
+    <wire from="(100,440)" to="(250,440)"/>
+    <wire from="(150,210)" to="(150,270)"/>
+    <wire from="(150,270)" to="(250,270)"/>
+    <wire from="(100,210)" to="(150,210)"/>
+    <comp lib="0" loc="(250,340)" name="Pin">
       <a name="facing" val="west"/>
       <a name="output" val="true"/>
       <a name="label" val="3"/>
       <a name="labelloc" val="east"/>
     </comp>
-    <comp lib="0" loc="(250,250)" name="Pin">
+    <comp lib="0" loc="(100,210)" name="Pin">
+      <a name="tristate" val="false"/>
+      <a name="label" val="2"/>
+    </comp>
+    <comp lib="0" loc="(100,80)" name="Pin">
+      <a name="tristate" val="false"/>
+      <a name="label" val="0"/>
+    </comp>
+    <comp lib="0" loc="(100,320)" name="Pin">
+      <a name="tristate" val="false"/>
+      <a name="label" val="3"/>
+    </comp>
+    <comp lib="0" loc="(250,270)" name="Pin">
       <a name="facing" val="west"/>
       <a name="output" val="true"/>
       <a name="label" val="2"/>
       <a name="labelloc" val="east"/>
     </comp>
-    <comp lib="0" loc="(100,340)" name="Pin">
-      <a name="tristate" val="false"/>
-      <a name="label" val="3"/>
-    </comp>
-    <comp lib="0" loc="(100,60)" name="Pin">
-      <a name="tristate" val="false"/>
-      <a name="label" val="0"/>
-    </comp>
-    <comp lib="0" loc="(100,300)" name="Pin">
-      <a name="tristate" val="false"/>
-      <a name="label" val="3"/>
-    </comp>
-    <comp lib="0" loc="(100,190)" name="Pin">
-      <a name="tristate" val="false"/>
-      <a name="label" val="2"/>
-    </comp>
-    <comp lib="0" loc="(100,120)" name="Pin">
+    <comp lib="0" loc="(100,140)" name="Pin">
       <a name="tristate" val="false"/>
       <a name="label" val="1"/>
     </comp>
-    <comp lib="0" loc="(100,60)" name="Pin">
+    <comp lib="0" loc="(100,360)" name="Pin">
+      <a name="tristate" val="false"/>
+      <a name="label" val="3"/>
+    </comp>
+    <comp lib="0" loc="(250,440)" name="Pin">
+      <a name="facing" val="west"/>
+      <a name="output" val="true"/>
+      <a name="width" val="2"/>
+      <a name="label" val="4"/>
+      <a name="labelloc" val="east"/>
+    </comp>
+    <comp lib="0" loc="(250,140)" name="Pin">
+      <a name="facing" val="west"/>
+      <a name="output" val="true"/>
+      <a name="label" val="1"/>
+      <a name="labelloc" val="east"/>
+    </comp>
+    <comp lib="0" loc="(100,80)" name="Pin">
       <a name="facing" val="west"/>
       <a name="output" val="true"/>
       <a name="label" val="0"/>
       <a name="labelloc" val="east"/>
+    </comp>
+    <comp lib="0" loc="(100,440)" name="Constant">
+      <a name="width" val="2"/>
+      <a name="value" val="0x3"/>
     </comp>
   </circuit>
   <circuit name="splitters">
@@ -218,275 +232,9 @@ This file is intended to be loaded by Logisim (http://www.cburch.com/logisim/).
     <wire from="(560,710)" to="(570,710)"/>
     <wire from="(580,530)" to="(590,530)"/>
     <wire from="(580,710)" to="(590,710)"/>
-    <comp lib="0" loc="(290,120)" name="Pin">
-      <a name="facing" val="north"/>
-      <a name="output" val="true"/>
-      <a name="label" val="LH_1_A"/>
-      <a name="labelloc" val="east"/>
-    </comp>
-    <comp lib="0" loc="(260,120)" name="Pin">
-      <a name="facing" val="north"/>
-      <a name="output" val="true"/>
-      <a name="label" val="LH_1_B"/>
-    </comp>
-    <comp lib="0" loc="(100,530)" name="Splitter">
-      <a name="appear" val="center"/>
-    </comp>
-    <comp lib="0" loc="(590,120)" name="Pin">
-      <a name="facing" val="north"/>
-      <a name="width" val="2"/>
-      <a name="tristate" val="false"/>
-      <a name="label" val="LH_3"/>
-    </comp>
-    <comp lib="0" loc="(450,720)" name="Pin">
-      <a name="facing" val="west"/>
-      <a name="width" val="2"/>
-      <a name="tristate" val="false"/>
-      <a name="label" val="L_2"/>
-      <a name="labelloc" val="north"/>
-    </comp>
-    <comp lib="0" loc="(280,530)" name="Splitter">
-      <a name="facing" val="south"/>
-      <a name="appear" val="center"/>
-    </comp>
-    <comp lib="0" loc="(560,520)" name="Pin">
-      <a name="facing" val="south"/>
-      <a name="output" val="true"/>
-      <a name="label" val="C_3_B"/>
-    </comp>
-    <comp lib="0" loc="(260,560)" name="Pin">
-      <a name="facing" val="north"/>
-      <a name="output" val="true"/>
-      <a name="label" val="C_1_B"/>
-    </comp>
-    <comp lib="0" loc="(260,90)" name="Splitter">
-      <a name="facing" val="south"/>
-    </comp>
-    <comp lib="0" loc="(560,700)" name="Pin">
-      <a name="facing" val="south"/>
-      <a name="output" val="true"/>
-      <a name="label" val="L_3_B"/>
-    </comp>
-    <comp lib="0" loc="(130,70)" name="Pin">
-      <a name="facing" val="west"/>
-      <a name="output" val="true"/>
-      <a name="label" val="LH_0_A"/>
-      <a name="labelloc" val="east"/>
-    </comp>
-    <comp lib="0" loc="(440,540)" name="Splitter">
-      <a name="facing" val="west"/>
-      <a name="appear" val="center"/>
-    </comp>
-    <comp lib="0" loc="(100,710)" name="Splitter">
-      <a name="appear" val="legacy"/>
-    </comp>
-    <comp lib="0" loc="(410,70)" name="Pin">
-      <a name="output" val="true"/>
-      <a name="label" val="LH_2_A"/>
-    </comp>
-    <comp lib="0" loc="(130,330)" name="Pin">
-      <a name="facing" val="west"/>
-      <a name="output" val="true"/>
-      <a name="label" val="RH_0_B"/>
-      <a name="labelloc" val="east"/>
-    </comp>
-    <comp lib="0" loc="(440,330)" name="Splitter">
-      <a name="facing" val="west"/>
-      <a name="appear" val="right"/>
-    </comp>
-    <comp lib="0" loc="(290,340)" name="Pin">
-      <a name="facing" val="north"/>
-      <a name="output" val="true"/>
-      <a name="label" val="RH_1_A"/>
-      <a name="labelloc" val="east"/>
-    </comp>
-    <comp lib="0" loc="(410,330)" name="Pin">
-      <a name="output" val="true"/>
-      <a name="label" val="RH_2_B"/>
-    </comp>
     <comp lib="0" loc="(280,710)" name="Splitter">
       <a name="facing" val="south"/>
       <a name="appear" val="legacy"/>
-    </comp>
-    <comp lib="0" loc="(560,330)" name="Splitter">
-      <a name="facing" val="north"/>
-      <a name="appear" val="right"/>
-    </comp>
-    <comp lib="0" loc="(90,530)" name="Pin">
-      <a name="width" val="2"/>
-      <a name="tristate" val="false"/>
-      <a name="label" val="C_0"/>
-    </comp>
-    <comp lib="0" loc="(280,700)" name="Pin">
-      <a name="facing" val="south"/>
-      <a name="width" val="2"/>
-      <a name="tristate" val="false"/>
-      <a name="label" val="L_1"/>
-      <a name="labelloc" val="north"/>
-    </comp>
-    <comp lib="0" loc="(410,100)" name="Pin">
-      <a name="output" val="true"/>
-      <a name="label" val="LH_2_B"/>
-    </comp>
-    <comp lib="0" loc="(590,520)" name="Pin">
-      <a name="facing" val="south"/>
-      <a name="output" val="true"/>
-      <a name="label" val="C_3_A"/>
-      <a name="labelloc" val="east"/>
-    </comp>
-    <comp lib="0" loc="(130,690)" name="Pin">
-      <a name="facing" val="west"/>
-      <a name="output" val="true"/>
-      <a name="label" val="L_0_A"/>
-      <a name="labelloc" val="east"/>
-    </comp>
-    <comp lib="0" loc="(290,310)" name="Splitter">
-      <a name="facing" val="south"/>
-      <a name="appear" val="right"/>
-    </comp>
-    <comp lib="0" loc="(130,300)" name="Pin">
-      <a name="facing" val="west"/>
-      <a name="output" val="true"/>
-      <a name="label" val="RH_0_A"/>
-      <a name="labelloc" val="east"/>
-    </comp>
-    <comp lib="0" loc="(130,540)" name="Pin">
-      <a name="facing" val="west"/>
-      <a name="output" val="true"/>
-      <a name="label" val="C_0_B"/>
-      <a name="labelloc" val="east"/>
-    </comp>
-    <comp lib="0" loc="(590,700)" name="Pin">
-      <a name="facing" val="south"/>
-      <a name="output" val="true"/>
-      <a name="label" val="L_3_A"/>
-      <a name="labelloc" val="east"/>
-    </comp>
-    <comp lib="0" loc="(90,100)" name="Pin">
-      <a name="width" val="2"/>
-      <a name="tristate" val="false"/>
-      <a name="label" val="LH_0"/>
-    </comp>
-    <comp lib="0" loc="(440,720)" name="Splitter">
-      <a name="facing" val="west"/>
-      <a name="appear" val="legacy"/>
-    </comp>
-    <comp lib="0" loc="(410,730)" name="Pin">
-      <a name="output" val="true"/>
-      <a name="label" val="L_2_B"/>
-    </comp>
-    <comp lib="0" loc="(280,520)" name="Pin">
-      <a name="facing" val="south"/>
-      <a name="width" val="2"/>
-      <a name="tristate" val="false"/>
-      <a name="label" val="C_1"/>
-      <a name="labelloc" val="north"/>
-    </comp>
-    <comp lib="0" loc="(290,560)" name="Pin">
-      <a name="facing" val="north"/>
-      <a name="output" val="true"/>
-      <a name="label" val="C_1_A"/>
-      <a name="labelloc" val="east"/>
-    </comp>
-    <comp lib="0" loc="(410,550)" name="Pin">
-      <a name="output" val="true"/>
-      <a name="label" val="C_2_B"/>
-    </comp>
-    <comp lib="0" loc="(580,550)" name="Splitter">
-      <a name="facing" val="north"/>
-      <a name="appear" val="center"/>
-    </comp>
-    <comp lib="0" loc="(450,540)" name="Pin">
-      <a name="facing" val="west"/>
-      <a name="width" val="2"/>
-      <a name="tristate" val="false"/>
-      <a name="label" val="C_2"/>
-      <a name="labelloc" val="north"/>
-    </comp>
-    <comp lib="0" loc="(100,100)" name="Splitter"/>
-    <comp lib="0" loc="(260,80)" name="Pin">
-      <a name="facing" val="south"/>
-      <a name="width" val="2"/>
-      <a name="tristate" val="false"/>
-      <a name="label" val="LH_1"/>
-      <a name="labelloc" val="north"/>
-    </comp>
-    <comp lib="0" loc="(590,110)" name="Splitter">
-      <a name="facing" val="north"/>
-    </comp>
-    <comp lib="0" loc="(450,330)" name="Pin">
-      <a name="facing" val="west"/>
-      <a name="width" val="2"/>
-      <a name="tristate" val="false"/>
-      <a name="label" val="RH_2"/>
-      <a name="labelloc" val="north"/>
-    </comp>
-    <comp lib="0" loc="(560,80)" name="Pin">
-      <a name="facing" val="south"/>
-      <a name="output" val="true"/>
-      <a name="label" val="LH_3_B"/>
-    </comp>
-    <comp lib="0" loc="(290,300)" name="Pin">
-      <a name="facing" val="south"/>
-      <a name="width" val="2"/>
-      <a name="tristate" val="false"/>
-      <a name="label" val="RH_1"/>
-      <a name="labelloc" val="north"/>
-    </comp>
-    <comp lib="0" loc="(130,510)" name="Pin">
-      <a name="facing" val="west"/>
-      <a name="output" val="true"/>
-      <a name="label" val="C_0_A"/>
-      <a name="labelloc" val="east"/>
-    </comp>
-    <comp lib="0" loc="(410,300)" name="Pin">
-      <a name="output" val="true"/>
-      <a name="label" val="RH_2_A"/>
-    </comp>
-    <comp lib="0" loc="(90,710)" name="Pin">
-      <a name="width" val="2"/>
-      <a name="tristate" val="false"/>
-      <a name="label" val="L_0"/>
-    </comp>
-    <comp lib="0" loc="(590,80)" name="Pin">
-      <a name="facing" val="south"/>
-      <a name="output" val="true"/>
-      <a name="label" val="LH_3_A"/>
-      <a name="labelloc" val="east"/>
-    </comp>
-    <comp lib="0" loc="(580,730)" name="Splitter">
-      <a name="facing" val="north"/>
-      <a name="appear" val="legacy"/>
-    </comp>
-    <comp lib="0" loc="(130,100)" name="Pin">
-      <a name="facing" val="west"/>
-      <a name="output" val="true"/>
-      <a name="label" val="LH_0_B"/>
-      <a name="labelloc" val="east"/>
-    </comp>
-    <comp lib="0" loc="(410,520)" name="Pin">
-      <a name="output" val="true"/>
-      <a name="label" val="C_2_A"/>
-    </comp>
-    <comp lib="0" loc="(590,300)" name="Pin">
-      <a name="facing" val="south"/>
-      <a name="output" val="true"/>
-      <a name="label" val="RH_3_A"/>
-      <a name="labelloc" val="east"/>
-    </comp>
-    <comp lib="0" loc="(560,300)" name="Pin">
-      <a name="facing" val="south"/>
-      <a name="output" val="true"/>
-      <a name="label" val="RH_3_B"/>
-    </comp>
-    <comp lib="0" loc="(410,700)" name="Pin">
-      <a name="output" val="true"/>
-      <a name="label" val="L_2_A"/>
-    </comp>
-    <comp lib="0" loc="(90,300)" name="Pin">
-      <a name="width" val="2"/>
-      <a name="tristate" val="false"/>
-      <a name="label" val="RH_0"/>
     </comp>
     <comp lib="0" loc="(450,70)" name="Pin">
       <a name="facing" val="west"/>
@@ -495,10 +243,114 @@ This file is intended to be loaded by Logisim (http://www.cburch.com/logisim/).
       <a name="label" val="LH_2"/>
       <a name="labelloc" val="north"/>
     </comp>
-    <comp lib="0" loc="(130,720)" name="Pin">
+    <comp lib="0" loc="(100,530)" name="Splitter">
+      <a name="appear" val="center"/>
+    </comp>
+    <comp lib="0" loc="(580,730)" name="Splitter">
+      <a name="facing" val="north"/>
+      <a name="appear" val="legacy"/>
+    </comp>
+    <comp lib="0" loc="(440,70)" name="Splitter">
+      <a name="facing" val="west"/>
+    </comp>
+    <comp lib="0" loc="(130,300)" name="Pin">
       <a name="facing" val="west"/>
       <a name="output" val="true"/>
-      <a name="label" val="L_0_B"/>
+      <a name="label" val="RH_0_A"/>
+      <a name="labelloc" val="east"/>
+    </comp>
+    <comp lib="0" loc="(280,530)" name="Splitter">
+      <a name="facing" val="south"/>
+      <a name="appear" val="center"/>
+    </comp>
+    <comp lib="0" loc="(100,710)" name="Splitter">
+      <a name="appear" val="legacy"/>
+    </comp>
+    <comp lib="0" loc="(130,100)" name="Pin">
+      <a name="facing" val="west"/>
+      <a name="output" val="true"/>
+      <a name="label" val="LH_0_B"/>
+      <a name="labelloc" val="east"/>
+    </comp>
+    <comp lib="0" loc="(290,560)" name="Pin">
+      <a name="facing" val="north"/>
+      <a name="output" val="true"/>
+      <a name="label" val="C_1_A"/>
+      <a name="labelloc" val="east"/>
+    </comp>
+    <comp lib="0" loc="(590,80)" name="Pin">
+      <a name="facing" val="south"/>
+      <a name="output" val="true"/>
+      <a name="label" val="LH_3_A"/>
+      <a name="labelloc" val="east"/>
+    </comp>
+    <comp lib="0" loc="(290,740)" name="Pin">
+      <a name="facing" val="north"/>
+      <a name="output" val="true"/>
+      <a name="label" val="L_1_A"/>
+      <a name="labelloc" val="east"/>
+    </comp>
+    <comp lib="0" loc="(440,540)" name="Splitter">
+      <a name="facing" val="west"/>
+      <a name="appear" val="center"/>
+    </comp>
+    <comp lib="0" loc="(90,300)" name="Pin">
+      <a name="width" val="2"/>
+      <a name="tristate" val="false"/>
+      <a name="label" val="RH_0"/>
+    </comp>
+    <comp lib="0" loc="(590,700)" name="Pin">
+      <a name="facing" val="south"/>
+      <a name="output" val="true"/>
+      <a name="label" val="L_3_A"/>
+      <a name="labelloc" val="east"/>
+    </comp>
+    <comp lib="0" loc="(440,330)" name="Splitter">
+      <a name="facing" val="west"/>
+      <a name="appear" val="right"/>
+    </comp>
+    <comp lib="0" loc="(260,560)" name="Pin">
+      <a name="facing" val="north"/>
+      <a name="output" val="true"/>
+      <a name="label" val="C_1_B"/>
+    </comp>
+    <comp lib="0" loc="(130,510)" name="Pin">
+      <a name="facing" val="west"/>
+      <a name="output" val="true"/>
+      <a name="label" val="C_0_A"/>
+      <a name="labelloc" val="east"/>
+    </comp>
+    <comp lib="0" loc="(290,120)" name="Pin">
+      <a name="facing" val="north"/>
+      <a name="output" val="true"/>
+      <a name="label" val="LH_1_A"/>
+      <a name="labelloc" val="east"/>
+    </comp>
+    <comp lib="0" loc="(130,690)" name="Pin">
+      <a name="facing" val="west"/>
+      <a name="output" val="true"/>
+      <a name="label" val="L_0_A"/>
+      <a name="labelloc" val="east"/>
+    </comp>
+    <comp lib="0" loc="(560,700)" name="Pin">
+      <a name="facing" val="south"/>
+      <a name="output" val="true"/>
+      <a name="label" val="L_3_B"/>
+    </comp>
+    <comp lib="0" loc="(410,730)" name="Pin">
+      <a name="output" val="true"/>
+      <a name="label" val="L_2_B"/>
+    </comp>
+    <comp lib="0" loc="(580,740)" name="Pin">
+      <a name="facing" val="north"/>
+      <a name="width" val="2"/>
+      <a name="tristate" val="false"/>
+      <a name="label" val="L_3"/>
+    </comp>
+    <comp lib="0" loc="(130,330)" name="Pin">
+      <a name="facing" val="west"/>
+      <a name="output" val="true"/>
+      <a name="label" val="RH_0_B"/>
       <a name="labelloc" val="east"/>
     </comp>
     <comp lib="0" loc="(560,340)" name="Pin">
@@ -507,36 +359,198 @@ This file is intended to be loaded by Logisim (http://www.cburch.com/logisim/).
       <a name="tristate" val="false"/>
       <a name="label" val="RH_3"/>
     </comp>
+    <comp lib="0" loc="(100,100)" name="Splitter"/>
+    <comp lib="0" loc="(90,530)" name="Pin">
+      <a name="width" val="2"/>
+      <a name="tristate" val="false"/>
+      <a name="label" val="C_0"/>
+    </comp>
+    <comp lib="0" loc="(450,330)" name="Pin">
+      <a name="facing" val="west"/>
+      <a name="width" val="2"/>
+      <a name="tristate" val="false"/>
+      <a name="label" val="RH_2"/>
+      <a name="labelloc" val="north"/>
+    </comp>
+    <comp lib="0" loc="(410,70)" name="Pin">
+      <a name="output" val="true"/>
+      <a name="label" val="LH_2_A"/>
+    </comp>
+    <comp lib="0" loc="(290,310)" name="Splitter">
+      <a name="facing" val="south"/>
+      <a name="appear" val="right"/>
+    </comp>
+    <comp lib="0" loc="(280,520)" name="Pin">
+      <a name="facing" val="south"/>
+      <a name="width" val="2"/>
+      <a name="tristate" val="false"/>
+      <a name="label" val="C_1"/>
+      <a name="labelloc" val="north"/>
+    </comp>
+    <comp lib="0" loc="(440,720)" name="Splitter">
+      <a name="facing" val="west"/>
+      <a name="appear" val="legacy"/>
+    </comp>
+    <comp lib="0" loc="(410,300)" name="Pin">
+      <a name="output" val="true"/>
+      <a name="label" val="RH_2_A"/>
+    </comp>
+    <comp lib="0" loc="(450,720)" name="Pin">
+      <a name="facing" val="west"/>
+      <a name="width" val="2"/>
+      <a name="tristate" val="false"/>
+      <a name="label" val="L_2"/>
+      <a name="labelloc" val="north"/>
+    </comp>
+    <comp lib="0" loc="(560,80)" name="Pin">
+      <a name="facing" val="south"/>
+      <a name="output" val="true"/>
+      <a name="label" val="LH_3_B"/>
+    </comp>
+    <comp lib="0" loc="(90,710)" name="Pin">
+      <a name="width" val="2"/>
+      <a name="tristate" val="false"/>
+      <a name="label" val="L_0"/>
+    </comp>
+    <comp lib="0" loc="(260,120)" name="Pin">
+      <a name="facing" val="north"/>
+      <a name="output" val="true"/>
+      <a name="label" val="LH_1_B"/>
+    </comp>
+    <comp lib="0" loc="(130,70)" name="Pin">
+      <a name="facing" val="west"/>
+      <a name="output" val="true"/>
+      <a name="label" val="LH_0_A"/>
+      <a name="labelloc" val="east"/>
+    </comp>
+    <comp lib="0" loc="(560,300)" name="Pin">
+      <a name="facing" val="south"/>
+      <a name="output" val="true"/>
+      <a name="label" val="RH_3_B"/>
+    </comp>
+    <comp lib="0" loc="(130,720)" name="Pin">
+      <a name="facing" val="west"/>
+      <a name="output" val="true"/>
+      <a name="label" val="L_0_B"/>
+      <a name="labelloc" val="east"/>
+    </comp>
+    <comp lib="0" loc="(590,110)" name="Splitter">
+      <a name="facing" val="north"/>
+    </comp>
+    <comp lib="0" loc="(560,520)" name="Pin">
+      <a name="facing" val="south"/>
+      <a name="output" val="true"/>
+      <a name="label" val="C_3_B"/>
+    </comp>
+    <comp lib="0" loc="(260,80)" name="Pin">
+      <a name="facing" val="south"/>
+      <a name="width" val="2"/>
+      <a name="tristate" val="false"/>
+      <a name="label" val="LH_1"/>
+      <a name="labelloc" val="north"/>
+    </comp>
+    <comp lib="0" loc="(410,700)" name="Pin">
+      <a name="output" val="true"/>
+      <a name="label" val="L_2_A"/>
+    </comp>
     <comp lib="0" loc="(260,740)" name="Pin">
       <a name="facing" val="north"/>
       <a name="output" val="true"/>
       <a name="label" val="L_1_B"/>
+    </comp>
+    <comp lib="0" loc="(260,90)" name="Splitter">
+      <a name="facing" val="south"/>
+    </comp>
+    <comp lib="0" loc="(590,520)" name="Pin">
+      <a name="facing" val="south"/>
+      <a name="output" val="true"/>
+      <a name="label" val="C_3_A"/>
+      <a name="labelloc" val="east"/>
+    </comp>
+    <comp lib="0" loc="(410,330)" name="Pin">
+      <a name="output" val="true"/>
+      <a name="label" val="RH_2_B"/>
+    </comp>
+    <comp lib="0" loc="(280,700)" name="Pin">
+      <a name="facing" val="south"/>
+      <a name="width" val="2"/>
+      <a name="tristate" val="false"/>
+      <a name="label" val="L_1"/>
+      <a name="labelloc" val="north"/>
+    </comp>
+    <comp lib="0" loc="(410,550)" name="Pin">
+      <a name="output" val="true"/>
+      <a name="label" val="C_2_B"/>
+    </comp>
+    <comp lib="0" loc="(410,520)" name="Pin">
+      <a name="output" val="true"/>
+      <a name="label" val="C_2_A"/>
+    </comp>
+    <comp lib="0" loc="(130,540)" name="Pin">
+      <a name="facing" val="west"/>
+      <a name="output" val="true"/>
+      <a name="label" val="C_0_B"/>
+      <a name="labelloc" val="east"/>
+    </comp>
+    <comp lib="0" loc="(90,100)" name="Pin">
+      <a name="width" val="2"/>
+      <a name="tristate" val="false"/>
+      <a name="label" val="LH_0"/>
+    </comp>
+    <comp lib="0" loc="(580,550)" name="Splitter">
+      <a name="facing" val="north"/>
+      <a name="appear" val="center"/>
     </comp>
     <comp lib="0" loc="(260,340)" name="Pin">
       <a name="facing" val="north"/>
       <a name="output" val="true"/>
       <a name="label" val="RH_1_B"/>
     </comp>
-    <comp lib="0" loc="(440,70)" name="Splitter">
-      <a name="facing" val="west"/>
+    <comp lib="0" loc="(290,300)" name="Pin">
+      <a name="facing" val="south"/>
+      <a name="width" val="2"/>
+      <a name="tristate" val="false"/>
+      <a name="label" val="RH_1"/>
+      <a name="labelloc" val="north"/>
     </comp>
-    <comp lib="0" loc="(580,740)" name="Pin">
+    <comp lib="0" loc="(590,120)" name="Pin">
       <a name="facing" val="north"/>
       <a name="width" val="2"/>
       <a name="tristate" val="false"/>
-      <a name="label" val="L_3"/>
+      <a name="label" val="LH_3"/>
+    </comp>
+    <comp lib="0" loc="(560,330)" name="Splitter">
+      <a name="facing" val="north"/>
+      <a name="appear" val="right"/>
+    </comp>
+    <comp lib="0" loc="(450,540)" name="Pin">
+      <a name="facing" val="west"/>
+      <a name="width" val="2"/>
+      <a name="tristate" val="false"/>
+      <a name="label" val="C_2"/>
+      <a name="labelloc" val="north"/>
+    </comp>
+    <comp lib="0" loc="(410,100)" name="Pin">
+      <a name="output" val="true"/>
+      <a name="label" val="LH_2_B"/>
+    </comp>
+    <comp lib="0" loc="(290,340)" name="Pin">
+      <a name="facing" val="north"/>
+      <a name="output" val="true"/>
+      <a name="label" val="RH_1_A"/>
+      <a name="labelloc" val="east"/>
+    </comp>
+    <comp lib="0" loc="(590,300)" name="Pin">
+      <a name="facing" val="south"/>
+      <a name="output" val="true"/>
+      <a name="label" val="RH_3_A"/>
+      <a name="labelloc" val="east"/>
     </comp>
     <comp lib="0" loc="(580,560)" name="Pin">
       <a name="facing" val="north"/>
       <a name="width" val="2"/>
       <a name="tristate" val="false"/>
       <a name="label" val="C_3"/>
-    </comp>
-    <comp lib="0" loc="(290,740)" name="Pin">
-      <a name="facing" val="north"/>
-      <a name="output" val="true"/>
-      <a name="label" val="L_1_A"/>
-      <a name="labelloc" val="east"/>
     </comp>
     <comp lib="0" loc="(100,300)" name="Splitter">
       <a name="appear" val="right"/>
@@ -547,9 +561,11 @@ This file is intended to be loaded by Logisim (http://www.cburch.com/logisim/).
     <a name="clabel" val=""/>
     <a name="clabelup" val="east"/>
     <a name="clabelfont" val="SansSerif plain 12"/>
-    <comp lib="0" loc="(100,120)" name="Pin">
-      <a name="tristate" val="false"/>
+    <comp lib="0" loc="(250,120)" name="Pin">
+      <a name="facing" val="west"/>
+      <a name="output" val="true"/>
       <a name="label" val="0"/>
+      <a name="labelloc" val="east"/>
     </comp>
     <comp lib="0" loc="(250,190)" name="Tunnel">
       <a name="facing" val="east"/>
@@ -559,8 +575,11 @@ This file is intended to be loaded by Logisim (http://www.cburch.com/logisim/).
       <a name="tristate" val="false"/>
       <a name="label" val="1"/>
     </comp>
-    <comp lib="0" loc="(100,190)" name="Tunnel">
+    <comp lib="0" loc="(250,230)" name="Pin">
+      <a name="facing" val="west"/>
+      <a name="output" val="true"/>
       <a name="label" val="1"/>
+      <a name="labelloc" val="east"/>
     </comp>
     <comp lib="0" loc="(250,190)" name="Pin">
       <a name="facing" val="west"/>
@@ -568,35 +587,30 @@ This file is intended to be loaded by Logisim (http://www.cburch.com/logisim/).
       <a name="label" val="1"/>
       <a name="labelloc" val="east"/>
     </comp>
-    <comp lib="0" loc="(250,230)" name="Pin">
-      <a name="facing" val="west"/>
-      <a name="output" val="true"/>
-      <a name="label" val="1"/>
-      <a name="labelloc" val="east"/>
-    </comp>
-    <comp lib="0" loc="(250,120)" name="Pin">
-      <a name="facing" val="west"/>
-      <a name="output" val="true"/>
-      <a name="label" val="0"/>
-      <a name="labelloc" val="east"/>
-    </comp>
-    <comp lib="0" loc="(250,230)" name="Tunnel">
-      <a name="facing" val="east"/>
-      <a name="label" val="1"/>
-    </comp>
     <comp lib="0" loc="(100,120)" name="Tunnel">
       <a name="label" val="0"/>
     </comp>
     <comp lib="0" loc="(100,230)" name="Tunnel">
       <a name="label" val="1"/>
     </comp>
-    <comp lib="0" loc="(100,230)" name="Pin">
-      <a name="tristate" val="false"/>
-      <a name="label" val="1"/>
-    </comp>
     <comp lib="0" loc="(250,120)" name="Tunnel">
       <a name="facing" val="east"/>
       <a name="label" val="0"/>
+    </comp>
+    <comp lib="0" loc="(100,120)" name="Pin">
+      <a name="tristate" val="false"/>
+      <a name="label" val="0"/>
+    </comp>
+    <comp lib="0" loc="(250,230)" name="Tunnel">
+      <a name="facing" val="east"/>
+      <a name="label" val="1"/>
+    </comp>
+    <comp lib="0" loc="(100,190)" name="Tunnel">
+      <a name="label" val="1"/>
+    </comp>
+    <comp lib="0" loc="(100,230)" name="Pin">
+      <a name="tristate" val="false"/>
+      <a name="label" val="1"/>
     </comp>
   </circuit>
 </project>

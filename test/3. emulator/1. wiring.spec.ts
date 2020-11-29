@@ -48,6 +48,10 @@ describe("Emulation: Wiring and Networking", () => {
 			}
 		}
 	});
+	step("Constant pins", async () => {
+		let circuit = project.circuits["wiring"];
+		expect(circuit.outputPinsLabeled["4"][0].probe()).to.eql([Bit.One, Bit.One]);
+	});
 	step("Tunnels", async () => {
 		let circuit = project.circuits["tunnels"];
 		for (let bit of [Bit.Unknown, Bit.Error, Bit.Zero, Bit.One]) {
