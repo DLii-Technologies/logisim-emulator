@@ -60,13 +60,6 @@ export class Register extends MemoryComponent
 	 * Update the contents of the register
 	 */
 	protected updateMemoryContents() {
-		if (this.clearPort.probe()[0] == Bit.One) {
-			this.contents.fill(Bit.Zero);
-			return false;
-		}
-		if (this.loadPort.probe()[0] != Bit.One) {
-			return false;
-		}
 		let data = this.inputPort.probe();
 		assert(data.length == this.bitWidth, "Invalid bit-width provided to memory update");
 		if (data.includes(Bit.Unknown) || data.includes(Bit.Error)) {
@@ -74,6 +67,21 @@ export class Register extends MemoryComponent
 		}
 		this.contents = data;
 		return true;
+	}
+
+	/**
+	 * Update the register
+	 */
+	protected onUpdate() {
+		if (this.clearPort.probe()[0] == Bit.One) {
+			this.contents.fill(Bit.Zero);
+			this.output();
+			return;
+		}
+		if (this.loadPort.probe()[0] != Bit.One) {
+			return;
+		}
+		super.onUpdate();
 	}
 
 	/**

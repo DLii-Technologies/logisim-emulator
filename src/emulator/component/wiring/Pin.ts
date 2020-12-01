@@ -36,7 +36,7 @@ export class Pin extends Component {
 		super(schematic);
 		this.isOutput = getAttribute("output", schematic, "false") == "true";
 		let bitWidth = parseInt(getAttribute("width", schematic, "1"));
-		this.__connector = this.addPort(0, 0, bitWidth);
+		this.__connector = this.addPort(0, 0, bitWidth, !this.isOutput);
 		this.initializeSignal();
 	}
 

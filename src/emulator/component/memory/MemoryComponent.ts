@@ -100,7 +100,7 @@ export abstract class MemoryComponent extends Component
 			if (this.updateMemoryContents()) {
 				this.output();
 			}
-		} else if (clock == Bit.Zero && (~this.trigger & MemoryTrigger.LowLevel)) {
+		} else if (clock == Bit.Zero && (this.trigger & MemoryTrigger.HighLevel) == 0) {
 			if (this.updateMemoryContents()) {
 				this.output();
 			}
