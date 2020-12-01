@@ -4,7 +4,7 @@ import { getAttribute } from "../../../util";
 import { Point } from "../../../util/coordinates";
 import { Bit } from "../../../util/logic";
 import { Port } from "../../core";
-import { MemoryComponent, MemoryTrigger } from "./MemoryComponent";
+import { MemoryComponent, MemoryTriggerType } from "./MemoryComponent";
 
 export class Register extends MemoryComponent
 {
@@ -12,6 +12,11 @@ export class Register extends MemoryComponent
 	 * The name of the component
 	 */
 	public static readonly NAME = "Register";
+
+	/**
+	 * The supported trigger event types for this register
+	 */
+	// protected readonly supportedTriggers = MemoryTriggerType.Edge | MemoryTriggerType.Level;
 
 	/**
 	 * The port for data input
@@ -24,11 +29,6 @@ export class Register extends MemoryComponent
 	protected readonly outputPort: Port;
 
 	/**
-	 * The port to enable loading into the register
-	 */
-	protected readonly loadPort: Port;
-
-	/**
 	 * The port for clearing the register
 	 */
 	protected readonly clearPort: Port;
@@ -38,22 +38,28 @@ export class Register extends MemoryComponent
 	 */
 	public constructor(schematic: IComponent) {
 		let bitWidth = parseInt(getAttribute("width", schematic, "8"));
-		super(schematic,  bitWidth, new Point(-20, 20));
+		super(schematic,  bitWidth, MemoryTriggerType.Edge | MemoryTriggerType.Level,
+			  new Point(-20, 20), new Point(-30, 10));
 
-		let muteInput = this.trigger >= MemoryTrigger.FallingEdge;
+		let muteInput = this.trigger == MemoryTriggerType.Edge;
 		this.inputPort = this.addPort(-30, 0, this.bitWidth, muteInput);
 		this.outputPort = this.addPort(0, 0, this.bitWidth, true);
-		this.loadPort = this.addPort(-30, 10, 1, true);
 		this.clearPort = this.addPort(-10, 20, 1);
 
-		this.output();
+		this.outputMemoryContents();
 	}
 
+	// ---------------------------------------------------------------------------------------------
+
 	/**
-	 * Output the contents of memory
+	 * Asynchronously set the contents of the register
 	 */
-	protected output() {
-		this.outputPort.emitSignal(this.contents);
+	protected asyncSet() {
+		if (this.clearPort.probe()[0] == Bit.One) {
+			this.contents.fill(Bit.Zero);
+			return true;
+		}
+		return false;
 	}
 
 	/**
@@ -70,19 +76,13 @@ export class Register extends MemoryComponent
 	}
 
 	/**
-	 * Update the register
+	 * Output the contents of memory
 	 */
-	protected onUpdate() {
-		if (this.clearPort.probe()[0] == Bit.One) {
-			this.contents.fill(Bit.Zero);
-			this.output();
-			return;
-		}
-		if (this.loadPort.probe()[0] != Bit.One) {
-			return;
-		}
-		super.onUpdate();
+	protected outputMemoryContents() {
+		this.outputPort.emitSignal(this.contents);
 	}
+
+	// ---------------------------------------------------------------------------------------------
 
 	/**
 	 * Get the bit-width of the register

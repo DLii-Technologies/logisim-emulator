@@ -10,11 +10,17 @@ import Component from "../Component";
 /**
  * The types of memory triggers
  */
-export enum MemoryTrigger {
-	LowLevel,
-	HighLevel,
-	FallingEdge,
-	RisingEdge
+export enum MemoryTriggerType {
+	Edge  = 0x1,
+	Level = 0x2
+}
+
+/**
+ * The types of clock signals for updates
+ */
+export enum ClockUpdateSignal {
+	Low,
+	High
 }
 
 export abstract class MemoryComponent extends Component
@@ -25,14 +31,29 @@ export abstract class MemoryComponent extends Component
 	public static readonly LIB = BuiltinLibrary.Memory;
 
 	/**
-	 * The trigger event for updating the memory contents
+	 * The trigger event types this memory component supports
 	 */
-	protected trigger: MemoryTrigger = MemoryTrigger.RisingEdge;
+	protected supportedTriggers: MemoryTriggerType = MemoryTriggerType.Edge;
+
+	/**
+	 * The trigger event type for updating memory contents
+	 */
+	protected trigger: MemoryTriggerType = MemoryTriggerType.Edge;
+
+	/**
+	 * Determine if the clock should be a low signal for memory updates
+	 */
+	protected clockUpdateSignal: ClockUpdateSignal = ClockUpdateSignal.High;
 
 	/**
 	 * The port for the clock
 	 */
 	protected clockPort: Port;
+
+	/**
+	 * The port for enabling loading of the memory component
+	 */
+	protected loadPort: Port;
 
 	/**
 	 * Store the previous clock bit to control updating for rising/falling edge cases
@@ -47,37 +68,52 @@ export abstract class MemoryComponent extends Component
 	/**
 	 * Create a new memory component
 	 */
-	public constructor(schematic: IComponent, bitWidth: number, clockPos: Point) {
+	public constructor(schematic: IComponent, bitWidth: number, clockTriggers: MemoryTriggerType,
+					   clockPos: Point, loadPos: Point)
+	{
 		super(schematic);
-		this.setTrigger(getAttribute("trigger", schematic, "rising"));
+		this.supportedTriggers = clockTriggers;
+		this.setTrigger(schematic);
+
+		let muteLoadPort = this.trigger == MemoryTriggerType.Edge;
 		this.clockPort = this.addPort(clockPos.x, clockPos.y, 1);
+		this.loadPort = this.addPort(loadPos.x, loadPos.y, 1, muteLoadPort);
 		this.contents = new Array(bitWidth).fill(Bit.Zero);
 	}
 
 	/**
 	 * Set the trigger event type for memory updating
 	 */
-	protected setTrigger(trigger: MemoryTrigger | string) {
-		if (typeof(trigger) == "string") {
-			switch(trigger) {
-				case "falling":
-					this.trigger = MemoryTrigger.FallingEdge;
-					break;
-				case "high":
-					this.trigger = MemoryTrigger.HighLevel;
-					break;
-				case "low":
-					this.trigger = MemoryTrigger.LowLevel;
-					break;
-				default:
-					this.trigger = MemoryTrigger.RisingEdge;
-			}
-		} else {
-			this.trigger = trigger;
+	protected setTrigger(schematic: IComponent) {
+		let trigger = getAttribute("trigger", schematic, "rising");
+		switch(trigger) {
+			case "falling":
+				this.trigger = MemoryTriggerType.Edge;
+				this.clockUpdateSignal = ClockUpdateSignal.Low;
+				break;
+			case "high":
+				this.trigger = MemoryTriggerType.Level;
+				this.clockUpdateSignal = ClockUpdateSignal.High;
+				break;
+			case "low":
+				this.trigger = MemoryTriggerType.Level;
+				this.clockUpdateSignal = ClockUpdateSignal.Low;
+				break;
+			default:
+				this.trigger = MemoryTriggerType.Edge;
+				this.clockUpdateSignal = ClockUpdateSignal.High;
 		}
+		assert(this.trigger & this.supportedTriggers, "Unsupported trigger type provided");
 	}
 
 	// ---------------------------------------------------------------------------------------------
+
+	/**
+	 * Asynchronously set the memory contents if necessary
+	 */
+	protected asyncSet(): boolean {
+		return false;
+	}
 
 	/**
 	 * Update the memory contents
@@ -85,42 +121,42 @@ export abstract class MemoryComponent extends Component
 	protected abstract updateMemoryContents(): boolean;
 
 	/**
-	 * Output the contents of memory to the appropriate ports
+	 * Output the contents of memory
 	 */
-	protected abstract output(): void;
+	protected abstract outputMemoryContents(): void;
 
 	// ---------------------------------------------------------------------------------------------
 
 	/**
-	 * Update memory if the clock is on the correct level
+	 * Determine if the clock signal is appropriate for memory updates
 	 */
-	protected tryUpdateMemory(clock: Bit) {
-		// Check if the memory component should update for the given clock signal
-		if (clock == Bit.One && (this.trigger & MemoryTrigger.HighLevel)) {
-			if (this.updateMemoryContents()) {
-				this.output();
-			}
-		} else if (clock == Bit.Zero && (this.trigger & MemoryTrigger.HighLevel) == 0) {
-			if (this.updateMemoryContents()) {
-				this.output();
+	protected isValidClockSignal() {
+		let clockBit = this.clockPort.probe()[0];
+		if (clockBit < Bit.Zero) { // clock is unknown or error bit
+			return false;
+		}
+		if (this.trigger == MemoryTriggerType.Edge) {
+			if (clockBit == this.prevClockBit || this.prevClockBit < Bit.Zero) {
+				return false;
 			}
 		}
+		if (clockBit != (this.clockUpdateSignal + Bit.Zero)) {
+			return false;
+		}
+		return true;
 	}
 
 	/**
-	 * Invoked when the component is updated
+	 * Update the memory component
 	 */
 	protected onUpdate() {
-		let clockBit = this.clockPort.probe()[0];
-		if (clockBit >= Bit.Zero) {
-			if ((this.trigger & MemoryTrigger.RisingEdge) >= MemoryTrigger.FallingEdge) {
-				if (clockBit != this.prevClockBit && this.prevClockBit >= Bit.Zero) {
-					this.tryUpdateMemory(clockBit);
-				}
-			} else {
-				this.tryUpdateMemory(clockBit);
+		if (this.asyncSet()) {
+			this.outputMemoryContents();
+		} else if (this.loadPort.probe()[0] == Bit.One && this.isValidClockSignal()) {
+			if (this.updateMemoryContents()) {
+				this.outputMemoryContents();
 			}
 		}
-		this.prevClockBit = clockBit;
+		this.prevClockBit = this.clockPort.probe()[0];
 	}
 }
