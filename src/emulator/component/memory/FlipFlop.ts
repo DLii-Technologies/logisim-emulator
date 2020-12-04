@@ -1,10 +1,8 @@
-import { assert } from "console";
 import { IComponent } from "../../../schematic";
-import { getAttribute } from "../../../util";
 import { Point } from "../../../util/coordinates";
 import { Bit, threeValuedNot } from "../../../util/logic";
 import { Port } from "../../core";
-import { MemoryComponent, MemoryTrigger } from "./MemoryComponent";
+import { MemoryComponent, MemoryTriggerType } from "./MemoryComponent";
 
 export abstract class FlipFlop extends MemoryComponent
 {
@@ -19,11 +17,6 @@ export abstract class FlipFlop extends MemoryComponent
 	protected readonly outputLowPort: Port;
 
 	/**
-	 * The port to enable the register (enabled as long as it is not set to 0)
-	 */
-	protected readonly enablePort: Port;
-
-	/**
 	 * The port to asynchronously set the flip-flop to 1
 	 */
 	protected readonly presetPort: Port;
@@ -36,16 +29,16 @@ export abstract class FlipFlop extends MemoryComponent
 	/**
 	 * Create a new register
 	 */
-	public constructor(schematic: IComponent, clockPos: Point) {
-		super(schematic, 1, clockPos);
+	public constructor(schematic: IComponent, triggerType: MemoryTriggerType, clockPos: Point)
+	{
+		super(schematic, 1, triggerType, clockPos, new Point(-20, 30));
 
 		this.outputHighPort = this.addPort(0, 0, 1, true);
 		this.outputLowPort = this.addPort(0, 20, 1, true);
 		this.presetPort = this.addPort(-30, 30, 1, true);
-		this.enablePort = this.addPort(-20, 30, 1, true);
 		this.clearPort = this.addPort(-10, 30, 1, true);
 
-		this.output();
+		this.outputMemoryContents();
 	}
 
 	// ---------------------------------------------------------------------------------------------
@@ -53,22 +46,14 @@ export abstract class FlipFlop extends MemoryComponent
 	/**
 	 * Load the input into the contents of memory
 	 */
-	protected abstract load(): void;
-
-	/**
-	 * Output the contents of memory to the appropriate ports
-	 */
-	protected output() {
-		this.outputHighPort.emitSignal(this.contents);
-		this.outputLowPort.emitSignal(threeValuedNot(this.contents));
-	}
+	protected abstract updateMemoryContents(): boolean;
 
 	// ---------------------------------------------------------------------------------------------
 
 	/**
-	 * Update the contents of the flip-flop
+	 * Asynchronously set the memory contents
 	 */
-	protected updateMemoryContents() {
+	protected asyncSet() {
 		if (this.clearPort.probe()[0] == Bit.One) {
 			this.contents.fill(Bit.Zero);
 			return true;
@@ -77,17 +62,14 @@ export abstract class FlipFlop extends MemoryComponent
 			this.contents.fill(Bit.One);
 			return true;
 		}
-		if (this.enablePort.probe()[0] == Bit.Zero) {
-			return false;
-		}
-		this.load();
-		return true;
+		return false;
 	}
 
 	/**
-	 * Get the bit-width of the register
+	 * Output the contents of memory to the appropriate ports
 	 */
-	public get bitWidth() {
-		return this.contents.length;
+	protected outputMemoryContents() {
+		this.outputHighPort.emitSignal(this.contents);
+		this.outputLowPort.emitSignal(threeValuedNot(this.contents));
 	}
 }
