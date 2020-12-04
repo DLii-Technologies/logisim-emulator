@@ -68,94 +68,68 @@ This file is intended to be loaded by Logisim (http://www.cburch.com/logisim/).
     <a name="clabel" val=""/>
     <a name="clabelup" val="east"/>
     <a name="clabelfont" val="SansSerif plain 12"/>
+    <wire from="(150,70)" to="(150,140)"/>
+    <wire from="(150,280)" to="(150,350)"/>
+    <wire from="(180,190)" to="(180,200)"/>
     <wire from="(170,130)" to="(170,140)"/>
     <wire from="(180,340)" to="(180,350)"/>
-    <wire from="(200,200)" to="(200,210)"/>
-    <wire from="(120,330)" to="(160,330)"/>
-    <wire from="(190,320)" to="(230,320)"/>
-    <wire from="(130,110)" to="(160,110)"/>
-    <wire from="(110,140)" to="(130,140)"/>
-    <wire from="(150,140)" to="(170,140)"/>
-    <wire from="(180,410)" to="(200,410)"/>
-    <wire from="(120,120)" to="(120,170)"/>
-    <wire from="(150,350)" to="(150,410)"/>
-    <wire from="(150,70)" to="(150,140)"/>
-    <wire from="(180,190)" to="(180,200)"/>
     <wire from="(170,340)" to="(170,350)"/>
-    <wire from="(200,410)" to="(200,420)"/>
-    <wire from="(120,170)" to="(120,180)"/>
-    <wire from="(120,180)" to="(160,180)"/>
-    <wire from="(190,170)" to="(230,170)"/>
-    <wire from="(130,140)" to="(130,170)"/>
-    <wire from="(130,320)" to="(160,320)"/>
-    <wire from="(110,350)" to="(130,350)"/>
-    <wire from="(180,140)" to="(200,140)"/>
-    <wire from="(150,350)" to="(170,350)"/>
-    <wire from="(120,330)" to="(120,380)"/>
-    <wire from="(150,280)" to="(150,350)"/>
     <wire from="(170,190)" to="(170,200)"/>
     <wire from="(180,400)" to="(180,410)"/>
     <wire from="(120,380)" to="(120,390)"/>
-    <wire from="(120,390)" to="(160,390)"/>
-    <wire from="(190,380)" to="(230,380)"/>
-    <wire from="(130,110)" to="(130,140)"/>
-    <wire from="(130,350)" to="(130,380)"/>
-    <wire from="(130,170)" to="(160,170)"/>
-    <wire from="(150,200)" to="(170,200)"/>
-    <wire from="(180,350)" to="(200,350)"/>
-    <wire from="(110,170)" to="(120,170)"/>
-    <wire from="(200,140)" to="(200,200)"/>
     <wire from="(180,130)" to="(180,140)"/>
     <wire from="(170,400)" to="(170,410)"/>
+    <wire from="(200,200)" to="(200,210)"/>
+    <wire from="(200,410)" to="(200,420)"/>
+    <wire from="(120,170)" to="(120,180)"/>
+    <wire from="(120,330)" to="(160,330)"/>
+    <wire from="(120,180)" to="(160,180)"/>
     <wire from="(120,120)" to="(160,120)"/>
+    <wire from="(190,170)" to="(230,170)"/>
+    <wire from="(120,390)" to="(160,390)"/>
     <wire from="(190,110)" to="(230,110)"/>
+    <wire from="(190,320)" to="(230,320)"/>
+    <wire from="(190,380)" to="(230,380)"/>
+    <wire from="(130,140)" to="(130,170)"/>
+    <wire from="(130,110)" to="(130,140)"/>
+    <wire from="(130,350)" to="(130,380)"/>
     <wire from="(130,320)" to="(130,350)"/>
+    <wire from="(130,110)" to="(160,110)"/>
+    <wire from="(130,320)" to="(160,320)"/>
+    <wire from="(130,170)" to="(160,170)"/>
     <wire from="(130,380)" to="(160,380)"/>
+    <wire from="(110,140)" to="(130,140)"/>
+    <wire from="(110,350)" to="(130,350)"/>
+    <wire from="(150,140)" to="(170,140)"/>
+    <wire from="(180,410)" to="(200,410)"/>
+    <wire from="(180,140)" to="(200,140)"/>
+    <wire from="(150,350)" to="(170,350)"/>
+    <wire from="(150,200)" to="(170,200)"/>
+    <wire from="(180,350)" to="(200,350)"/>
     <wire from="(180,200)" to="(200,200)"/>
     <wire from="(150,410)" to="(170,410)"/>
+    <wire from="(120,120)" to="(120,170)"/>
+    <wire from="(120,330)" to="(120,380)"/>
+    <wire from="(110,170)" to="(120,170)"/>
     <wire from="(110,380)" to="(120,380)"/>
+    <wire from="(150,350)" to="(150,410)"/>
     <wire from="(150,140)" to="(150,200)"/>
+    <wire from="(200,140)" to="(200,200)"/>
     <wire from="(200,350)" to="(200,410)"/>
-    <comp lib="0" loc="(150,280)" name="Pin">
-      <a name="facing" val="south"/>
-      <a name="label" val="Level_Clock"/>
-    </comp>
     <comp lib="0" loc="(110,380)" name="Pin">
       <a name="label" val="Level_Load"/>
-    </comp>
-    <comp lib="4" loc="(190,110)" name="Register">
-      <a name="width" val="1"/>
     </comp>
     <comp lib="0" loc="(200,420)" name="Pin">
       <a name="facing" val="north"/>
       <a name="label" val="Level_Clear"/>
     </comp>
-    <comp lib="4" loc="(190,380)" name="Register">
-      <a name="width" val="1"/>
-      <a name="trigger" val="low"/>
-    </comp>
-    <comp lib="0" loc="(230,380)" name="Pin">
-      <a name="facing" val="west"/>
-      <a name="output" val="true"/>
-      <a name="label" val="L_Level_Out"/>
-      <a name="labelloc" val="east"/>
-    </comp>
-    <comp lib="0" loc="(110,170)" name="Pin">
+    <comp lib="0" loc="(110,140)" name="Pin">
       <a name="tristate" val="false"/>
-      <a name="label" val="Edge_Load"/>
+      <a name="label" val="Edge_In"/>
     </comp>
     <comp lib="4" loc="(190,320)" name="Register">
       <a name="width" val="1"/>
       <a name="trigger" val="high"/>
-    </comp>
-    <comp lib="0" loc="(110,350)" name="Pin">
-      <a name="label" val="Level_In"/>
-    </comp>
-    <comp lib="0" loc="(230,110)" name="Pin">
-      <a name="facing" val="west"/>
-      <a name="output" val="true"/>
-      <a name="label" val="R_Edge_Out"/>
-      <a name="labelloc" val="east"/>
     </comp>
     <comp lib="0" loc="(230,320)" name="Pin">
       <a name="facing" val="west"/>
@@ -163,10 +137,10 @@ This file is intended to be loaded by Logisim (http://www.cburch.com/logisim/).
       <a name="label" val="H_Level_Out"/>
       <a name="labelloc" val="east"/>
     </comp>
-    <comp lib="0" loc="(200,210)" name="Pin">
-      <a name="facing" val="north"/>
+    <comp lib="0" loc="(150,70)" name="Pin">
+      <a name="facing" val="south"/>
       <a name="tristate" val="false"/>
-      <a name="label" val="Edge_Clear"/>
+      <a name="label" val="Edge_Clock"/>
     </comp>
     <comp lib="0" loc="(230,170)" name="Pin">
       <a name="facing" val="west"/>
@@ -174,18 +148,44 @@ This file is intended to be loaded by Logisim (http://www.cburch.com/logisim/).
       <a name="label" val="F_Edge_Out"/>
       <a name="labelloc" val="east"/>
     </comp>
-    <comp lib="0" loc="(110,140)" name="Pin">
+    <comp lib="4" loc="(190,380)" name="Register">
+      <a name="width" val="1"/>
+      <a name="trigger" val="low"/>
+    </comp>
+    <comp lib="0" loc="(230,110)" name="Pin">
+      <a name="facing" val="west"/>
+      <a name="output" val="true"/>
+      <a name="label" val="R_Edge_Out"/>
+      <a name="labelloc" val="east"/>
+    </comp>
+    <comp lib="0" loc="(200,210)" name="Pin">
+      <a name="facing" val="north"/>
       <a name="tristate" val="false"/>
-      <a name="label" val="Edge_In"/>
+      <a name="label" val="Edge_Clear"/>
+    </comp>
+    <comp lib="0" loc="(110,350)" name="Pin">
+      <a name="label" val="Level_In"/>
     </comp>
     <comp lib="4" loc="(190,170)" name="Register">
       <a name="width" val="1"/>
       <a name="trigger" val="falling"/>
     </comp>
-    <comp lib="0" loc="(150,70)" name="Pin">
-      <a name="facing" val="south"/>
+    <comp lib="0" loc="(230,380)" name="Pin">
+      <a name="facing" val="west"/>
+      <a name="output" val="true"/>
+      <a name="label" val="L_Level_Out"/>
+      <a name="labelloc" val="east"/>
+    </comp>
+    <comp lib="4" loc="(190,110)" name="Register">
+      <a name="width" val="1"/>
+    </comp>
+    <comp lib="0" loc="(110,170)" name="Pin">
       <a name="tristate" val="false"/>
-      <a name="label" val="Edge_Clock"/>
+      <a name="label" val="Edge_Load"/>
+    </comp>
+    <comp lib="0" loc="(150,280)" name="Pin">
+      <a name="facing" val="south"/>
+      <a name="label" val="Level_Clock"/>
     </comp>
   </circuit>
   <circuit name="flip-flops">
@@ -193,28 +193,43 @@ This file is intended to be loaded by Logisim (http://www.cburch.com/logisim/).
     <a name="clabel" val=""/>
     <a name="clabelup" val="east"/>
     <a name="clabelfont" val="SansSerif plain 12"/>
-    <wire from="(140,140)" to="(190,140)"/>
-    <wire from="(190,140)" to="(190,220)"/>
+    <wire from="(190,140)" to="(220,140)"/>
+    <wire from="(190,220)" to="(220,220)"/>
     <wire from="(260,140)" to="(290,140)"/>
     <wire from="(260,160)" to="(290,160)"/>
     <wire from="(260,220)" to="(290,220)"/>
     <wire from="(260,240)" to="(290,240)"/>
-    <wire from="(140,180)" to="(150,180)"/>
-    <wire from="(140,200)" to="(150,200)"/>
-    <wire from="(140,220)" to="(150,220)"/>
-    <wire from="(150,190)" to="(160,190)"/>
     <wire from="(140,160)" to="(200,160)"/>
     <wire from="(180,280)" to="(240,280)"/>
     <wire from="(180,200)" to="(240,200)"/>
     <wire from="(240,190)" to="(240,200)"/>
     <wire from="(240,270)" to="(240,280)"/>
-    <wire from="(180,200)" to="(180,280)"/>
-    <wire from="(200,160)" to="(200,240)"/>
-    <wire from="(190,140)" to="(220,140)"/>
-    <wire from="(190,220)" to="(220,220)"/>
+    <wire from="(140,140)" to="(190,140)"/>
     <wire from="(200,160)" to="(220,160)"/>
     <wire from="(200,240)" to="(220,240)"/>
+    <wire from="(190,140)" to="(190,220)"/>
+    <wire from="(180,200)" to="(180,280)"/>
+    <wire from="(200,160)" to="(200,240)"/>
+    <wire from="(140,180)" to="(150,180)"/>
+    <wire from="(140,200)" to="(150,200)"/>
+    <wire from="(140,220)" to="(150,220)"/>
+    <wire from="(150,190)" to="(160,190)"/>
     <wire from="(170,200)" to="(180,200)"/>
+    <comp lib="0" loc="(140,180)" name="Pin">
+      <a name="label" val="D_Edge_Clear"/>
+    </comp>
+    <comp lib="0" loc="(140,220)" name="Pin">
+      <a name="label" val="D_Edge_Preset"/>
+    </comp>
+    <comp lib="0" loc="(140,160)" name="Pin">
+      <a name="label" val="D_Edge_In"/>
+    </comp>
+    <comp lib="0" loc="(290,140)" name="Pin">
+      <a name="facing" val="west"/>
+      <a name="output" val="true"/>
+      <a name="label" val="D_R_Edge_Q1"/>
+      <a name="labelloc" val="east"/>
+    </comp>
     <comp lib="0" loc="(170,200)" name="Splitter">
       <a name="facing" val="west"/>
       <a name="fanout" val="5"/>
@@ -223,50 +238,16 @@ This file is intended to be loaded by Logisim (http://www.cburch.com/logisim/).
       <a name="bit1" val="2"/>
       <a name="bit2" val="4"/>
     </comp>
-    <comp lib="4" loc="(260,220)" name="T Flip-Flop">
-      <a name="trigger" val="falling"/>
-    </comp>
-    <comp lib="0" loc="(140,140)" name="Pin">
-      <a name="tristate" val="false"/>
-      <a name="label" val="D_Edge_Clock"/>
-    </comp>
-    <comp lib="0" loc="(140,160)" name="Pin">
-      <a name="label" val="D_Edge_Data"/>
-    </comp>
     <comp lib="0" loc="(290,240)" name="Pin">
       <a name="facing" val="west"/>
       <a name="output" val="true"/>
       <a name="label" val="D_F_Edge_Q0"/>
       <a name="labelloc" val="east"/>
     </comp>
-    <comp lib="0" loc="(290,160)" name="Pin">
-      <a name="facing" val="west"/>
-      <a name="output" val="true"/>
-      <a name="label" val="D_R_Edge_Q0"/>
-      <a name="labelloc" val="east"/>
-    </comp>
-    <comp lib="0" loc="(140,180)" name="Pin">
-      <a name="tristate" val="false"/>
-      <a name="label" val="D_Edge_Clear"/>
-    </comp>
-    <comp lib="0" loc="(140,200)" name="Pin">
-      <a name="tristate" val="false"/>
-      <a name="label" val="D_Edge_Load"/>
-    </comp>
-    <comp lib="0" loc="(140,220)" name="Pin">
-      <a name="tristate" val="false"/>
-      <a name="label" val="D_Edge_Preset"/>
-    </comp>
     <comp lib="0" loc="(290,220)" name="Pin">
       <a name="facing" val="west"/>
       <a name="output" val="true"/>
       <a name="label" val="D_F_Edge_Q1"/>
-      <a name="labelloc" val="east"/>
-    </comp>
-    <comp lib="0" loc="(290,140)" name="Pin">
-      <a name="facing" val="west"/>
-      <a name="output" val="true"/>
-      <a name="label" val="D_R_Edge_Q1"/>
       <a name="labelloc" val="east"/>
     </comp>
     <comp lib="0" loc="(240,190)" name="Splitter">
@@ -275,12 +256,28 @@ This file is intended to be loaded by Logisim (http://www.cburch.com/logisim/).
       <a name="incoming" val="3"/>
       <a name="appear" val="center"/>
     </comp>
+    <comp lib="0" loc="(140,200)" name="Pin">
+      <a name="label" val="D_Edge_Load"/>
+    </comp>
     <comp lib="0" loc="(240,270)" name="Splitter">
       <a name="facing" val="north"/>
       <a name="fanout" val="3"/>
       <a name="incoming" val="3"/>
       <a name="appear" val="center"/>
     </comp>
+    <comp lib="0" loc="(140,140)" name="Pin">
+      <a name="tristate" val="false"/>
+      <a name="label" val="D_Edge_Clock"/>
+    </comp>
     <comp lib="4" loc="(260,140)" name="D Flip-Flop"/>
+    <comp lib="0" loc="(290,160)" name="Pin">
+      <a name="facing" val="west"/>
+      <a name="output" val="true"/>
+      <a name="label" val="D_R_Edge_Q0"/>
+      <a name="labelloc" val="east"/>
+    </comp>
+    <comp lib="4" loc="(260,220)" name="D Flip-Flop">
+      <a name="trigger" val="falling"/>
+    </comp>
   </circuit>
 </project>

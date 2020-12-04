@@ -147,4 +147,96 @@ describe("Emulation", () => {
 		expect(outputRisingEdge.probe()[0]).to.equal(Bit.Zero);
 		expect(outputFallingEdge.probe()[0]).to.equal(Bit.Zero);
 	});
+	it("D Flip-Flop: Rising/Falling Edge", async () => {
+		let circuit = project.circuits["flip-flops"];
+		let clock = circuit.inputPinsLabeled["D_Edge_Clock"][0];
+		let input = circuit.inputPinsLabeled["D_Edge_In"][0];
+		let load = circuit.inputPinsLabeled["D_Edge_Load"][0];
+		let outputRisingEdge0 = circuit.outputPinsLabeled["D_R_Edge_Q0"][0];
+		let outputRisingEdge1 = circuit.outputPinsLabeled["D_R_Edge_Q1"][0];
+		let outputFallingEdge0 = circuit.outputPinsLabeled["D_F_Edge_Q0"][0];
+		let outputFallingEdge1 = circuit.outputPinsLabeled["D_F_Edge_Q1"][0];
+
+		// Initial evaluation
+		await circuit.evaluate();
+		expect(outputRisingEdge0.probe()[0]).to.equal(Bit.One, "Initial evaluation of rising-edge register failed");
+		expect(outputRisingEdge1.probe()[0]).to.equal(Bit.Zero, "Initial evaluation of rising-edge register failed");
+		expect(outputFallingEdge0.probe()[0]).to.equal(Bit.One, "Initial evaluation of falling-edge register failed");
+		expect(outputFallingEdge1.probe()[0]).to.equal(Bit.Zero, "Initial evaluation of falling-edge register failed");
+
+		// Try all possible combinations of input/load/clock
+		let resultsRisingEdge = [
+			Bit.Zero, Bit.Zero, Bit.Zero, Bit.Zero, Bit.Zero, Bit.Zero, Bit.One,  Bit.One,  // load: X
+			Bit.One,  Bit.One,  Bit.One,  Bit.One,  Bit.Zero, Bit.Zero, Bit.One,  Bit.One,  // load: E
+			Bit.One,  Bit.One,  Bit.One,  Bit.One,  Bit.One,  Bit.One,  Bit.One,  Bit.One,  // load: 0
+			Bit.One,  Bit.One,  Bit.One,  Bit.One,  Bit.Zero, Bit.Zero, Bit.One,  Bit.One   // load: 1
+		];
+		let resultsFallingEdge = [
+			Bit.Zero, Bit.Zero, Bit.Zero, Bit.Zero, Bit.Zero, Bit.Zero, Bit.Zero, Bit.One,  // load: X
+			Bit.One,  Bit.One,  Bit.One,  Bit.One,  Bit.One,  Bit.Zero, Bit.Zero, Bit.One,  // load: E
+			Bit.One,  Bit.One,  Bit.One,  Bit.One,  Bit.One,  Bit.One,  Bit.One,  Bit.One,  // load: 0
+			Bit.One,  Bit.One,  Bit.One,  Bit.One,  Bit.One,  Bit.Zero, Bit.Zero, Bit.One   // load: 1
+		];
+		let index = 0;
+		await signalCombinations(1, async (comb) => {
+			// Since the register starts at 0, negate some of the combinations to do 1 then 0 again
+			load.connector.emitSignal([comb[0]]);
+			for (let data of [Bit.Unknown, Bit.Error, Bit.Zero, Bit.One]) {
+				input.connector.emitSignal([data]);
+				for (let clockBit of [Bit.One, Bit.Zero]) {
+					clock.connector.emitSignal([clockBit]);
+					await circuit.evaluate();
+
+					// Rising edge
+					expect(outputRisingEdge1.probe()[0]).to.equal(resultsRisingEdge[index],
+						"Unexpected output from rising-edge register: " + index.toString());
+					expect(outputRisingEdge0.probe()).to.eql(threeValuedNot(outputRisingEdge1.probe()));
+
+					// Falling edge
+					expect(outputFallingEdge1.probe()[0]).to.equal(resultsFallingEdge[index],
+						"Unexpected output from falling-edge register: " + index.toString());
+					expect(outputFallingEdge0.probe()).to.eql(threeValuedNot(outputFallingEdge1.probe()));
+					index++;
+				}
+			}
+		});
+	});
+	it.skip("Register: Asynchronous clearing", async () => {
+		let circuit = project.circuits["register"];
+		let clock = circuit.inputPinsLabeled["Edge_Clock"][0];
+		let input = circuit.inputPinsLabeled["Edge_In"][0];
+		let load = circuit.inputPinsLabeled["Edge_Load"][0];
+		let clear = circuit.inputPinsLabeled["Edge_Clear"][0];
+		let outputRisingEdge = circuit.outputPinsLabeled["R_Edge_Out"][0];
+		let outputFallingEdge = circuit.outputPinsLabeled["F_Edge_Out"][0];
+
+		// Clear prevents loading
+		clear.connector.emitSignal([Bit.One]);
+		await binaryBitCombinations(3, async (comb) => {
+			// Since the register starts at 0, negate some of the combinations to do 1 then 0 again
+			input.connector.emitSignal([threeValuedNot(comb[0])]);
+			load.connector.emitSignal([comb[1]]);
+			clock.connector.emitSignal([threeValuedNot(comb[2])]);
+			await circuit.evaluate();
+			expect(outputRisingEdge.probe()[0]).to.equal(Bit.Zero);
+			expect(outputFallingEdge.probe()[0]).to.equal(Bit.Zero);
+		});
+
+		// Load a 1 into both registors
+		clear.connector.emitSignal([Bit.Zero]);
+		input.connector.emitSignal([Bit.One]);
+		load.connector.emitSignal([Bit.One]);
+		clock.connector.emitSignal([Bit.One]);
+		await circuit.evaluate();
+		clock.connector.emitSignal([Bit.Zero]);
+		await circuit.evaluate();
+		expect(outputRisingEdge.probe()[0]).to.equal(Bit.One);
+		expect(outputFallingEdge.probe()[0]).to.equal(Bit.One);
+
+		// Clear the register using the clear pin
+		clear.connector.emitSignal([Bit.One]);
+		await circuit.evaluate();
+		expect(outputRisingEdge.probe()[0]).to.equal(Bit.Zero);
+		expect(outputFallingEdge.probe()[0]).to.equal(Bit.Zero);
+	});
 });
