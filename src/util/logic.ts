@@ -14,6 +14,11 @@ export enum Bit {
 }
 
 /**
+ * The number of possible bit types
+ */
+export const NUM_BIT_VALUES = Object.values(Bit).length / 2;
+
+/**
  * Encode the given number into binary bits
  */
 export function numberToBits(value: number) {
@@ -178,12 +183,45 @@ export function transpose<T>(a: T[][]) {
  */
 export class BitCombinations
 {
+	/**
+	 * The allowed bits to use in the combination set
+	 */
+	protected bitSet: boolean[]; // unknown, error, zero, one
+
+	/**
+	 * The current bit combination
+	 */
 	protected bits?: Bit[];
 
-	public constructor(numBits: number) {
-		this.bits = [];
-		for (let i = 0; i < numBits; i++) {
-			this.bits.push(Bit.Zero);
+	public constructor(numBits: number, unknownBit: boolean = false, errorBit: boolean = false) {
+		this.bitSet = new Array<boolean>(NUM_BIT_VALUES);
+		this.bitSet[Bit.Unknown] = unknownBit;
+		this.bitSet[Bit.Error] = errorBit;
+		this.bitSet[Bit.Zero] = true;
+		this.bitSet[Bit.One] = true;
+		let fillBit = <Bit>this.bitSet.indexOf(true);
+		this.bits = new Array<Bit>(numBits).fill(fillBit);
+	}
+
+	/**
+	 * Increment the current combination
+	 */
+	protected increment() {
+		assert(this.bits != undefined, "Attempted to additional increment after all combinations");
+		let carry: boolean;
+		let i = this.bits.length - 1;
+
+		do {
+			let bit = this.bits[i];
+			do {
+				this.bits[i] = (this.bits[i] + 1) % NUM_BIT_VALUES;
+			} while (this.bitSet[this.bits[i]] == false && this.bits[i] != bit);
+			carry = this.bits[i] <= bit;
+		} while(--i >= 0 && carry);
+
+		// Overflow
+		if (carry) {
+			this.bits = undefined;
 		}
 	}
 
@@ -191,14 +229,11 @@ export class BitCombinations
 	 * Get the next bit combination
 	 */
 	public next() {
-		let result = this.bits;
-		if (this.bits) {
-			if (this.bits.includes(Bit.Zero)) {
-				this.bits = threeValuedIncrement(this.bits);
-			} else {
-				this.bits = undefined;
-			}
+		if (this.bits === undefined) {
+			return undefined;
 		}
+		let result = this.bits.concat();
+		this.increment();
 		return result;
 	}
 }
@@ -206,7 +241,9 @@ export class BitCombinations
 /**
  * Evaluate a function with all possible binary-bit combinations
  */
-export async function bitCombinations(numBits: number, evaluate: (comb: Bit[]) => Promise<void>) {
+export async function binaryBitCombinations(numBits: number,
+											evaluate: (comb: Bit[]) => Promise<void>)
+{
 	let generator = new BitCombinations(numBits);
 	for (let comb = generator.next(); comb; comb = generator.next()) {
 		await evaluate(comb);
@@ -216,9 +253,32 @@ export async function bitCombinations(numBits: number, evaluate: (comb: Bit[]) =
 /**
  * Evaluate a function with all possible binary-bit combinations synchronously
  */
-export function bitCombinationsSync(numBits: number, evaluate: (comb: Bit[]) => void) {
+export function binaryBitCombinationsSync(numBits: number, evaluate: (comb: Bit[]) => void) {
 	let generator = new BitCombinations(numBits);
 	for (let comb = generator.next(); comb; comb = generator.next()) {
 		evaluate(comb);
+	}
+}
+
+/**
+ * Evaluate a function with all possible three-value bit combinations
+ */
+export async function threeBitCombinations(numBits: number,
+										   evaluate: (comb: Bit[]) => Promise<void>)
+{
+	let generator = new BitCombinations(numBits, true, false);
+	for (let comb = generator.next(); comb; comb = generator.next()) {
+		await evaluate(comb);
+	}
+}
+
+/**
+ * Evaluate a function with all possible signal bit combinations
+ */
+export async function signalCombinations(numBits: number, evaluate: (comb: Bit[]) => Promise<void>)
+{
+	let generator = new BitCombinations(numBits, true, true);
+	for (let comb = generator.next(); comb; comb = generator.next()) {
+		await evaluate(comb);
 	}
 }

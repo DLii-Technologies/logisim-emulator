@@ -1,6 +1,6 @@
 import assert from "assert";
-import { arraysAreEqual } from "../../util";
-import { Bit, threeValuedMerge } from "../../util/logic";
+import * as _ from "lodash";
+import { Bit } from "../../util/logic";
 import Component from "../component/Component";
 import { Connector } from "./Connector";
 import { Network } from "./Network";
@@ -88,7 +88,7 @@ export class Port {
 	 * Emit a value into the connected network
 	 */
 	public emitSignal(signal: Bit[]) {
-		if (arraysAreEqual(signal, this.signal)) {
+		if (_.isEqual(signal, this.signal)) {
 			return;
 		}
 		assert(signal.length == this.signal.length, "Emitted signal width invalid");

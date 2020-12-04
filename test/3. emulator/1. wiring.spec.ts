@@ -3,7 +3,7 @@ import "mocha";
 import { step } from "mocha-steps";
 import Project from "../../src/emulator/Project";
 import { loadProject } from "../../src/loader";
-import { Bit, bitCombinations, threeValuedMerge } from "../../src/util/logic";
+import { Bit, binaryBitCombinations, threeValuedMerge } from "../../src/util/logic";
 
 /**
  * The Logisim circuit file to load
@@ -77,7 +77,7 @@ describe("Emulation: Wiring and Networking", () => {
 	step("Splitter types and orientations", async () => {
 		let circuit = project.circuits["splitters"];
 		let types = ["LH", "RH", "C", "L"]; // left-handed, right-handed, center, legacy
-		await bitCombinations(2, async (comb) => {
+		await binaryBitCombinations(2, async (comb) => {
 			for (let type of types) {
 				for (let i = 0; i < 4; i++) {
 					circuit.inputPinsLabeled[`${type}_${i}`][0].connector.emitSignal(comb);
@@ -94,7 +94,7 @@ describe("Emulation: Wiring and Networking", () => {
 	});
 	step("Splitter bit-mapping", async () => {
 		let circuit = project.circuits["splitters"];
-		await bitCombinations(3, async (comb) => {
+		await binaryBitCombinations(3, async (comb) => {
 			circuit.inputPinsLabeled["FAN_2"][0].connector.emitSignal(comb);
 			circuit.inputPinsLabeled["FAN_3"][0].connector.emitSignal(comb);
 			circuit.evaluate();

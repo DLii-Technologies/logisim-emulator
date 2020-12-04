@@ -152,7 +152,7 @@ export abstract class MemoryComponent extends Component
 	protected onUpdate() {
 		if (this.asyncSet()) {
 			this.outputMemoryContents();
-		} else if (this.loadPort.probe()[0] == Bit.One && this.isValidClockSignal()) {
+		} else if (this.loadPort.probe()[0] != Bit.Zero && this.isValidClockSignal()) {
 			if (this.updateMemoryContents()) {
 				this.outputMemoryContents();
 			}

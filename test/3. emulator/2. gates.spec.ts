@@ -5,8 +5,8 @@ import { AndGate } from "../../src/emulator";
 import Project from "../../src/emulator/Project";
 import { loadProject } from "../../src/loader";
 import { Point } from "../../src/util/coordinates";
-import { Bit, bitCombinations, threeValuedAnd, threeValuedNand, threeValuedNor, threeValuedNot,
-	     threeValuedOr, threeValuedXnor, threeValuedXor } from "../../src/util/logic";
+import { Bit, binaryBitCombinations, threeValuedAnd, threeValuedNand, threeValuedNor,
+	threeValuedNot, threeValuedOr, threeValuedXnor, threeValuedXor } from "../../src/util/logic";
 
 /**
  * The Logisim circuit file to load
@@ -99,7 +99,7 @@ describe("Emulation: Gates", () => {
 		];
 
 		// Logic gates (AND, NAND, OR, NOR, XOR, XNOR)
-		await bitCombinations(3, async (comb) => {
+		await binaryBitCombinations(3, async (comb) => {
 			for (let i = 0; i < gates.length; i++) {
 				circuit.inputPinsLabeled[`${i}_A`][0].connector.emitSignal([comb[0]]);
 				circuit.inputPinsLabeled[`${i}_B`][0].connector.emitSignal([comb[1]]);
@@ -114,7 +114,7 @@ describe("Emulation: Gates", () => {
 		});
 
 		// Buffer/NOT Gate
-		await bitCombinations(1, async (comb) => {
+		await binaryBitCombinations(1, async (comb) => {
 			circuit.inputPinsLabeled["6"][0].connector.emitSignal([comb[0]]);
 			await circuit.evaluate();
 			expect(circuit.outputPinsLabeled["6_A"][0].probe()).to.eql([comb[0]]);
@@ -124,7 +124,7 @@ describe("Emulation: Gates", () => {
 		// Controlled Buffer/NOT Gate
 		for (let bit = 0; bit <= Bit.One; bit++) {
 			circuit.inputPinsLabeled["7_B"][0].connector.emitSignal([bit]);
-			await bitCombinations(1, async (comb) => {
+			await binaryBitCombinations(1, async (comb) => {
 				circuit.inputPinsLabeled["7_A"][0].connector.emitSignal([comb[0]]);
 				await circuit.evaluate();
 				if (bit == Bit.One) {

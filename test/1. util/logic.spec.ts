@@ -1,7 +1,7 @@
 import { expect } from "chai";
 import "mocha";
 import { threeValuedAnd, threeValuedNot, threeValuedOr, Bit, threeValuedNand, threeValuedNor,
-	threeValuedXor, threeValuedXnor, threeValuedMerge, threeValuedIncrement, bitCombinations, bitCombinationsSync} from "../../src/util/logic";
+	threeValuedXor, threeValuedXnor, threeValuedMerge, threeValuedIncrement, binaryBitCombinations, binaryBitCombinationsSync} from "../../src/util/logic";
 
 describe("Three-valued Logic", () => {
 	it("AND", () => {
@@ -163,27 +163,29 @@ describe("Three-valued Logic", () => {
 		expect(testA).to.eql([Bit.Zero, Bit.One]);
 	})
 	it("Combination Generator (Synchronous)", () => {
-		let combinations = new Set<string>([
-			[Bit.Zero, Bit.Zero].toString(),
-			[Bit.Zero, Bit.One ].toString(),
-			[Bit.One,  Bit.Zero].toString(),
-			[Bit.One,  Bit.One].toString()
-		]);
-		bitCombinationsSync(2, (comb) => {
-			expect(combinations.delete(comb.toString())).to.equal(true);
+		let combinations = [
+			[Bit.Zero, Bit.Zero],
+			[Bit.Zero, Bit.One ],
+			[Bit.One,  Bit.Zero],
+			[Bit.One,  Bit.One ]
+		]
+		let index = 0;
+		binaryBitCombinationsSync(2, (comb) => {
+			expect(comb).to.eql(combinations[index++]);
 		});
-		expect(combinations.size).to.equal(0);
+		expect(index).to.equal(combinations.length);
 	});
 	it("Combination Generator (Asynchronous)", async () => {
-		let combinations = new Set<string>([
-			[Bit.Zero, Bit.Zero].toString(),
-			[Bit.Zero, Bit.One ].toString(),
-			[Bit.One,  Bit.Zero].toString(),
-			[Bit.One,  Bit.One].toString()
-		]);
-		await bitCombinations(2, async (comb) => {
-			expect(combinations.delete(comb.toString())).to.equal(true);
+		let combinations = [
+			[Bit.Zero, Bit.Zero],
+			[Bit.Zero, Bit.One ],
+			[Bit.One,  Bit.Zero],
+			[Bit.One,  Bit.One ]
+		]
+		let index = 0;
+		await binaryBitCombinations(2, async (comb) => {
+			expect(comb).to.eql(combinations[index++]);
 		});
-		expect(combinations.size).to.equal(0);
+		expect(index).to.equal(combinations.length);
 	});
 });
