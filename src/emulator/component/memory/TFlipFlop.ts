@@ -3,7 +3,7 @@ import { Point } from "../../../util/coordinates";
 import { Bit, threeValuedNot } from "../../../util/logic";
 import { Port } from "../../core";
 import { FlipFlop } from "./FlipFlop";
-import { MemoryTrigger } from "./MemoryComponent";
+import { MemoryTriggerType } from "./MemoryComponent";
 
 export class TFlipFlop extends FlipFlop
 {
@@ -21,26 +21,20 @@ export class TFlipFlop extends FlipFlop
 	 * Create a new register
 	 */
 	public constructor(schematic: IComponent) {
-		super(schematic, new Point(-40, 0));
-		let muteInput = this.trigger >= MemoryTrigger.FallingEdge;
-		this.inputPort = this.addPort(-40, 20, this.bitWidth, muteInput);
+		super(schematic, MemoryTriggerType.Edge | MemoryTriggerType.Level, new Point(-40, 0));
+		let muteInput = this.trigger == MemoryTriggerType.Edge;
+		this.inputPort = this.addPort(-40, 20, 1, muteInput);
 	}
 
 	/**
 	 * Load the input into the contents of memory
 	 */
-	protected load() {
+	protected updateMemoryContents() {
 		let bit = this.inputPort.probe()[0];
 		if (bit != Bit.One) {
-			return;
+			return false;
 		}
-		this.contents = threeValuedNot(this.contents);
-	}
-
-	/**
-	 * Get the bit-width of the register
-	 */
-	public get bitWidth() {
-		return this.contents.length;
+		this.contents[0] = threeValuedNot(bit);
+		return true;
 	}
 }
