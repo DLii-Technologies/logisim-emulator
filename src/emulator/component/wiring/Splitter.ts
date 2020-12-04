@@ -52,9 +52,9 @@ export class Splitter extends Component
 	public rootConnector: Port;
 
 	/**
-	 * The fanned connectors
+	 * The port for each fan
 	 */
-	public fannedConnectors: Port[] = [];
+	public fannedConnectors: {[index: number]: Port} = {};
 
 	/**
 	 * Map bits from the main wire bundle to the fanned wires
@@ -114,8 +114,8 @@ export class Splitter extends Component
 				dy = -10 * Math.floor(this.fanOut / 2);
 		}
 		for (let i = 0; i < this.fanOut; i++) {
-			if (this.fanMapping[i] != null) {
-				this.fannedConnectors.push(this.addPort(20, 10*i + dy, this.fanBitWidths[i]));
+			if (this.fanBitWidths[i] > 0) {
+				this.fannedConnectors[i] = this.addPort(20, 10*i + dy, this.fanBitWidths[i]);
 			}
 		}
 	}
